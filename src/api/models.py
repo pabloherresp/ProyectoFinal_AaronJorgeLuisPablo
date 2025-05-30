@@ -2,11 +2,11 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import String, Boolean, DateTime, ForeignKey, Float, Integer
 from enum import Enum as PyEnum
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from datetime import datetime
+from datetime import datetime, timezone
 from sqlalchemy import Enum as SQLAEnum
+#default=datetime.now(timezone.utc)
 
 db = SQLAlchemy()
-
 
 class enumProf(PyEnum):
     freelance = "FREELANCE"
@@ -44,9 +44,6 @@ class Users(db.Model):
     reports: Mapped[list["Reports"]] = relationship("Reports",back_populates="user")
     profesional: Mapped["Profesionals"] = relationship("Profesionals",back_populates="user",uselist=False)
     client: Mapped["Clients"] = relationship("Clients",back_populates="user",uselist=False)
-    
-
-
 
     def serialize(self):
         return {
@@ -61,7 +58,6 @@ class Users(db.Model):
             "avatar_url": self.avatar_url,
             "reports": [r.id for r in self.reports],
             "profesional": self.profesional.serialize() if self.profesional else None,
-            # do not serialize the password, its a security breach
         }
     
 class Reports(db.Model):
@@ -70,7 +66,7 @@ class Reports(db.Model):
     message: Mapped[str] = mapped_column(String, nullable=False)
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
     target_type: Mapped[enumReps] = mapped_column(SQLAEnum(enumReps), nullable=False)
-    profesional_target_id: Mapped[int] = mapped_column(ForeignKey("profesionals.id"))
+    profesional_target_id: Mapped[int] = mapped_column(ForeignKey("profesionals.user_id"))
     activity_target_id: Mapped[int] = mapped_column(ForeignKey("info_activities.id"))
     creation_date: Mapped[datetime] = mapped_column(DateTime(),  default=datetime.utcnow, nullable=False)
 
@@ -78,9 +74,6 @@ class Reports(db.Model):
     user: Mapped["Users"] = relationship("Users",back_populates="reports")
     profesional: Mapped["Profesionals"] = relationship("Profesionals",back_populates="reports")
     info_activity: Mapped["Info_activity"] = relationship("Info_activity",back_populates="reports")
-        
-
-
 
     def serialize(self):
         return {
@@ -89,9 +82,7 @@ class Reports(db.Model):
             "user": self.user.serialize() if self.user else None,
             "profesional": self.profesional.serialize() if self.profesional else None,
             "info_activity": self.info_activity.serialize() if self.info_activity else None
-            # do not serialize the password, its a security breach
         }
-    
     
 class Profesionals(db.Model):
     __tablename__ = "profesionals"
@@ -99,7 +90,7 @@ class Profesionals(db.Model):
     bio: Mapped[str] = mapped_column(String)
     type: Mapped[enumProf] = mapped_column(SQLAEnum(enumProf), nullable=False)
     business_name: Mapped[str] = mapped_column(String)
-    tax_address: Mapped[str] = mapped_column(String, nullable=False)
+    tax_address: Mapped[str] = mapped_column(String)
     nuss: Mapped[str] = mapped_column(String(12))
     rating: Mapped[float] = mapped_column(Float, nullable=False)
 
@@ -107,6 +98,7 @@ class Profesionals(db.Model):
     user: Mapped["Users"] = relationship("Users",back_populates="profesional",uselist=False)
     activities: Mapped[list["Activities"]] = relationship("Activities",back_populates="profesional")
     reports: Mapped[list["Reports"]] = relationship("Reports",back_populates="profesional")
+    reviews: Mapped[list["Reviews"]] = relationship(back_populates="profesional")
 
     def serialize(self):
         return {
@@ -119,7 +111,6 @@ class Profesionals(db.Model):
             "activities": [a.id for a in self.activities],
             "reports": [r.id for r in self.reports],
             "user": self.user.serialize() if self.user else None
-            # do not serialize the password, its a security breach
         }
     
 class Clients(db.Model):
@@ -134,6 +125,8 @@ class Clients(db.Model):
 
     user: Mapped["Users"] = relationship("Users",back_populates="client",uselist=False)
     inscriptions: Mapped[list["Inscriptions"]] = relationship("Inscriptions",back_populates="client")
+    favourites: Mapped[list["Favourites"]] = relationship(back_populates="clients")
+    reviews: Mapped[list["Reviews"]] = relationship(back_populates="client")
 
     def serialize(self):
         return {
@@ -144,23 +137,22 @@ class Clients(db.Model):
             "tax_address": self.tax_address,
             "user": self.user.serialize() if self.user else None,
             "inscriptions": [i.id for i in self.inscriptions]
-            # do not serialize the password, its a security breach
         }
     
         
 class Activities(db.Model):
     __tablename__ = "activities"
     id: Mapped[int] = mapped_column(primary_key=True)
-    info_id: Mapped[int] = mapped_column(ForeignKey("info_activities"))
+    info_id: Mapped[int] = mapped_column(ForeignKey("info_activities.id"))
     price: Mapped[float] = mapped_column(Float, nullable=False)
     slots: Mapped[int] = mapped_column(Integer, nullable=False)
     creation_date: Mapped[datetime] = mapped_column(DateTime(),  default=datetime.utcnow, nullable=False)
     start_date: Mapped[datetime] = mapped_column(DateTime(),  default=datetime.utcnow, nullable=False)
     end_date: Mapped[datetime] = mapped_column(DateTime(),  default=datetime.utcnow, nullable=False)
-    profesional_id: Mapped[int] = mapped_column(ForeignKey("profesionals.id"), nullable=False)
-    is_finished: Mapped[bool] = mapped_column(bool, nullable=False)
+    profesional_id: Mapped[int] = mapped_column(ForeignKey("profesionals.user_id"), nullable=False)
+    is_finished: Mapped[Boolean] = mapped_column(Boolean, nullable=False)
     meeting_point: Mapped[str] = mapped_column(String, nullable=False)
-    is_active: Mapped[bool] = mapped_column(bool, nullable=False)
+    is_active: Mapped[Boolean] = mapped_column(Boolean, nullable=False)
 
 
     profesional: Mapped["Profesionals"] = relationship("Profesionals",back_populates="activities",uselist=False)
@@ -182,32 +174,27 @@ class Activities(db.Model):
             "profesional": self.profesional.serialize() if self.profesional else None,
             "info_activity": self.info_activity.serialize() if self.info_activity else None,
             "inscriptions": [i.id for i in self.inscriptions]
-            # do not serialize the password, its a security breach
         }
 
 class Inscriptions(db.Model):
     __tablename__ = "inscriptions"
     id: Mapped[int] = mapped_column(primary_key=True)
     activity_id: Mapped[int] = mapped_column(ForeignKey("activities.id"))
-    user_id: Mapped[int] = mapped_column(ForeignKey("clients.id"))
+    user_id: Mapped[int] = mapped_column(ForeignKey("clients.user_id"))
     inscription_date: Mapped[datetime] = mapped_column(DateTime(),  default=datetime.utcnow, nullable=False)
-    is_active: Mapped[bool] = mapped_column(bool, nullable=False)
-
+    is_active: Mapped[Boolean] = mapped_column(Boolean, nullable=False)
 
     activity: Mapped["Activities"] = relationship("Activities",back_populates="inscriptions",uselist=False)
     client: Mapped["Clients"] = relationship("Clients",back_populates="inscriptions",uselist=False)
         
-
-
-
     def serialize(self):
         return {
             "id": self.id,
+            "activity_id": self.activity_id,
             "inscription_date": self.inscription_date,
             "is_active": self.is_active,
             "activity": self.activity.serialize() if self.activity else None,
             "client": self.client.serialize() if self.client else None
-            # do not serialize the password, its a security breach
         }
     
 class Info_activity(db.Model):
@@ -217,12 +204,13 @@ class Info_activity(db.Model):
     desc: Mapped[str] = mapped_column(String(60),nullable=False)
     type: Mapped[enumInfo] = mapped_column(SQLAEnum(enumInfo), nullable=False)
     last_update: Mapped[datetime] = mapped_column(DateTime(),  default=datetime.utcnow, nullable=False)
-    media_url: Mapped[str] = mapped_column(ForeignKey("media.url"))
-    rating: Mapped[float] = mapped_column(ForeignKey("reviews.activity_rating"))
-
+    #rating: Mapped[float] = mapped_column(ForeignKey("reviews.activity_rating")) # recordar cambiar para que se actualice solo
 
     activities: Mapped[list["Activities"]] = relationship("Activities",back_populates="info_activity")
     reports: Mapped[list["Reports"]] = relationship("Reports",back_populates="info_activity")
+    favourited_by: Mapped[list["Favourites"]] = relationship(back_populates="activities")
+    media: Mapped[list["Media"]] = relationship(back_populates="info_activity")
+    reviews: Mapped[list["Reviews"]] = relationship(back_populates="info_activity")
 
     def serialize(self):
         return {
@@ -233,135 +221,70 @@ class Info_activity(db.Model):
             "last_update": self.last_update,
             "activities": [a.id for a in self.activities],
             "reports": [r.id for r in self.reports]
-            # do not serialize the password, its a security breach
         }
     
+class Favourites(db.Model):
+    __tablename__ = "favourites"
+    client_id: Mapped[int] = mapped_column(ForeignKey("clients.user_id"), primary_key=True)
+    info_activity_id: Mapped[int] = mapped_column(ForeignKey("info_activities.id"), primary_key=True)
 
+    clients: Mapped[list["Clients"]] = relationship(back_populates="favourites")
+    activities: Mapped[list["Info_activity"]] = relationship(back_populates="favourited_by")
 
-    """
+    def serialize(self):
+        return{
+            "client_id": self.client_id,
+            "info_activity_id": self.info_activity_id,
+            "clients": [a.serialize for a in self.clients],
+            "activities": [a.serialize for a in self.activities]
+        }
 
-    /////////////////// lo siguiente está comentado porque es el repositorio de Javier! //////////////////
-
-    from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import String, ForeignKey, DateTime
-from sqlalchemy.orm import Mapped, mapped_column, relationship
-from datetime import datetime
-
-db = SQLAlchemy()
-
-# 🔵 1:1 User → Profile
-class User(db.Model):
-    __tablename__ = "users"
-
+class Media(db.Model):
+    __tablename__ = "media"
     id: Mapped[int] = mapped_column(primary_key=True)
-    email: Mapped[str] = mapped_column(String(120), unique=True, nullable=False)
-    password: Mapped[str] = mapped_column(String(250), nullable=False)
-    profile: Mapped["Profile"] = relationship(back_populates="user", uselist=False)
+    info_activity_id: Mapped[int] = mapped_column(ForeignKey("info_activities.id"))
+    url: Mapped[String] = mapped_column(String, nullable=False)
+    #alt_desc: Mapped[String] = mapped_column(String)
 
+    info_activity: Mapped["Info_activity"] = relationship(back_populates="media", uselist=False)
 
-    #se encarga de pasar el OBJETO respuesta a diccionario. Se ejecuta como METODO de la clase
     def serialize(self):
-        return {
+        return{
             "id": self.id,
-            "email": self.email,
-            #serializamos el perfil porque recibimos un objeto de la tabla Perfiles que es el perfil asociado 
-            # al usuario. Los objetos (<User 1>) no son compatibles con JSONIFY, solo los diccionarios/listas/string
-            "profile": self.profile.serialize() if self.profile else None
+            "url": self.url
         }
 
-class Profile(db.Model):
-    __tablename__ = "profiles"
+class Administrators(db.Model):
+    __tablename__ = "administrators"
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), primary_key=True)
 
+class Reviews(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
-    bio: Mapped[str] = mapped_column(String(250))
-    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
+    info_activity_id: Mapped[int] = mapped_column(ForeignKey("info_activities.id"))
+    profesional_id: Mapped[int] = mapped_column(ForeignKey("profesionals.user_id"))
+    client_id: Mapped[int] = mapped_column(ForeignKey("clients.user_id"))
+    profesional_rating: Mapped[float] = mapped_column(Float)
+    activity_rating: Mapped[float] = mapped_column(Float)
+    profesional_message: Mapped[String] = mapped_column(String)
+    activity_message: Mapped[String] = mapped_column(String)
+    creation_date: Mapped[datetime] = mapped_column(DateTime(),  default=datetime.utcnow, nullable=False)
 
-    user: Mapped["User"] = relationship(back_populates="profile")
-
+    client: Mapped["Clients"] = relationship(back_populates="reviews")
+    info_activity: Mapped["Info_activity"] = relationship(back_populates="reviews")
+    profesional: Mapped["Profesionals"] = relationship(back_populates="reviews")
+    
     def serialize(self):
-        return {
+        return{
             "id": self.id,
-            "bio": self.bio
+            "info_activity_id": self.info_activity_id,
+            "profesional_id": self.profesional_id,
+            "client_id": self.client_id,
+            "profesional_rating": self.profesional_rating,
+            "activity_rating": self.activity_rating,
+            "profesional_message": self.profesional_message,
+            "activity_message": self.activity_message,
+            "creation_date": self.creation_date,
+            "client": self.client.serialize(),
+            "info_activity": self.info_activity.serialize(),
+            "profesional": self.profesional.serialize()
         }
-
-# 🟢 1:N Teacher → Course
-class Teacher(db.Model):
-    __tablename__ = "teachers"
-
-    id: Mapped[int] = mapped_column(primary_key=True)
-    name: Mapped[str] = mapped_column(String(100))
-
-    courses: Mapped[list["Course"]] = relationship(back_populates="teacher")
-
-    def serialize(self):
-        return {
-            "id": self.id,
-            "name": self.name,
-            #hacemos loop porque es una lista y no queremos el objeto, 
-            # en este caso, solo queremos el title del curso asociado
-            "courses": [course.title for course in self.courses]
-        }
-
-class Course(db.Model):
-    __tablename__ = "courses"
-
-    id: Mapped[int] = mapped_column(primary_key=True)
-    title: Mapped[str] = mapped_column(String(100))
-    teacher_id: Mapped[int] = mapped_column(ForeignKey("teachers.id"))
-
-    teacher: Mapped["Teacher"] = relationship(back_populates="courses")
-    enrollments: Mapped[list["Enrollment"]] = relationship(back_populates="course")
-
-    def serialize(self):
-        return {
-            "id": self.id,
-            "title": self.title,
-            "teacher": self.teacher.name,
-            "students": [
-                {
-                    "name": enrollment.student.name,
-                    "enrolled_on": enrollment.enrollment_date.isoformat()
-                } for enrollment in self.enrollments
-            ]
-        }
-
-# 🔴 N:M Student ↔ Course con modelo de asociación
-class Student(db.Model):
-    __tablename__ = "students"
-
-    id: Mapped[int] = mapped_column(primary_key=True)
-    name: Mapped[str] = mapped_column(String(100))
-
-    enrollments: Mapped[list["Enrollment"]] = relationship(back_populates="student")
-
-    def serialize(self):
-        return {
-            "id": self.id,
-            "name": self.name,
-            "courses": [
-                {
-                    "title": enrollment.course.title,
-                    "enrolled_on": enrollment.enrollment_date.isoformat()
-                } for enrollment in self.enrollments
-            ]
-        }
-#tabla de asosiacion, se encarga de decir que alumno esta en que curso
-#es relacion muchos a muchos
-class Enrollment(db.Model):
-    __tablename__ = "enrollments"
-    #tabla de asociacion NO tienen id
-    student_id: Mapped[int] = mapped_column(ForeignKey("students.id"), primary_key=True)
-    course_id: Mapped[int] = mapped_column(ForeignKey("courses.id"), primary_key=True)
-    enrollment_date: Mapped[datetime] = mapped_column(DateTime(), default=datetime.utcnow)
-
-    student: Mapped["Student"] = relationship(back_populates="enrollments")
-    course: Mapped["Course"] = relationship(back_populates="enrollments")
-
-    def serialize(self):
-        return {
-            "student_id": self.student_id,
-            "course_id": self.course_id,
-            "enrollment_date": self.enrollment_date.isoformat()
-        }
-
-        """
