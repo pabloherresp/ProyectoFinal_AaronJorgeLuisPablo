@@ -2,9 +2,10 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, User
+from api.models import db, Users
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
+from sqlalchemy import select, delete, and_
 
 api = Blueprint('api', __name__)
 
@@ -12,11 +13,10 @@ api = Blueprint('api', __name__)
 CORS(api)
 
 
-@api.route('/hello', methods=['POST', 'GET'])
-def handle_hello():
-
-    response_body = {
-        "message": "Hello! I'm a message that came from the backend, check the network tab on the google inspector and you will see the GET request"
-    }
-
+@api.route('/users', methods=['GET'])
+def get_users():
+    stmt = select(Users)
+    users = db.session.execute(stmt).scalars().all()
+    response_body = [user.serialize() for user in users]
+    
     return jsonify(response_body), 200
