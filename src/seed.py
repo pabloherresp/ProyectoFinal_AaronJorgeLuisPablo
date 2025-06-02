@@ -100,7 +100,7 @@ with app.app_context():
             gender=enumClts.male),
     ]
 
-    db.session.add(clients)
+    db.session.add_all(clients)
     db.session.commit()
 
     # Info de actividades
@@ -153,103 +153,83 @@ with app.app_context():
 
     # Actividades
     actividades = [
-        Activities(info_id=info_activities[0].id, price=12.0, slots=15,
-            profesional_id=profs[0].user_id, is_finished=True,
+        Activities(info_id=info_activities[0].id, price=12.0, slots=15, is_finished=True,
             meeting_point="Calle Gulliver, Valencia", is_active=True,
             start_date=datetime(2025, 5, 10, 10, 0), end_date=datetime(2025, 5, 10, 12, 0)
         ),
-        Activities(info_id=info_activities[1].id, price=18.0, slots=10,
-            profesional_id=profs[2].user_id, is_finished=True,
+        Activities(info_id=info_activities[1].id, price=18.0, slots=10, is_finished=True,
             meeting_point="Plaza Zocodover, Toledo", is_active=True,
             start_date=datetime(2025, 5, 11, 11, 0), end_date=datetime(2025, 5, 11, 13, 0)
         ),
-        Activities(info_id=info_activities[2].id, price=20.0, slots=12,
-            profesional_id=profs[1].user_id, is_finished=True,
+        Activities(info_id=info_activities[2].id, price=20.0, slots=12, is_finished=True,
             meeting_point="Calle Gran Vía, Madrid", is_active=True,
             start_date=datetime(2025, 5, 12, 17, 0), end_date=datetime(2025, 5, 12, 19, 0)
         ),
-        Activities(info_id=info_activities[3].id, price=10.0, slots=20,
-            profesional_id=profs[0].user_id, is_finished=True,
+        Activities(info_id=info_activities[3].id, price=10.0, slots=20, is_finished=True,
             meeting_point="Calle Sierra Nevada, Granada", is_active=True,
             start_date=datetime(2025, 5, 13, 9, 0), end_date=datetime(2025, 5, 13, 13, 0)
         ),
-        Activities(info_id=info_activities[4].id, price=15.0, slots=14,
-            profesional_id=profs[1].user_id, is_finished=True,
+        Activities(info_id=info_activities[4].id, price=15.0, slots=14, is_finished=True,
             meeting_point="Avenida del Puerto, Valencia", is_active=True,
             start_date=datetime(2025, 5, 14, 18, 0), end_date=datetime(2025, 5, 14, 20, 0)
         ),
-        Activities(info_id=info_activities[5].id, price=22.0, slots=8,
-            profesional_id=profs[2].user_id, is_finished=False,
+        Activities(info_id=info_activities[5].id, price=22.0, slots=8, is_finished=False,
             meeting_point="Paseo del Prado, Madrid", is_active=True,
             start_date=datetime(2025, 6, 15, 16, 0), end_date=datetime(2025, 6, 15, 18, 0)
         ),
-        Activities(info_id=info_activities[6].id, price=16.0, slots=10,
-            profesional_id=profs[1].user_id, is_finished=False,
+        Activities(info_id=info_activities[6].id, price=16.0, slots=10, is_finished=False,
             meeting_point="Calle Alcalá, Madrid", is_active=True,
             start_date=datetime(2025, 6, 16, 10, 0), end_date=datetime(2025, 6, 16, 12, 0)
         ),
-        Activities(info_id=info_activities[7].id, price=14.0, slots=18,
-            profesional_id=profs[0].user_id, is_finished=False,
+        Activities(info_id=info_activities[7].id, price=14.0, slots=18, is_finished=False,
             meeting_point="Avenida Aragón, Valencia", is_active=True,
             start_date=datetime(2025, 6, 17, 9, 0), end_date=datetime(2025, 6, 17, 11, 0)
         ),
-        Activities(info_id=info_activities[8].id, price=19.0, slots=9,
-            profesional_id=profs[2].user_id, is_finished=False,
+        Activities(info_id=info_activities[8].id, price=19.0, slots=9, is_finished=False,
             meeting_point="Calle Elvira, Granada", is_active=True,
             start_date=datetime(2025, 6, 18, 19, 0), end_date=datetime(2025, 6, 18, 21, 0)
         ),
-        Activities(info_id=info_activities[9].id, price=13.0, slots=16,
-            profesional_id=profs[1].user_id, is_finished=False,
+        Activities(info_id=info_activities[9].id, price=13.0, slots=16, is_finished=False,
             meeting_point="Calle Comercio, Toledo", is_active=True,
             start_date=datetime(2025, 6, 19, 17, 0), end_date=datetime(2025, 6, 19, 19, 0)
         ),
-        Activities(info_id=info_activities[10].id, price=11.0, slots=20,
-            profesional_id=profs[0].user_id, is_finished=False,
+        Activities(info_id=info_activities[10].id, price=11.0, slots=20, is_finished=False,
             meeting_point="Calle Arenal, Madrid", is_active=True,
             start_date=datetime(2025, 6, 20, 10, 0), end_date=datetime(2025, 6, 20, 12, 0)
         ),
-        Activities(info_id=info_activities[11].id, price=17.0, slots=13,
-            profesional_id=profs[1].user_id, is_finished=False,
+        Activities(info_id=info_activities[11].id, price=17.0, slots=13, is_finished=False,
             meeting_point="Playa Malvarrosa, Valencia", is_active=True,
             start_date=datetime(2025, 6, 21, 18, 0), end_date=datetime(2025, 6, 21, 20, 0)
         ),
-        Activities(info_id=info_activities[12].id, price=12.0, slots=15,
-            profesional_id=profs[0].user_id, is_finished=False,
+        Activities(info_id=info_activities[12].id, price=12.0, slots=15, is_finished=False,
             meeting_point="Paseo del Violón, Granada", is_active=True,
             start_date=datetime(2025, 6, 22, 9, 0), end_date=datetime(2025, 6, 22, 11, 0)
         ),
-        Activities(info_id=info_activities[13].id, price=21.0, slots=10,
-            profesional_id=profs[2].user_id, is_finished=False,
+        Activities(info_id=info_activities[13].id, price=21.0, slots=10, is_finished=False,
             meeting_point="Plaza Nueva, Granada", is_active=True,
             start_date=datetime(2025, 6, 23, 17, 0), end_date=datetime(2025, 6, 23, 19, 0)
         ),
-        Activities(info_id=info_activities[14].id, price=13.0, slots=14,
-            profesional_id=profs[1].user_id, is_finished=False,
+        Activities(info_id=info_activities[14].id, price=13.0, slots=14, is_finished=False,
             meeting_point="Calle Serrano, Madrid", is_active=True,
             start_date=datetime(2025, 6, 24, 16, 0), end_date=datetime(2025, 6, 24, 18, 0)
         ),
-        Activities(info_id=info_activities[15].id, price=15.0, slots=12,
-            profesional_id=profs[0].user_id, is_finished=False,
+        Activities(info_id=info_activities[15].id, price=15.0, slots=12, is_finished=False,
             meeting_point="Parque Tres Culturas, Toledo", is_active=True,
             start_date=datetime(2025, 6, 25, 10, 0), end_date=datetime(2025, 6, 25, 12, 0)
         ),
-        Activities(info_id=info_activities[16].id, price=18.0, slots=11,
-            profesional_id=profs[2].user_id, is_finished=False,
+        Activities(info_id=info_activities[16].id, price=18.0, slots=11, is_finished=False,
             meeting_point="Calle Reyes Católicos, Toledo", is_active=True,
             start_date=datetime(2025, 6, 26, 11, 0), end_date=datetime(2025, 6, 26, 13, 0)
         ),
-        Activities(info_id=info_activities[17].id, price=16.0, slots=13,
-            profesional_id=profs[1].user_id, is_finished=False,
+        Activities(info_id=info_activities[17].id, price=16.0, slots=13, is_finished=False,
             meeting_point="Calle Colón, Valencia", is_active=True,
             start_date=datetime(2025, 6, 27, 18, 0), end_date=datetime(2025, 6, 27, 20, 0)
         ),
-        Activities(info_id=info_activities[18].id, price=14.0, slots=17,
-            profesional_id=profs[0].user_id, is_finished=False,
+        Activities(info_id=info_activities[18].id, price=14.0, slots=17, is_finished=False,
             meeting_point="Piscina Municipal, Madrid", is_active=True,
             start_date=datetime(2025, 6, 28, 9, 0), end_date=datetime(2025, 6, 28, 11, 0)
         ),
-        Activities(info_id=info_activities[19].id, price=20.0, slots=8,
-            profesional_id=profs[1].user_id, is_finished=False,
+        Activities(info_id=info_activities[19].id, price=20.0, slots=8, is_finished=False,
             meeting_point="Calle Bodegas, Toledo", is_active=True,
             start_date=datetime(2025, 6, 29, 17, 0), end_date=datetime(2025, 6, 29, 19, 0)
         ),
@@ -310,52 +290,179 @@ with app.app_context():
         Inscriptions(user_id=clients[7].user_id, activity_id=actividades[8].id),
     ]
 
-    db.session.add(inscriptions)
+    db.session.add_all(inscriptions)
     db.session.commit()
 
     # Favoritos
-    fav1 = Favourites(
-        client_id=client2.user_id,
-        info_activity_id=info1.id
-    )
-    db.session.add(fav1)
+    favourites = [
+        Favourites(client_id=clients[0].user_id, info_activity_id=info_activities[0].id),
+        Favourites(client_id=clients[1].user_id, info_activity_id=info_activities[0].id),
+        Favourites(client_id=clients[2].user_id, info_activity_id=info_activities[1].id),
+        Favourites(client_id=clients[3].user_id, info_activity_id=info_activities[2].id),
+        Favourites(client_id=clients[4].user_id, info_activity_id=info_activities[3].id),
+        Favourites(client_id=clients[5].user_id, info_activity_id=info_activities[4].id),
+        Favourites(client_id=clients[6].user_id, info_activity_id=info_activities[5].id),
+        Favourites(client_id=clients[7].user_id, info_activity_id=info_activities[6].id),
+        Favourites(client_id=clients[8].user_id, info_activity_id=info_activities[7].id),
+        Favourites(client_id=clients[9].user_id, info_activity_id=info_activities[8].id),
+        Favourites(client_id=clients[0].user_id, info_activity_id=info_activities[9].id),
+        Favourites(client_id=clients[1].user_id, info_activity_id=info_activities[10].id),
+        Favourites(client_id=clients[2].user_id, info_activity_id=info_activities[11].id),
+        Favourites(client_id=clients[3].user_id, info_activity_id=info_activities[12].id),
+        Favourites(client_id=clients[4].user_id, info_activity_id=info_activities[13].id),
+        Favourites(client_id=clients[5].user_id, info_activity_id=info_activities[14].id),
+        Favourites(client_id=clients[6].user_id, info_activity_id=info_activities[15].id),
+        Favourites(client_id=clients[7].user_id, info_activity_id=info_activities[16].id),
+        Favourites(client_id=clients[8].user_id, info_activity_id=info_activities[17].id),
+        Favourites(client_id=clients[9].user_id, info_activity_id=info_activities[18].id),
+    ]
+    db.session.add_all(favourites)
     db.session.commit()
 
     # Media
-    media1 = Media(
-        info_activity_id=info1.id,
-        url="https://images.unsplash.com/photo-yoga"
-    )
-    db.session.add(media1)
+    media = [
+        Media(info_activity_id=info_activities[0].id, url="https://images.unsplash.com/photo-1506744038136-46273834b3fb?fit=crop&w=600&q=80"),
+        Media(info_activity_id=info_activities[0].id, url="https://images.unsplash.com/photo-1464983953574-0892a716854b?fit=crop&w=600&q=80"),
+        Media(info_activity_id=info_activities[1].id, url="https://images.unsplash.com/photo-1505761671935-60b3a7427bad?fit=crop&w=600&q=80"),
+        Media(info_activity_id=info_activities[1].id, url="https://images.unsplash.com/photo-1465101046530-73398c7f28ca?fit=crop&w=600&q=80"),
+        Media(info_activity_id=info_activities[2].id, url="https://images.unsplash.com/photo-1519864600265-abb23847ef2c?fit=crop&w=600&q=80"),
+        Media(info_activity_id=info_activities[2].id, url="https://images.unsplash.com/photo-1504674900247-0877df9cc836?fit=crop&w=600&q=80"),
+        Media(info_activity_id=info_activities[3].id, url="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?fit=crop&w=600&q=80"),
+        Media(info_activity_id=info_activities[3].id, url="https://images.unsplash.com/photo-1465101178521-c1a9136a3b99?fit=crop&w=600&q=80"),
+        Media(info_activity_id=info_activities[4].id, url="https://images.unsplash.com/photo-1517841905240-472988babdf9?fit=crop&w=600&q=80"),
+        Media(info_activity_id=info_activities[4].id, url="https://images.unsplash.com/photo-1519125323398-675f0ddb6308?fit=crop&w=600&q=80"),
+        Media(info_activity_id=info_activities[5].id, url="https://images.unsplash.com/photo-1465101046530-73398c7f28ca?fit=crop&w=600&q=80"),
+        Media(info_activity_id=info_activities[5].id, url="https://images.unsplash.com/photo-1464983953574-0892a716854b?fit=crop&w=600&q=80"),
+        Media(info_activity_id=info_activities[6].id, url="https://images.unsplash.com/photo-1519125323398-675f0ddb6308?fit=crop&w=600&q=80"),
+        Media(info_activity_id=info_activities[6].id, url="https://images.unsplash.com/photo-1517841905240-472988babdf9?fit=crop&w=600&q=80"),
+        Media(info_activity_id=info_activities[7].id, url="https://images.unsplash.com/photo-1506744038136-46273834b3fb?fit=crop&w=600&q=80"),
+        Media(info_activity_id=info_activities[7].id, url="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?fit=crop&w=600&q=80"),
+        Media(info_activity_id=info_activities[8].id, url="https://images.unsplash.com/photo-1505761671935-60b3a7427bad?fit=crop&w=600&q=80"),
+        Media(info_activity_id=info_activities[8].id, url="https://images.unsplash.com/photo-1519864600265-abb23847ef2c?fit=crop&w=600&q=80"),
+        Media(info_activity_id=info_activities[9].id, url="https://images.unsplash.com/photo-1464983953574-0892a716854b?fit=crop&w=600&q=80"),
+        Media(info_activity_id=info_activities[9].id, url="https://images.unsplash.com/photo-1465101178521-c1a9136a3b99?fit=crop&w=600&q=80"),
+        Media(info_activity_id=info_activities[10].id, url="https://images.unsplash.com/photo-1519125323398-675f0ddb6308?fit=crop&w=600&q=80"),
+        Media(info_activity_id=info_activities[10].id, url="https://images.unsplash.com/photo-1517841905240-472988babdf9?fit=crop&w=600&q=80"),
+        Media(info_activity_id=info_activities[11].id, url="https://images.unsplash.com/photo-1506744038136-46273834b3fb?fit=crop&w=600&q=80"),
+        Media(info_activity_id=info_activities[11].id, url="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?fit=crop&w=600&q=80"),
+        Media(info_activity_id=info_activities[12].id, url="https://images.unsplash.com/photo-1505761671935-60b3a7427bad?fit=crop&w=600&q=80"),
+        Media(info_activity_id=info_activities[12].id, url="https://images.unsplash.com/photo-1519864600265-abb23847ef2c?fit=crop&w=600&q=80"),
+        Media(info_activity_id=info_activities[13].id, url="https://images.unsplash.com/photo-1464983953574-0892a716854b?fit=crop&w=600&q=80"),
+        Media(info_activity_id=info_activities[13].id, url="https://images.unsplash.com/photo-1465101178521-c1a9136a3b99?fit=crop&w=600&q=80"),
+        Media(info_activity_id=info_activities[14].id, url="https://images.unsplash.com/photo-1519125323398-675f0ddb6308?fit=crop&w=600&q=80"),
+        Media(info_activity_id=info_activities[14].id, url="https://images.unsplash.com/photo-1517841905240-472988babdf9?fit=crop&w=600&q=80"),
+        Media(info_activity_id=info_activities[15].id, url="https://images.unsplash.com/photo-1506744038136-46273834b3fb?fit=crop&w=600&q=80"),
+        Media(info_activity_id=info_activities[15].id, url="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?fit=crop&w=600&q=80"),
+        Media(info_activity_id=info_activities[16].id, url="https://images.unsplash.com/photo-1505761671935-60b3a7427bad?fit=crop&w=600&q=80"),
+        Media(info_activity_id=info_activities[16].id, url="https://images.unsplash.com/photo-1519864600265-abb23847ef2c?fit=crop&w=600&q=80"),
+        Media(info_activity_id=info_activities[17].id, url="https://images.unsplash.com/photo-1464983953574-0892a716854b?fit=crop&w=600&q=80"),
+        Media(info_activity_id=info_activities[17].id, url="https://images.unsplash.com/photo-1465101178521-c1a9136a3b99?fit=crop&w=600&q=80"),
+        Media(info_activity_id=info_activities[18].id, url="https://images.unsplash.com/photo-1519125323398-675f0ddb6308?fit=crop&w=600&q=80"),
+        Media(info_activity_id=info_activities[18].id, url="https://images.unsplash.com/photo-1517841905240-472988babdf9?fit=crop&w=600&q=80"),
+        Media(info_activity_id=info_activities[19].id, url="https://images.unsplash.com/photo-1506744038136-46273834b3fb?fit=crop&w=600&q=80"),
+        Media(info_activity_id=info_activities[19].id, url="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?fit=crop&w=600&q=80"),
+        Media(info_activity_id=info_activities[0].id, url="https://images.unsplash.com/photo-1465101046530-73398c7f28ca?fit=crop&w=600&q=80"),
+        Media(info_activity_id=info_activities[1].id, url="https://images.unsplash.com/photo-1519864600265-abb23847ef2c?fit=crop&w=600&q=80"),
+        Media(info_activity_id=info_activities[2].id, url="https://images.unsplash.com/photo-1504674900247-0877df9cc836?fit=crop&w=600&q=80"),
+        Media(info_activity_id=info_activities[3].id, url="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?fit=crop&w=600&q=80"),
+        Media(info_activity_id=info_activities[4].id, url="https://images.unsplash.com/photo-1464983953574-0892a716854b?fit=crop&w=600&q=80"),
+        Media(info_activity_id=info_activities[5].id, url="https://images.unsplash.com/photo-1465101178521-c1a9136a3b99?fit=crop&w=600&q=80"),
+        Media(info_activity_id=info_activities[6].id, url="https://images.unsplash.com/photo-1519125323398-675f0ddb6308?fit=crop&w=600&q=80"),
+        Media(info_activity_id=info_activities[7].id, url="https://images.unsplash.com/photo-1517841905240-472988babdf9?fit=crop&w=600&q=80"),
+        Media(info_activity_id=info_activities[8].id, url="https://images.unsplash.com/photo-1506744038136-46273834b3fb?fit=crop&w=600&q=80"),
+        Media(info_activity_id=info_activities[9].id, url="https://images.unsplash.com/photo-1505761671935-60b3a7427bad?fit=crop&w=600&q=80"),
+        Media(info_activity_id=info_activities[10].id, url="https://images.unsplash.com/photo-1519864600265-abb23847ef2c?fit=crop&w=600&q=80"),
+        Media(info_activity_id=info_activities[11].id, url="https://images.unsplash.com/photo-1504674900247-0877df9cc836?fit=crop&w=600&q=80"),
+        Media(info_activity_id=info_activities[12].id, url="https://images.unsplash.com/photo-1465101046530-73398c7f28ca?fit=crop&w=600&q=80"),
+        Media(info_activity_id=info_activities[13].id, url="https://images.unsplash.com/photo-1464983953574-0892a716854b?fit=crop&w=600&q=80"),
+        Media(info_activity_id=info_activities[14].id, url="https://images.unsplash.com/photo-1519125323398-675f0ddb6308?fit=crop&w=600&q=80"),
+        Media(info_activity_id=info_activities[15].id, url="https://images.unsplash.com/photo-1517841905240-472988babdf9?fit=crop&w=600&q=80"),
+        Media(info_activity_id=info_activities[16].id, url="https://images.unsplash.com/photo-1506744038136-46273834b3fb?fit=crop&w=600&q=80"),
+        Media(info_activity_id=info_activities[17].id, url="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?fit=crop&w=600&q=80"),
+        Media(info_activity_id=info_activities[18].id, url="https://images.unsplash.com/photo-1465101178521-c1a9136a3b99?fit=crop&w=600&q=80"),
+        Media(info_activity_id=info_activities[19].id, url="https://images.unsplash.com/photo-1519125323398-675f0ddb6308?fit=crop&w=600&q=80"),
+    ]
+    db.session.add_all(media)
     db.session.commit()
 
     # Reviews
-    review1 = Reviews(
-        info_activity_id=info1.id,
-        profesional_id=prof1.user_id,
-        client_id=client2.user_id,
-        profesional_rating=5.0,
-        activity_rating=4.5,
-        profesional_message="Muy profesional y amable.",
-        activity_message="La actividad fue relajante y divertida."
-    )
-    db.session.add(review1)
+    reviews = [
+        Reviews(info_activity_id=info_activities[0].id, profesional_id=profs[0].user_id, client_id=clients[0].user_id, profesional_rating=4.5, activity_rating=None, profesional_message="Muy profesional", activity_message=""),
+        Reviews(info_activity_id=info_activities[1].id, profesional_id=profs[2].user_id, client_id=clients[1].user_id, profesional_rating=None, activity_rating=4.5, profesional_message="", activity_message="Muy interesante"),
+        Reviews(info_activity_id=info_activities[2].id, profesional_id=profs[1].user_id, client_id=clients[2].user_id, profesional_rating=4.0, activity_rating=None, profesional_message="", activity_message=""),
+        Reviews(info_activity_id=info_activities[3].id, profesional_id=profs[0].user_id, client_id=clients[3].user_id, profesional_rating=None, activity_rating=5.0, profesional_message="", activity_message="Ruta preciosa"),
+        Reviews(info_activity_id=info_activities[4].id, profesional_id=profs[1].user_id, client_id=clients[4].user_id, profesional_rating=5.0, activity_rating=None, profesional_message="Buen trato", activity_message=""),
+        Reviews(info_activity_id=info_activities[5].id, profesional_id=profs[2].user_id, client_id=clients[5].user_id, profesional_rating=None, activity_rating=4.8, profesional_message="", activity_message="Museo espectacular"),
+        Reviews(info_activity_id=info_activities[6].id, profesional_id=profs[1].user_id, client_id=clients[6].user_id, profesional_rating=3.0, activity_rating=None, profesional_message="", activity_message=""),
+        Reviews(info_activity_id=info_activities[7].id, profesional_id=profs[0].user_id, client_id=clients[7].user_id, profesional_rating=None, activity_rating=4.2, profesional_message="", activity_message="Muy motivador"),
+        Reviews(info_activity_id=info_activities[8].id, profesional_id=profs[2].user_id, client_id=clients[8].user_id, profesional_rating=None, activity_rating=4.0, profesional_message="", activity_message="Buena comida"),
+        Reviews(info_activity_id=info_activities[9].id, profesional_id=profs[1].user_id, client_id=clients[9].user_id, profesional_rating=4.1, activity_rating=None, profesional_message="", activity_message=""),
+        Reviews(info_activity_id=info_activities[10].id, profesional_id=profs[0].user_id, client_id=clients[0].user_id, profesional_rating=None, activity_rating=5.0, profesional_message="", activity_message="Muy divertido"),
+        Reviews(info_activity_id=info_activities[11].id, profesional_id=profs[1].user_id, client_id=clients[1].user_id, profesional_rating=4.0, activity_rating=None, profesional_message="", activity_message=""),
+        Reviews(info_activity_id=info_activities[12].id, profesional_id=profs[0].user_id, client_id=clients[2].user_id, profesional_rating=None, activity_rating=None, profesional_message="Muy buena ruta", activity_message=""),
+        Reviews(info_activity_id=info_activities[13].id, profesional_id=profs[2].user_id, client_id=clients[3].user_id, profesional_rating=None, activity_rating=3.5, profesional_message="", activity_message=""),
+        Reviews(info_activity_id=info_activities[14].id, profesional_id=profs[1].user_id, client_id=clients[4].user_id, profesional_rating=4.8, activity_rating=None, profesional_message="Creativo", activity_message=""),
+        Reviews(info_activity_id=info_activities[15].id, profesional_id=profs[0].user_id, client_id=clients[5].user_id, profesional_rating=None, activity_rating=4.0, profesional_message="", activity_message=""),
+        Reviews(info_activity_id=info_activities[16].id, profesional_id=profs[2].user_id, client_id=clients[6].user_id, profesional_rating=None, activity_rating=4.3, profesional_message="", activity_message="Arquitectura impresionante"),
+        Reviews(info_activity_id=info_activities[17].id, profesional_id=profs[1].user_id, client_id=clients[7].user_id, profesional_rating=3.9, activity_rating=None, profesional_message="", activity_message=""),
+        Reviews(info_activity_id=info_activities[18].id, profesional_id=profs[0].user_id, client_id=clients[8].user_id, profesional_rating=None, activity_rating=5.0, profesional_message="", activity_message="Aprendí mucho"),
+        Reviews(info_activity_id=info_activities[19].id, profesional_id=profs[1].user_id, client_id=clients[9].user_id, profesional_rating=4.0, activity_rating=None, profesional_message="", activity_message=""),
+        Reviews(info_activity_id=info_activities[0].id, profesional_id=profs[0].user_id, client_id=clients[1].user_id, profesional_rating=None, activity_rating=4.7, profesional_message="", activity_message="Muy relajante"),
+        Reviews(info_activity_id=info_activities[1].id, profesional_id=profs[2].user_id, client_id=clients[2].user_id, profesional_rating=4.2, activity_rating=None, profesional_message="Buen guía", activity_message=""),
+        Reviews(info_activity_id=info_activities[2].id, profesional_id=profs[1].user_id, client_id=clients[3].user_id, profesional_rating=None, activity_rating=3.5, profesional_message="", activity_message=""),
+        Reviews(info_activity_id=info_activities[3].id, profesional_id=profs[0].user_id, client_id=clients[4].user_id, profesional_rating=3.8, activity_rating=None, profesional_message="", activity_message="Ruta exigente"),
+        Reviews(info_activity_id=info_activities[4].id, profesional_id=profs[1].user_id, client_id=clients[5].user_id, profesional_rating=None, activity_rating=4.1, profesional_message="", activity_message=""),
+        Reviews(info_activity_id=info_activities[5].id, profesional_id=profs[2].user_id, client_id=clients[6].user_id, profesional_rating=4.5, activity_rating=None, profesional_message="Muy ameno", activity_message=""),
+        Reviews(info_activity_id=info_activities[6].id, profesional_id=profs[1].user_id, client_id=clients[7].user_id, profesional_rating=None, activity_rating=4.0, profesional_message="", activity_message="Interesante"),
+        Reviews(info_activity_id=info_activities[7].id, profesional_id=profs[0].user_id, client_id=clients[8].user_id, profesional_rating=4.9, activity_rating=None, profesional_message="Motivador", activity_message=""),
+        Reviews(info_activity_id=info_activities[8].id, profesional_id=profs[2].user_id, client_id=clients[9].user_id, profesional_rating=None, activity_rating=4.2, profesional_message="", activity_message="Genial"),
+        Reviews(info_activity_id=info_activities[9].id, profesional_id=profs[1].user_id, client_id=clients[0].user_id, profesional_rating=4.0, activity_rating=5.0, profesional_message="Muy educado", activity_message="Muy útil"),
+    ]
+    db.session.add_all(reviews)
     db.session.commit()
 
     # Reports
-    report1 = Reports(
-        message="Todo perfecto.",
-        user_id=user2.id,
-        target_type=enumReps.user,
-        profesional_target_id=prof1.user_id,
-        activity_target_id=info1.id
-    )
-    db.session.add(report1)
+    reports = [
+        Reports(
+            message="El profesional llegó tarde y no avisó.",
+            user_id=clients[0].user_id,
+            target_type=enumReps.user,
+            profesional_target_id=profs[0].user_id,
+            activity_target_id=None
+        ),
+        Reports(
+            message="La actividad no se realizó como estaba descrita.",
+            user_id=clients[1].user_id,
+            target_type=enumReps.activity,
+            profesional_target_id=None,
+            activity_target_id=info_activities[2].id
+        ),
+        Reports(
+            message="El profesional fue poco amable durante la actividad.",
+            user_id=clients[2].user_id,
+            target_type=enumReps.user,
+            profesional_target_id=profs[1].user_id,
+            activity_target_id=None
+        ),
+        Reports(
+            message="La actividad fue cancelada sin previo aviso.",
+            user_id=clients[3].user_id,
+            target_type=enumReps.activity,
+            profesional_target_id=None,
+            activity_target_id=info_activities[5].id
+        )]
+    db.session.add_all(reports)
     db.session.commit()
 
     # Administradores
-    admin1 = Administrators(user_id=user1.id)
-    db.session.add(admin1)
+    user = Users( email="admin@admin.com",username="admintodopoderoso",
+            password=generate_password_hash("1234"),name="Admin",surname="Pérez",
+            telephone="666888777",NID="90289510A",avatar_url="https://i.pinimg.com/736x/25/cf/5c/25cf5cf090b01de5521e3f086e51637a.jpg"
+        )
+    db.session.add(user)
+    db.session.commit()
+    admin = Administrators(user_id=user.id)
+    db.session.add(admin)
     db.session.commit()
 
-    print("✅ Datos de ejemplo insertados correctamente.")
+print("✅ Datos de ejemplo insertados correctamente.")
