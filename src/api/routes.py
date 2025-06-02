@@ -12,7 +12,6 @@ api = Blueprint('api', __name__)
 # Allow CORS requests to this API
 CORS(api)
 
-
 @api.route('/users', methods=['GET'])
 def get_users():
     stmt = select(Users)

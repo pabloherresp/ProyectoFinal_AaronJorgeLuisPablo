@@ -96,7 +96,7 @@ class Profesionals(db.Model):
 
 
     user: Mapped["Users"] = relationship("Users",back_populates="profesional",uselist=False)
-    activities: Mapped[list["Activities"]] = relationship("Activities",back_populates="profesional")
+    info_activities: Mapped[list["Info_activity"]] = relationship("Info_actiivty",back_populates="profesional")
     reports: Mapped[list["Reports"]] = relationship("Reports",back_populates="profesional")
     reviews: Mapped[list["Reviews"]] = relationship(back_populates="profesional")
 
@@ -108,7 +108,7 @@ class Profesionals(db.Model):
             "tax_address": self.tax_address,
             "nuss": self.nuss,
             "rating": self.rating,
-            "activities": [a.id for a in self.activities],
+            "info_activities": [a.id for a in self.info_activities],
             "reports": [r.id for r in self.reports],
             "user": self.user.serialize() if self.user else None
         }
@@ -120,7 +120,6 @@ class Clients(db.Model):
     city: Mapped[str] = mapped_column(String, nullable=False)
     birthdate: Mapped[datetime] = mapped_column(DateTime(),  default=datetime.utcnow, nullable=False)
     gender: Mapped[enumClts] = mapped_column(SQLAEnum(enumClts), nullable=False)
-    tax_address: Mapped[str] = mapped_column(String, nullable=False)
 
 
     user: Mapped["Users"] = relationship("Users",back_populates="client",uselist=False)
@@ -147,15 +146,12 @@ class Activities(db.Model):
     price: Mapped[float] = mapped_column(Float, nullable=False)
     slots: Mapped[int] = mapped_column(Integer, nullable=False)
     creation_date: Mapped[datetime] = mapped_column(DateTime(),  default=datetime.utcnow, nullable=False)
-    start_date: Mapped[datetime] = mapped_column(DateTime(),  default=datetime.utcnow, nullable=False)
-    end_date: Mapped[datetime] = mapped_column(DateTime(),  default=datetime.utcnow, nullable=False)
-    profesional_id: Mapped[int] = mapped_column(ForeignKey("profesionals.user_id"), nullable=False)
+    start_date: Mapped[datetime] = mapped_column(DateTime(), nullable=False)
+    end_date: Mapped[datetime] = mapped_column(DateTime(), nullable=False)
     is_finished: Mapped[Boolean] = mapped_column(Boolean, nullable=False)
     meeting_point: Mapped[str] = mapped_column(String, nullable=False)
     is_active: Mapped[Boolean] = mapped_column(Boolean, nullable=False)
 
-
-    profesional: Mapped["Profesionals"] = relationship("Profesionals",back_populates="activities",uselist=False)
     info_activity: Mapped["Info_activity"] = relationship("Info_activity",back_populates="activities",uselist=False)
     inscriptions: Mapped[list["Inscriptions"]] = relationship("Inscriptions",back_populates="activity")
 
@@ -182,7 +178,7 @@ class Inscriptions(db.Model):
     activity_id: Mapped[int] = mapped_column(ForeignKey("activities.id"))
     user_id: Mapped[int] = mapped_column(ForeignKey("clients.user_id"))
     inscription_date: Mapped[datetime] = mapped_column(DateTime(),  default=datetime.utcnow, nullable=False)
-    is_active: Mapped[Boolean] = mapped_column(Boolean, nullable=False)
+    is_active: Mapped[Boolean] = mapped_column(Boolean, default=True, nullable=False)
 
     activity: Mapped["Activities"] = relationship("Activities",back_populates="inscriptions",uselist=False)
     client: Mapped["Clients"] = relationship("Clients",back_populates="inscriptions",uselist=False)
@@ -200,12 +196,15 @@ class Inscriptions(db.Model):
 class Info_activity(db.Model):
     __tablename__ = "info_activities"
     id: Mapped[int] = mapped_column(primary_key=True)
+    profesional_id: Mapped[int] = mapped_column(ForeignKey("profesionals.user_id"), nullable=False)
     name: Mapped[str] = mapped_column(String(60),nullable=False)
     desc: Mapped[str] = mapped_column(String(60),nullable=False)
     type: Mapped[enumInfo] = mapped_column(SQLAEnum(enumInfo), nullable=False)
+    location: Mapped[str] = mapped_column(String(60), nullable=False)
     last_update: Mapped[datetime] = mapped_column(DateTime(),  default=datetime.utcnow, nullable=False)
-    #rating: Mapped[float] = mapped_column(ForeignKey("reviews.activity_rating")) # recordar cambiar para que se actualice solo
+    rating: Mapped[float] = mapped_column(Float, default=0) # recordar cambiar para que se actualice solo
 
+    profesional: Mapped["Profesionals"] = relationship("Profesionals",back_populates="info_activities",uselist=False)
     activities: Mapped[list["Activities"]] = relationship("Activities",back_populates="info_activity")
     reports: Mapped[list["Reports"]] = relationship("Reports",back_populates="info_activity")
     favourited_by: Mapped[list["Favourites"]] = relationship(back_populates="activities")
@@ -220,7 +219,8 @@ class Info_activity(db.Model):
             "type": self.type,
             "last_update": self.last_update,
             "activities": [a.id for a in self.activities],
-            "reports": [r.id for r in self.reports]
+            "reports": [r.id for r in self.reports],
+            "profesional": self.profesional.serialize()
         }
     
 class Favourites(db.Model):
