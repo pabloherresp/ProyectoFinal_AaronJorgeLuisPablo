@@ -66,14 +66,14 @@ class Reports(db.Model):
     message: Mapped[str] = mapped_column(String, nullable=False)
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
     target_type: Mapped[enumReps] = mapped_column(SQLAEnum(enumReps), nullable=False)
-    profesional_target_id: Mapped[int] = mapped_column(ForeignKey("profesionals.user_id"))
-    activity_target_id: Mapped[int] = mapped_column(ForeignKey("info_activities.id"))
-    creation_date: Mapped[datetime] = mapped_column(DateTime(),  default=datetime.utcnow, nullable=False)
+    profesional_target_id: Mapped[int] = mapped_column(ForeignKey("profesionals.user_id", name="fk_reports_profesional_target_id"), nullable=True)
+    activity_target_id: Mapped[int] = mapped_column(ForeignKey("info_activities.id", name="fk_reports_activity_target_id"), nullable=True)
+    
+    creation_date: Mapped[datetime] = mapped_column(DateTime(), default=datetime.utcnow, nullable=False)
 
-
-    user: Mapped["Users"] = relationship("Users",back_populates="reports")
-    profesional: Mapped["Profesionals"] = relationship("Profesionals",back_populates="reports")
-    info_activity: Mapped["Info_activity"] = relationship("Info_activity",back_populates="reports")
+    user: Mapped["Users"] = relationship("Users", back_populates="reports")
+    profesional: Mapped["Profesionals"] = relationship("Profesionals", back_populates="reports", foreign_keys=[profesional_target_id])
+    info_activity: Mapped["Info_activity"] = relationship("Info_activity", back_populates="reports", foreign_keys=[activity_target_id])
 
     def serialize(self):
         return {
@@ -94,10 +94,9 @@ class Profesionals(db.Model):
     nuss: Mapped[str] = mapped_column(String(12))
     rating: Mapped[float] = mapped_column(Float, nullable=False)
 
-
     user: Mapped["Users"] = relationship("Users",back_populates="profesional",uselist=False)
-    info_activities: Mapped[list["Info_activity"]] = relationship("Info_actiivty",back_populates="profesional")
-    reports: Mapped[list["Reports"]] = relationship("Reports",back_populates="profesional")
+    info_activities: Mapped[list["Info_activity"]] = relationship("Info_activity", back_populates="profesional")
+    reports: Mapped[list["Reports"]] = relationship("Reports", back_populates="profesional")
     reviews: Mapped[list["Reviews"]] = relationship(back_populates="profesional")
 
     def serialize(self):
@@ -121,7 +120,6 @@ class Clients(db.Model):
     birthdate: Mapped[datetime] = mapped_column(DateTime(),  default=datetime.utcnow, nullable=False)
     gender: Mapped[enumClts] = mapped_column(SQLAEnum(enumClts), nullable=False)
 
-
     user: Mapped["Users"] = relationship("Users",back_populates="client",uselist=False)
     inscriptions: Mapped[list["Inscriptions"]] = relationship("Inscriptions",back_populates="client")
     favourites: Mapped[list["Favourites"]] = relationship(back_populates="clients")
@@ -133,7 +131,6 @@ class Clients(db.Model):
             "city": self.city,
             "birthdate": self.birthdate,
             "gender": self.gender,
-            "tax_address": self.tax_address,
             "user": self.user.serialize() if self.user else None,
             "inscriptions": [i.id for i in self.inscriptions]
         }
@@ -163,7 +160,6 @@ class Activities(db.Model):
             "creation_date": self.creation_date,
             "start_date": self.start_date,
             "end_date": self.end_date,
-            "profesional_id": self.profesional_id,
             "is_finished": self.is_finished,
             "meeting_point": self.meeting_point,
             "is_active": self.is_active,
@@ -228,22 +224,22 @@ class Favourites(db.Model):
     client_id: Mapped[int] = mapped_column(ForeignKey("clients.user_id"), primary_key=True)
     info_activity_id: Mapped[int] = mapped_column(ForeignKey("info_activities.id"), primary_key=True)
 
-    clients: Mapped[list["Clients"]] = relationship(back_populates="favourites")
-    activities: Mapped[list["Info_activity"]] = relationship(back_populates="favourited_by")
+    clients: Mapped["Clients"] = relationship(back_populates="favourites")
+    activities: Mapped["Info_activity"] = relationship(back_populates="favourited_by")
 
     def serialize(self):
         return{
             "client_id": self.client_id,
             "info_activity_id": self.info_activity_id,
-            "clients": [a.serialize for a in self.clients],
-            "activities": [a.serialize for a in self.activities]
+            "clients": [a.serialize() for a in self.clients],
+            "activities": [a.serialize() for a in self.activities]
         }
 
 class Media(db.Model):
     __tablename__ = "media"
     id: Mapped[int] = mapped_column(primary_key=True)
     info_activity_id: Mapped[int] = mapped_column(ForeignKey("info_activities.id"))
-    url: Mapped[String] = mapped_column(String, nullable=False)
+    url: Mapped[str] = mapped_column(String, nullable=False)
     #alt_desc: Mapped[String] = mapped_column(String)
 
     info_activity: Mapped["Info_activity"] = relationship(back_populates="media", uselist=False)
@@ -259,14 +255,15 @@ class Administrators(db.Model):
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), primary_key=True)
 
 class Reviews(db.Model):
+    __tablename__ = "reviews"
     id: Mapped[int] = mapped_column(primary_key=True)
     info_activity_id: Mapped[int] = mapped_column(ForeignKey("info_activities.id"))
     profesional_id: Mapped[int] = mapped_column(ForeignKey("profesionals.user_id"))
     client_id: Mapped[int] = mapped_column(ForeignKey("clients.user_id"))
     profesional_rating: Mapped[float] = mapped_column(Float)
     activity_rating: Mapped[float] = mapped_column(Float)
-    profesional_message: Mapped[String] = mapped_column(String)
-    activity_message: Mapped[String] = mapped_column(String)
+    profesional_message: Mapped[str] = mapped_column(String)
+    activity_message: Mapped[str] = mapped_column(String)
     creation_date: Mapped[datetime] = mapped_column(DateTime(),  default=datetime.utcnow, nullable=False)
 
     client: Mapped["Clients"] = relationship(back_populates="reviews")
