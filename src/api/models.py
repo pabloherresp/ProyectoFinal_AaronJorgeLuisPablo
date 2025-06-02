@@ -28,7 +28,6 @@ class enumReps(PyEnum):
 
 class Users(db.Model):
     __tablename__ = "users"
-
     id: Mapped[int] = mapped_column(primary_key=True)
     email: Mapped[str] = mapped_column(String(40), unique=True, nullable=False)
     username: Mapped[str] = mapped_column(String(20), unique=True, nullable=False)
@@ -40,12 +39,13 @@ class Users(db.Model):
     creation_date: Mapped[datetime] = mapped_column(DateTime(), default=datetime.utcnow, nullable=False)
     avatar_url: Mapped[str] = mapped_column(String, unique=True, nullable=False)
 
-
     reports: Mapped[list["Reports"]] = relationship("Reports",back_populates="user")
     profesional: Mapped["Profesionals"] = relationship("Profesionals",back_populates="user",uselist=False)
     client: Mapped["Clients"] = relationship("Clients",back_populates="user",uselist=False)
 
     def serialize(self):
+        prof = {name: value for name, value in self.profesional.serialize().items() if name != "user"} if self.profesional else None
+        client = {name: value for name, value in self.client.serialize().items() if name != "user"} if self.client else None
         return {
             "id": self.id,
             "email": self.email,
@@ -57,7 +57,8 @@ class Users(db.Model):
             "creation_date": self.creation_date,
             "avatar_url": self.avatar_url,
             "reports": [r.id for r in self.reports],
-            "profesional": self.profesional.serialize() if self.profesional else None,
+            "profesional": prof,
+            "client": client
         }
     
 class Reports(db.Model):
@@ -100,16 +101,17 @@ class Profesionals(db.Model):
     reviews: Mapped[list["Reviews"]] = relationship(back_populates="profesional")
 
     def serialize(self):
+        user = {"email": self.user.email,"username": self.user.username,"name": self.user.name,"surname": self.user.surname,"telephone": self.user.telephone,"NID": self.user.NID,"creation_date": self.user.creation_date,"avatar_url": self.user.avatar_url,"reports": [r.id for r in self.user.reports]}
         return {
             "bio": self.bio,
-            "type": self.type,
+            "type": self.type.value,
             "business_name": self.business_name,
             "tax_address": self.tax_address,
             "nuss": self.nuss,
             "rating": self.rating,
             "info_activities": [a.id for a in self.info_activities],
             "reports": [r.id for r in self.reports],
-            "user": self.user.serialize() if self.user else None
+            "user": user
         }
     
 class Clients(db.Model):
@@ -126,12 +128,13 @@ class Clients(db.Model):
     reviews: Mapped[list["Reviews"]] = relationship(back_populates="client")
 
     def serialize(self):
+        user = user = {"email": self.user.email,"username": self.user.username,"name": self.user.name,"surname": self.user.surname,"telephone": self.user.telephone,"NID": self.user.NID,"creation_date": self.user.creation_date,"avatar_url": self.user.avatar_url,"reports": [r.id for r in self.user.reports]}
         return {
             "address": self.address,
             "city": self.city,
             "birthdate": self.birthdate,
-            "gender": self.gender,
-            "user": self.user.serialize() if self.user else None,
+            "gender": self.gender.value,
+            "user": user,
             "inscriptions": [i.id for i in self.inscriptions]
         }
     
@@ -155,6 +158,7 @@ class Activities(db.Model):
     def serialize(self):
         return {
             "id": self.id,
+            "info_id": self.info_id,
             "price": self.price,
             "slots": self.slots,
             "creation_date": self.creation_date,
@@ -185,8 +189,8 @@ class Inscriptions(db.Model):
             "activity_id": self.activity_id,
             "inscription_date": self.inscription_date,
             "is_active": self.is_active,
-            "activity": self.activity.serialize() if self.activity else None,
-            "client": self.client.serialize() if self.client else None
+            "activity": self.activity.id if self.activity else None,
+            "client": self.client.user_id if self.client else None
         }
     
 class Info_activity(db.Model):
@@ -212,7 +216,7 @@ class Info_activity(db.Model):
             "id": self.id,
             "name": self.name,
             "desc": self.desc,
-            "type": self.type,
+            "type": self.type.value,
             "last_update": self.last_update,
             "activities": [a.id for a in self.activities],
             "reports": [r.id for r in self.reports],
