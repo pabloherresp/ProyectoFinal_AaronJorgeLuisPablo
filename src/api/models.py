@@ -37,7 +37,7 @@ class Users(db.Model):
     telephone: Mapped[str] = mapped_column(String(15), unique=True, nullable=False)
     NID: Mapped[str] = mapped_column(String(10), unique=True, nullable=False)
     creation_date: Mapped[datetime] = mapped_column(DateTime(), default=datetime.utcnow, nullable=False)
-    avatar_url: Mapped[str] = mapped_column(String, unique=True, nullable=False)
+    avatar_url: Mapped[str] = mapped_column(String, nullable=False)
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
 
     reports: Mapped[list["Reports"]] = relationship("Reports",back_populates="user")
@@ -108,7 +108,6 @@ class Profesionals(db.Model):
             "business_name": self.business_name,
             "tax_address": self.tax_address,
             "nuss": self.nuss,
-            "rating": self.rating,
             "info_activities": [a.id for a in self.info_activities],
             "reports": [r.id for r in self.reports],
             "user": user
