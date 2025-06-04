@@ -13,15 +13,23 @@ api = Blueprint('api', __name__)
 # Allow CORS requests to this API
 CORS(api)
 
+#Enpoints para tabla Users
 @api.route('/users', methods=['GET'])
 def get_users():
     stmt = select(Users)
     users = db.session.execute(stmt).scalars().all()
-    if not users:
-        return jsonify({"error": "No users found"}), 404
     response_body = [user.serialize() for user in users]
-
+    
     return jsonify(response_body), 200
+
+@api.route('/users/<int:id>', methods=['GET'])
+def get_one_user(id):
+    stmt = select(Users).where(Users.id == id)
+    user = db.session.execute(stmt).scalar_one_or_none()
+    #response_body = [user.serialize() for user in user_by_id]
+    if user is None:
+        return jsonify({"Error": "User not found"}), 404
+    return jsonify(user.serialize()),200
 
 @api.route('/signup', methods=['POST'])
 def create_user():
@@ -43,7 +51,44 @@ def create_user():
     if "is_profesional" in data:
         prof = Profesionals(user_id=user.id, bio=data["bio"], type=enumProf(data["type"]), business_name=data["business_name"], tax_address=data["tax_address"], nuss=data["nuss"])
         db.session.add(prof)
-
     db.session.commit()
 
     return jsonify(user.serialize()), 200
+
+#Endpoints para Profesional
+@api.route('/profesionals', methods=['GET'])
+def get_profesionals():
+    stmt = select(Profesionals)
+    profesionals = db.session.execute(stmt).scalars().all()
+    response_body = [profesional.serialize() for profesional in profesionals]
+
+    return jsonify(response_body), 200
+
+@api.route('/profesionals/<int:id>', methods=['GET'])
+def get_one_profesional(id):
+    stmt = select(Profesionals).where(Profesionals.user_id == id)
+    profesional = db.session.execute(stmt).scalar_one_or_none()
+    #response_body = [user.serialize() for user in user_by_id]
+    if profesional is None:
+        return jsonify({"Error": "User not found"}), 404
+    return jsonify(profesional.serialize()),200
+
+#Enpoints para Clientes
+@api.route('/clients', methods=['GET'])
+def get_clients():
+    stmt= select(Clients)
+    clients = db.session.execute(stmt).scalars().all()
+    response_body = [client.serialize() for client in clients]
+
+    return jsonify(response_body), 200
+
+@api.route('/clients/<int:id>', methods=['GET'])
+def get_one_client(id):
+    stmt = select(Clients).where(Clients.user_id == id)
+    client = db.session.execute(stmt).scalar_one_or_none()
+    #response_body = [user.serialize() for user in user_by_id]
+    if client is None:
+        return jsonify({"Error": "User not found"}), 404
+    return jsonify(client.serialize()),200
+
+

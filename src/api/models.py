@@ -197,7 +197,7 @@ class Info_activity(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     profesional_id: Mapped[int] = mapped_column(ForeignKey("profesionals.user_id"), nullable=False)
     name: Mapped[str] = mapped_column(String(60),nullable=False)
-    desc: Mapped[str] = mapped_column(String(60),nullable=False)
+    desc: Mapped[str] = mapped_column(String,nullable=False)
     type: Mapped[enumInfo] = mapped_column(SQLAEnum(enumInfo), nullable=False)
     location: Mapped[str] = mapped_column(String(60), nullable=False)
     last_update: Mapped[datetime] = mapped_column(DateTime(),  default=datetime.utcnow, nullable=False)
