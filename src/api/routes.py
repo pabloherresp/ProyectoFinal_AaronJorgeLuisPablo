@@ -16,6 +16,8 @@ CORS(api)
 def get_users():
     stmt = select(Users)
     users = db.session.execute(stmt).scalars().all()
+    if not users:
+        return jsonify({"error": "No users found"}), 404
     response_body = [user.serialize() for user in users]
-    
+
     return jsonify(response_body), 200

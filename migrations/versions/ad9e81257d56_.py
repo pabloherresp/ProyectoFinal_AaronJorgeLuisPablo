@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: ed25b1238006
+Revision ID: ad9e81257d56
 Revises: 
-Create Date: 2025-06-03 00:07:25.575703
+Create Date: 2025-06-04 19:54:56.772033
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'ed25b1238006'
+revision = 'ad9e81257d56'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -29,6 +29,7 @@ def upgrade():
     sa.Column('NID', sa.String(length=10), nullable=False),
     sa.Column('creation_date', sa.DateTime(), nullable=False),
     sa.Column('avatar_url', sa.String(), nullable=False),
+    sa.Column('is_active', sa.Boolean(), nullable=False),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('NID'),
     sa.UniqueConstraint('avatar_url'),
@@ -57,7 +58,6 @@ def upgrade():
     sa.Column('business_name', sa.String(), nullable=False),
     sa.Column('tax_address', sa.String(), nullable=False),
     sa.Column('nuss', sa.String(length=12), nullable=False),
-    sa.Column('rating', sa.Float(), nullable=False),
     sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
     sa.PrimaryKeyConstraint('user_id')
     )
@@ -69,7 +69,6 @@ def upgrade():
     sa.Column('type', sa.Enum('tourism', 'leisure', 'sport', name='enuminfo'), nullable=False),
     sa.Column('location', sa.String(length=60), nullable=False),
     sa.Column('last_update', sa.DateTime(), nullable=False),
-    sa.Column('rating', sa.Float(), nullable=False),
     sa.ForeignKeyConstraint(['profesional_id'], ['profesionals.user_id'], ),
     sa.PrimaryKeyConstraint('id')
     )

@@ -38,6 +38,7 @@ class Users(db.Model):
     NID: Mapped[str] = mapped_column(String(10), unique=True, nullable=False)
     creation_date: Mapped[datetime] = mapped_column(DateTime(), default=datetime.utcnow, nullable=False)
     avatar_url: Mapped[str] = mapped_column(String, unique=True, nullable=False)
+    is_active: Mapped[bool] = mapped_column(Boolean, default=True)
 
     reports: Mapped[list["Reports"]] = relationship("Reports",back_populates="user")
     profesional: Mapped["Profesionals"] = relationship("Profesionals",back_populates="user",uselist=False)
@@ -55,6 +56,7 @@ class Users(db.Model):
             "telephone": self.telephone,
             "NID": self.NID,
             "creation_date": self.creation_date,
+            "is_active": self.is_active,
             "avatar_url": self.avatar_url,
             "reports": [r.id for r in self.reports],
             "profesional": prof,
@@ -69,7 +71,6 @@ class Reports(db.Model):
     target_type: Mapped[enumReps] = mapped_column(SQLAEnum(enumReps), nullable=False)
     profesional_target_id: Mapped[int] = mapped_column(ForeignKey("profesionals.user_id", name="fk_reports_profesional_target_id"), nullable=True)
     activity_target_id: Mapped[int] = mapped_column(ForeignKey("info_activities.id", name="fk_reports_activity_target_id"), nullable=True)
-    
     creation_date: Mapped[datetime] = mapped_column(DateTime(), default=datetime.utcnow, nullable=False)
 
     user: Mapped["Users"] = relationship("Users", back_populates="reports")
@@ -93,7 +94,6 @@ class Profesionals(db.Model):
     business_name: Mapped[str] = mapped_column(String)
     tax_address: Mapped[str] = mapped_column(String)
     nuss: Mapped[str] = mapped_column(String(12))
-    rating: Mapped[float] = mapped_column(Float, nullable=False)
 
     user: Mapped["Users"] = relationship("Users",back_populates="profesional",uselist=False)
     info_activities: Mapped[list["Info_activity"]] = relationship("Info_activity", back_populates="profesional")
@@ -202,7 +202,6 @@ class Info_activity(db.Model):
     type: Mapped[enumInfo] = mapped_column(SQLAEnum(enumInfo), nullable=False)
     location: Mapped[str] = mapped_column(String(60), nullable=False)
     last_update: Mapped[datetime] = mapped_column(DateTime(),  default=datetime.utcnow, nullable=False)
-    rating: Mapped[float] = mapped_column(Float, default=0) # recordar cambiar para que se actualice solo
 
     profesional: Mapped["Profesionals"] = relationship("Profesionals",back_populates="info_activities",uselist=False)
     activities: Mapped[list["Activities"]] = relationship("Activities",back_populates="info_activity")
