@@ -1,5 +1,5 @@
 from app import app
-from api.models import db, Users, Profesionals, Clients, Activities, Info_activity, Reviews, Reports, Media, Favourites, Inscriptions, Administrators
+from api.models import db, Users, Professionals, Clients, Activities, Info_activity, Reviews, Reports, Media, Favourites, Inscriptions, Administrators
 from api.models import enumProf, enumClts, enumInfo, enumReps
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -49,17 +49,17 @@ with app.app_context():
     db.session.add_all(users)
     db.session.commit()
 
-     # Profesionales
-    profs = [Profesionals(user_id=users[0].id,
+     # Professionales
+    profs = [Professionals(user_id=users[0].id,
         bio="Soy monitora de actividades de aventura y una gran apasionada de todo lo que tenga que ver con la naturaleza, el deporte y la emoción de vivir nuevas experiencias al aire libre.<br>Desde muy pequeña he sentido una conexión especial con la montaña, los ríos, los senderos y cada rincón donde se respira libertad. Por eso me dedico con todo mi corazón a compartir esa pasión con otras personas.<br>Mi objetivo es que cada actividad sea algo más que una simple excursión: quiero que vivas una auténtica experiencia que te conecte contigo mismo, con los demás y con el entorno natural que nos rodea. Ya sea escalando una pared, cruzando un puente colgante, descendiendo un barranco o simplemente caminando por un bosque al atardecer, siempre me esfuerzo por crear un ambiente seguro, divertido y lleno de energía positiva.<br>A lo largo de nuestra aventura, aprenderás nuevas habilidades, superarás retos personales y descubrirás paisajes que te dejarán sin aliento. Pero, sobre todo, compartirás risas, historias y momentos únicos que quedarán grabados en tu memoria.<br>Porque no se trata solo de hacer deporte o de vivir una experiencia intensa: se trata de coleccionar recuerdos inolvidables y de disfrutar del presente como nunca antes.<br>Estoy aquí para guiarte, motivarte y acompañarte en cada paso. Así que, si te animas a vivir algo diferente, auténtico y emocionante, ¡prepárate! Juntos pasaremos momentos increíbles que recordarás toda la vida.",
         type=enumProf.freelance,business_name="AnaSportive",
         tax_address="Calle Mayor 1",nuss="NUSS123456"
-    ), Profesionals(user_id=users[1].id,
-        bio="Somos una empresa especializada en la organización de eventos sociales, con sede en Madrid y una firme vocación por llevar experiencias inolvidables a cualquier rincón del territorio.<br>Nos apasiona crear momentos únicos que conecten a las personas, ya sea a través de celebraciones íntimas, encuentros corporativos o actividades lúdicas diseñadas para disfrutar, compartir y celebrar la vida.<br>Madrid es nuestro punto de partida y el corazón de muchas de nuestras propuestas, pero no conocemos límites geográficos cuando se trata de hacer realidad una buena idea. Nos desplazamos allá donde nos necesites, adaptándonos al entorno, al público y al tipo de evento que desees realizar. Nuestra visión es clara: convertir cualquier espacio en un escenario perfecto para crear recuerdos imborrables.<br>Cada evento que organizamos nace del cuidado por los detalles y de una planificación pensada para que todo fluya con naturalidad, elegancia y diversión.<br>Escuchamos a nuestros clientes, nos involucramos con sus ideas y aportamos creatividad, profesionalidad y entusiasmo en cada paso del proceso.<br>No importa si se trata de una fiesta privada, una jornada para fomentar el trabajo en equipo, una experiencia cultural o una actividad recreativa al aire libre: nos encanta asumir nuevos retos y darles vida.<br>Gracias a nuestro equipo dinámico, con experiencia en logística, animación, coordinación y diseño de experiencias, conseguimos que cada ocasión sea especial, adaptándonos a diferentes públicos, edades y estilos.<br>Nuestro compromiso es ofrecer eventos que no solo cumplan expectativas, sino que las superen. Porque creemos que los mejores recuerdos se crean cuando la organización es impecable y el ambiente invita a disfrutar, estamos aquí para ayudarte a imaginar, planificar y celebrar.<br>Desde Madrid hacia donde tú quieras, diseñamos vivencias que se sienten y se recuerdan.",
+    ), Professionals(user_id=users[1].id,
+        bio="Somos una empresa especializada en la organización de eventos sociales, con sede en Madrid y una firme vocación por llevar experiencias inolvidables a cualquier rincón del territorio.<br>Nos apasiona crear momentos únicos que conecten a las personas, ya sea a través de celebraciones íntimas, encuentros corporativos o actividades lúdicas diseñadas para disfrutar, compartir y celebrar la vida.<br>Madrid es nuestro punto de partida y el corazón de muchas de nuestras propuestas, pero no conocemos límites geográficos cuando se trata de hacer realidad una buena idea. Nos desplazamos allá donde nos necesites, adaptándonos al entorno, al público y al tipo de evento que desees realizar. Nuestra visión es clara: convertir cualquier espacio en un escenario perfecto para crear recuerdos imborrables.<br>Cada evento que organizamos nace del cuidado por los detalles y de una planificación pensada para que todo fluya con naturalidad, elegancia y diversión.<br>Escuchamos a nuestros clientes, nos involucramos con sus ideas y aportamos creatividad, professionalidad y entusiasmo en cada paso del proceso.<br>No importa si se trata de una fiesta privada, una jornada para fomentar el trabajo en equipo, una experiencia cultural o una actividad recreativa al aire libre: nos encanta asumir nuevos retos y darles vida.<br>Gracias a nuestro equipo dinámico, con experiencia en logística, animación, coordinación y diseño de experiencias, conseguimos que cada ocasión sea especial, adaptándonos a diferentes públicos, edades y estilos.<br>Nuestro compromiso es ofrecer eventos que no solo cumplan expectativas, sino que las superen. Porque creemos que los mejores recuerdos se crean cuando la organización es impecable y el ambiente invita a disfrutar, estamos aquí para ayudarte a imaginar, planificar y celebrar.<br>Desde Madrid hacia donde tú quieras, diseñamos vivencias que se sienten y se recuerdan.",
         type=enumProf.business,business_name="TuOcioCentral",
         tax_address="Calle Ocio 2",nuss="NUSS654321"
-    ), Profesionals(user_id=users[2].id,
-        bio="Soy guía turístico profesional, con una profunda vocación por compartir la historia, la cultura y los rincones más fascinantes de cada lugar con viajeros de todo el mundo.<br>Mi trabajo no es solo mostrar monumentos o dar datos: es crear experiencias memorables que conecten emocionalmente a las personas con el destino que están explorando.<br>A lo largo de los años he tenido el privilegio de acompañar a todo tipo de grupos —familias, aventureros, parejas, estudiantes, empresas y viajeros solitarios— por paisajes urbanos y naturales, descubriendo juntos el alma auténtica de cada lugar. Mi formación y experiencia me permiten ofrecer rutas adaptadas a diferentes intereses: historia, arte, gastronomía, leyendas locales, naturaleza o incluso recorridos personalizados para quienes buscan algo único.<br>Me considero no solo un narrador de historias, sino también un puente entre culturas. Hablo varios idiomas y disfruto creando un ambiente acogedor, cercano y enriquecedor, donde cada visitante se sienta cómodo, bien atendido y plenamente involucrado en la experiencia.<br>Ya sea paseando por callejuelas históricas, admirando la arquitectura de una ciudad vibrante o contemplando un atardecer desde un mirador escondido, siempre busco despertar la curiosidad, el asombro y el disfrute genuino.<br>Como guía turístico profesional, mi compromiso es ofrecer calidad, seguridad, amabilidad y un conocimiento profundo de cada lugar, además de una atención personalizada y cercana. Porque no se trata solo de visitar un sitio, sino de entenderlo, sentirlo y llevarlo contigo en la memoria como parte de una vivencia irrepetible.<br>Si estás buscando algo más que una simple visita, estaré encantado de acompañarte en esta aventura. Descubramos juntos la magia que se esconde en cada rincón.",
+    ), Professionals(user_id=users[2].id,
+        bio="Soy guía turístico professional, con una profunda vocación por compartir la historia, la cultura y los rincones más fascinantes de cada lugar con viajeros de todo el mundo.<br>Mi trabajo no es solo mostrar monumentos o dar datos: es crear experiencias memorables que conecten emocionalmente a las personas con el destino que están explorando.<br>A lo largo de los años he tenido el privilegio de acompañar a todo tipo de grupos —familias, aventureros, parejas, estudiantes, empresas y viajeros solitarios— por paisajes urbanos y naturales, descubriendo juntos el alma auténtica de cada lugar. Mi formación y experiencia me permiten ofrecer rutas adaptadas a diferentes intereses: historia, arte, gastronomía, leyendas locales, naturaleza o incluso recorridos personalizados para quienes buscan algo único.<br>Me considero no solo un narrador de historias, sino también un puente entre culturas. Hablo varios idiomas y disfruto creando un ambiente acogedor, cercano y enriquecedor, donde cada visitante se sienta cómodo, bien atendido y plenamente involucrado en la experiencia.<br>Ya sea paseando por callejuelas históricas, admirando la arquitectura de una ciudad vibrante o contemplando un atardecer desde un mirador escondido, siempre busco despertar la curiosidad, el asombro y el disfrute genuino.<br>Como guía turístico professional, mi compromiso es ofrecer calidad, seguridad, amabilidad y un conocimiento profundo de cada lugar, además de una atención personalizada y cercana. Porque no se trata solo de visitar un sitio, sino de entenderlo, sentirlo y llevarlo contigo en la memoria como parte de una vivencia irrepetible.<br>Si estás buscando algo más que una simple visita, estaré encantado de acompañarte en esta aventura. Descubramos juntos la magia que se esconde en cada rincón.",
         type=enumProf.freelance,business_name="GreatTourism",
         tax_address="Calle Turismo 3",nuss="NUSS789012"
     )]
@@ -105,47 +105,47 @@ with app.app_context():
 
     # Info de actividades
     info_activities = [
-        Info_activity(profesional_id=profs[0].user_id,name="Yoga en el Parque Gulliver", location="Valencia",
+        Info_activity(professional_id=profs[0].user_id,name="Yoga en el Parque Gulliver", location="Valencia",
             desc="Descubre el equilibrio perfecto entre cuerpo, mente y naturaleza con nuestra sesión de yoga al aire libre.<br>Respira profundamente, estira tu cuerpo y deja que la energía del entorno natural te revitalice por completo.<br>Rodeados de aire fresco, luz natural y sonidos relajantes, practicaremos posturas (asanas), ejercicios de respiración (pranayama) y técnicas de relajación guiada para reconectar contigo mismo y encontrar paz interior.<br><br>No importa si eres principiante o tienes experiencia: adaptamos la práctica a todos los niveles, fomentando un espacio seguro, tranquilo y sin juicios, donde cada persona pueda avanzar a su ritmo.<br>Solo necesitas una esterilla, ropa cómoda y muchas ganas de sentirte bien.<br><br>Las sesiones están dirigidas por un instructor certificado, que te acompañará paso a paso para que disfrutes al máximo de esta experiencia consciente, conectando con el aquí y el ahora.<br><br>Únete a nosotros y regálate un momento de calma, armonía y bienestar en plena naturaleza.<br>Tu cuerpo lo agradecerá. Tu mente también.",
             type=enumInfo.sport),
-        Info_activity(profesional_id=profs[2].user_id,name="Ruta turística", location="Toledo",
-            desc="Embárcate en una fascinante visita guiada por el centro histórico de Toledo, una ciudad declarada Patrimonio de la Humanidad por la UNESCO y repleta de historia, arte y cultura.<br>Descubre sus callejuelas medievales, sus impresionantes monumentos y las huellas de las tres culturas —cristiana, judía y musulmana— que convivieron durante siglos.<br>Nuestro guía profesional te acompañará en un recorrido ameno y enriquecedor por lugares emblemáticos como la Catedral Primada, el Alcázar, la Judería y las antiguas murallas.<br><br>Conocerás curiosidades, leyendas y detalles que no aparecen en las guías turísticas, todo en un ambiente cercano y participativo.<br>Ideal para amantes de la historia, familias, grupos o visitantes que deseen una experiencia auténtica y profunda.<br><br>Ven a descubrir por qué Toledo es conocida como la “Ciudad de las Tres Culturas” y déjate sorprender por su encanto atemporal.<br>Una experiencia que recordarás mucho después de regresar a casa.",
+        Info_activity(professional_id=profs[2].user_id,name="Ruta turística", location="Toledo",
+            desc="Embárcate en una fascinante visita guiada por el centro histórico de Toledo, una ciudad declarada Patrimonio de la Humanidad por la UNESCO y repleta de historia, arte y cultura.<br>Descubre sus callejuelas medievales, sus impresionantes monumentos y las huellas de las tres culturas —cristiana, judía y musulmana— que convivieron durante siglos.<br>Nuestro guía professional te acompañará en un recorrido ameno y enriquecedor por lugares emblemáticos como la Catedral Primada, el Alcázar, la Judería y las antiguas murallas.<br><br>Conocerás curiosidades, leyendas y detalles que no aparecen en las guías turísticas, todo en un ambiente cercano y participativo.<br>Ideal para amantes de la historia, familias, grupos o visitantes que deseen una experiencia auténtica y profunda.<br><br>Ven a descubrir por qué Toledo es conocida como la “Ciudad de las Tres Culturas” y déjate sorprender por su encanto atemporal.<br>Una experiencia que recordarás mucho después de regresar a casa.",
             type=enumInfo.tourism),
-        Info_activity(profesional_id=profs[1].user_id,name="Taller de cocina saludable", location="Madrid",
+        Info_activity(professional_id=profs[1].user_id,name="Taller de cocina saludable", location="Madrid",
             desc="Aprende recetas fáciles y sanas",type=enumInfo.leisure),
-        Info_activity(profesional_id=profs[0].user_id,name="Senderismo en la sierra", location="Granada",
+        Info_activity(professional_id=profs[0].user_id,name="Senderismo en la sierra", location="Granada",
             desc="Ruta de senderismo para todos los niveles",type=enumInfo.sport),
-        Info_activity(profesional_id=profs[1].user_id,name="Clase de pilates", location="Valencia",
+        Info_activity(professional_id=profs[1].user_id,name="Clase de pilates", location="Valencia",
             desc="Pilates para mejorar tu postura",type=enumInfo.sport),
-        Info_activity(profesional_id=profs[2].user_id,name="Visita a museo del Prado", location="Madrid",
+        Info_activity(professional_id=profs[2].user_id,name="Visita a museo del Prado", location="Madrid",
             desc="Recorrido cultural por los principales museos",type=enumInfo.tourism),
-        Info_activity(profesional_id=profs[1].user_id,name="Taller de fotografía", location="Madrid",
+        Info_activity(professional_id=profs[1].user_id,name="Taller de fotografía", location="Madrid",
             desc="Aprende a sacar el máximo partido a tu cámara",type=enumInfo.leisure),
-        Info_activity(profesional_id=profs[0].user_id,name="Clase de spinning", location="Valencia",
+        Info_activity(professional_id=profs[0].user_id,name="Clase de spinning", location="Valencia",
             desc="Entrenamiento cardiovascular intenso",type=enumInfo.sport),
-        Info_activity(profesional_id=profs[2].user_id,name="Tour gastronómico", location="Granada",
+        Info_activity(professional_id=profs[2].user_id,name="Tour gastronómico", location="Granada",
             desc="Descubre los mejores sabores locales",type=enumInfo.tourism),
-        Info_activity(profesional_id=profs[1].user_id,name="Taller de mindfulness", location="Toledo",
+        Info_activity(professional_id=profs[1].user_id,name="Taller de mindfulness", location="Toledo",
             desc="Aprende técnicas de relajación y meditación",type=enumInfo.leisure),
-        Info_activity(profesional_id=profs[0].user_id,name="Clase de zumba", location="Madrid",
+        Info_activity(professional_id=profs[0].user_id,name="Clase de zumba", location="Madrid",
             desc="Baila y haz ejercicio al ritmo de la música",type=enumInfo.sport),
-        Info_activity(profesional_id=profs[1].user_id,name="Excursión a la playa", location="Valencia",
+        Info_activity(professional_id=profs[1].user_id,name="Excursión a la playa", location="Valencia",
             desc="Día de actividades y juegos en la playa",type=enumInfo.leisure),
-        Info_activity(profesional_id=profs[0].user_id,name="Ruta en bicicleta", location="Granada",
+        Info_activity(professional_id=profs[0].user_id,name="Ruta en bicicleta", location="Granada",
             desc="Paseo en bici por la ciudad",type=enumInfo.sport),
-        Info_activity(profesional_id=profs[2].user_id,name="Visita guiada al casco antiguo", location="Granada",
+        Info_activity(professional_id=profs[2].user_id,name="Visita guiada al casco antiguo", location="Granada",
             desc="Historia y curiosidades del centro histórico",type=enumInfo.tourism),
-        Info_activity(profesional_id=profs[1].user_id,name="Taller de pintura", location="Madrid",
+        Info_activity(professional_id=profs[1].user_id,name="Taller de pintura", location="Madrid",
             desc="Desarrolla tu creatividad con la pintura",type=enumInfo.leisure),
-        Info_activity(profesional_id=profs[0].user_id,name="Clase de running", location="Toledo",
+        Info_activity(professional_id=profs[0].user_id,name="Clase de running", location="Toledo",
             desc="Entrenamiento para corredores principiantes",type=enumInfo.sport),
-        Info_activity(profesional_id=profs[2].user_id,name="Tour de arquitectura", location="Toledo",
+        Info_activity(professional_id=profs[2].user_id,name="Tour de arquitectura", location="Toledo",
             desc="Descubre los edificios más emblemáticos",type=enumInfo.tourism),
-        Info_activity(profesional_id=profs[1].user_id,name="Taller de escritura creativa", location="Valencia",
+        Info_activity(professional_id=profs[1].user_id,name="Taller de escritura creativa", location="Valencia",
             desc="Mejora tus habilidades narrativas",type=enumInfo.leisure),
-        Info_activity(profesional_id=profs[0].user_id,name="Clase de natación", location="Madrid",
+        Info_activity(professional_id=profs[0].user_id,name="Clase de natación", location="Madrid",
             desc="Aprende a nadar o mejora tu técnica",type=enumInfo.sport),
-        Info_activity(profesional_id=profs[1].user_id,name="Visita a bodegas", location="Toledo",
+        Info_activity(professional_id=profs[1].user_id,name="Visita a bodegas", location="Toledo",
             desc="Cata de vinos y recorrido por bodegas locales",type=enumInfo.tourism),
     ]
     db.session.add_all(info_activities)
@@ -387,36 +387,36 @@ with app.app_context():
 
     # Reviews
     reviews = [
-        Reviews(info_activity_id=info_activities[0].id, profesional_id=profs[0].user_id, client_id=clients[0].user_id, profesional_rating=4.5, activity_rating=None, profesional_message="Muy profesional", activity_message=""),
-        Reviews(info_activity_id=info_activities[1].id, profesional_id=profs[2].user_id, client_id=clients[1].user_id, profesional_rating=None, activity_rating=4.5, profesional_message="", activity_message="Muy interesante"),
-        Reviews(info_activity_id=info_activities[2].id, profesional_id=profs[1].user_id, client_id=clients[2].user_id, profesional_rating=4.0, activity_rating=None, profesional_message="", activity_message=""),
-        Reviews(info_activity_id=info_activities[3].id, profesional_id=profs[0].user_id, client_id=clients[3].user_id, profesional_rating=None, activity_rating=5.0, profesional_message="", activity_message="Ruta preciosa"),
-        Reviews(info_activity_id=info_activities[4].id, profesional_id=profs[1].user_id, client_id=clients[4].user_id, profesional_rating=5.0, activity_rating=None, profesional_message="Buen trato", activity_message=""),
-        Reviews(info_activity_id=info_activities[5].id, profesional_id=profs[2].user_id, client_id=clients[5].user_id, profesional_rating=None, activity_rating=4.8, profesional_message="", activity_message="Museo espectacular"),
-        Reviews(info_activity_id=info_activities[6].id, profesional_id=profs[1].user_id, client_id=clients[6].user_id, profesional_rating=3.0, activity_rating=None, profesional_message="", activity_message=""),
-        Reviews(info_activity_id=info_activities[7].id, profesional_id=profs[0].user_id, client_id=clients[7].user_id, profesional_rating=None, activity_rating=4.2, profesional_message="", activity_message="Muy motivador"),
-        Reviews(info_activity_id=info_activities[8].id, profesional_id=profs[2].user_id, client_id=clients[8].user_id, profesional_rating=None, activity_rating=4.0, profesional_message="", activity_message="Buena comida"),
-        Reviews(info_activity_id=info_activities[9].id, profesional_id=profs[1].user_id, client_id=clients[9].user_id, profesional_rating=4.1, activity_rating=None, profesional_message="", activity_message=""),
-        Reviews(info_activity_id=info_activities[10].id, profesional_id=profs[0].user_id, client_id=clients[0].user_id, profesional_rating=None, activity_rating=5.0, profesional_message="", activity_message="Muy divertido"),
-        Reviews(info_activity_id=info_activities[11].id, profesional_id=profs[1].user_id, client_id=clients[1].user_id, profesional_rating=4.0, activity_rating=None, profesional_message="", activity_message=""),
-        Reviews(info_activity_id=info_activities[12].id, profesional_id=profs[0].user_id, client_id=clients[2].user_id, profesional_rating=None, activity_rating=None, profesional_message="Muy buena ruta", activity_message=""),
-        Reviews(info_activity_id=info_activities[13].id, profesional_id=profs[2].user_id, client_id=clients[3].user_id, profesional_rating=None, activity_rating=3.5, profesional_message="", activity_message=""),
-        Reviews(info_activity_id=info_activities[14].id, profesional_id=profs[1].user_id, client_id=clients[4].user_id, profesional_rating=4.8, activity_rating=None, profesional_message="Creativo", activity_message=""),
-        Reviews(info_activity_id=info_activities[15].id, profesional_id=profs[0].user_id, client_id=clients[5].user_id, profesional_rating=None, activity_rating=4.0, profesional_message="", activity_message=""),
-        Reviews(info_activity_id=info_activities[16].id, profesional_id=profs[2].user_id, client_id=clients[6].user_id, profesional_rating=None, activity_rating=4.3, profesional_message="", activity_message="Arquitectura impresionante"),
-        Reviews(info_activity_id=info_activities[17].id, profesional_id=profs[1].user_id, client_id=clients[7].user_id, profesional_rating=3.9, activity_rating=None, profesional_message="", activity_message=""),
-        Reviews(info_activity_id=info_activities[18].id, profesional_id=profs[0].user_id, client_id=clients[8].user_id, profesional_rating=None, activity_rating=5.0, profesional_message="", activity_message="Aprendí mucho"),
-        Reviews(info_activity_id=info_activities[19].id, profesional_id=profs[1].user_id, client_id=clients[9].user_id, profesional_rating=4.0, activity_rating=None, profesional_message="", activity_message=""),
-        Reviews(info_activity_id=info_activities[0].id, profesional_id=profs[0].user_id, client_id=clients[1].user_id, profesional_rating=None, activity_rating=4.7, profesional_message="", activity_message="Muy relajante"),
-        Reviews(info_activity_id=info_activities[1].id, profesional_id=profs[2].user_id, client_id=clients[2].user_id, profesional_rating=4.2, activity_rating=None, profesional_message="Buen guía", activity_message=""),
-        Reviews(info_activity_id=info_activities[2].id, profesional_id=profs[1].user_id, client_id=clients[3].user_id, profesional_rating=None, activity_rating=3.5, profesional_message="", activity_message=""),
-        Reviews(info_activity_id=info_activities[3].id, profesional_id=profs[0].user_id, client_id=clients[4].user_id, profesional_rating=3.8, activity_rating=None, profesional_message="", activity_message="Ruta exigente"),
-        Reviews(info_activity_id=info_activities[4].id, profesional_id=profs[1].user_id, client_id=clients[5].user_id, profesional_rating=None, activity_rating=4.1, profesional_message="", activity_message=""),
-        Reviews(info_activity_id=info_activities[5].id, profesional_id=profs[2].user_id, client_id=clients[6].user_id, profesional_rating=4.5, activity_rating=None, profesional_message="Muy ameno", activity_message=""),
-        Reviews(info_activity_id=info_activities[6].id, profesional_id=profs[1].user_id, client_id=clients[7].user_id, profesional_rating=None, activity_rating=4.0, profesional_message="", activity_message="Interesante"),
-        Reviews(info_activity_id=info_activities[7].id, profesional_id=profs[0].user_id, client_id=clients[8].user_id, profesional_rating=4.9, activity_rating=None, profesional_message="Motivador", activity_message=""),
-        Reviews(info_activity_id=info_activities[8].id, profesional_id=profs[2].user_id, client_id=clients[9].user_id, profesional_rating=None, activity_rating=4.2, profesional_message="", activity_message="Genial"),
-        Reviews(info_activity_id=info_activities[9].id, profesional_id=profs[1].user_id, client_id=clients[0].user_id, profesional_rating=4.0, activity_rating=5.0, profesional_message="Muy educado", activity_message="Muy útil"),
+        Reviews(info_activity_id=info_activities[0].id, professional_id=profs[0].user_id, client_id=clients[0].user_id, professional_rating=4.5, activity_rating=None, professional_message="Muy professional", activity_message=""),
+        Reviews(info_activity_id=info_activities[1].id, professional_id=profs[2].user_id, client_id=clients[1].user_id, professional_rating=None, activity_rating=4.5, professional_message="", activity_message="Muy interesante"),
+        Reviews(info_activity_id=info_activities[2].id, professional_id=profs[1].user_id, client_id=clients[2].user_id, professional_rating=4.0, activity_rating=None, professional_message="", activity_message=""),
+        Reviews(info_activity_id=info_activities[3].id, professional_id=profs[0].user_id, client_id=clients[3].user_id, professional_rating=None, activity_rating=5.0, professional_message="", activity_message="Ruta preciosa"),
+        Reviews(info_activity_id=info_activities[4].id, professional_id=profs[1].user_id, client_id=clients[4].user_id, professional_rating=5.0, activity_rating=None, professional_message="Buen trato", activity_message=""),
+        Reviews(info_activity_id=info_activities[5].id, professional_id=profs[2].user_id, client_id=clients[5].user_id, professional_rating=None, activity_rating=4.8, professional_message="", activity_message="Museo espectacular"),
+        Reviews(info_activity_id=info_activities[6].id, professional_id=profs[1].user_id, client_id=clients[6].user_id, professional_rating=3.0, activity_rating=None, professional_message="", activity_message=""),
+        Reviews(info_activity_id=info_activities[7].id, professional_id=profs[0].user_id, client_id=clients[7].user_id, professional_rating=None, activity_rating=4.2, professional_message="", activity_message="Muy motivador"),
+        Reviews(info_activity_id=info_activities[8].id, professional_id=profs[2].user_id, client_id=clients[8].user_id, professional_rating=None, activity_rating=4.0, professional_message="", activity_message="Buena comida"),
+        Reviews(info_activity_id=info_activities[9].id, professional_id=profs[1].user_id, client_id=clients[9].user_id, professional_rating=4.1, activity_rating=None, professional_message="", activity_message=""),
+        Reviews(info_activity_id=info_activities[10].id, professional_id=profs[0].user_id, client_id=clients[0].user_id, professional_rating=None, activity_rating=5.0, professional_message="", activity_message="Muy divertido"),
+        Reviews(info_activity_id=info_activities[11].id, professional_id=profs[1].user_id, client_id=clients[1].user_id, professional_rating=4.0, activity_rating=None, professional_message="", activity_message=""),
+        Reviews(info_activity_id=info_activities[12].id, professional_id=profs[0].user_id, client_id=clients[2].user_id, professional_rating=None, activity_rating=None, professional_message="Muy buena ruta", activity_message=""),
+        Reviews(info_activity_id=info_activities[13].id, professional_id=profs[2].user_id, client_id=clients[3].user_id, professional_rating=None, activity_rating=3.5, professional_message="", activity_message=""),
+        Reviews(info_activity_id=info_activities[14].id, professional_id=profs[1].user_id, client_id=clients[4].user_id, professional_rating=4.8, activity_rating=None, professional_message="Creativo", activity_message=""),
+        Reviews(info_activity_id=info_activities[15].id, professional_id=profs[0].user_id, client_id=clients[5].user_id, professional_rating=None, activity_rating=4.0, professional_message="", activity_message=""),
+        Reviews(info_activity_id=info_activities[16].id, professional_id=profs[2].user_id, client_id=clients[6].user_id, professional_rating=None, activity_rating=4.3, professional_message="", activity_message="Arquitectura impresionante"),
+        Reviews(info_activity_id=info_activities[17].id, professional_id=profs[1].user_id, client_id=clients[7].user_id, professional_rating=3.9, activity_rating=None, professional_message="", activity_message=""),
+        Reviews(info_activity_id=info_activities[18].id, professional_id=profs[0].user_id, client_id=clients[8].user_id, professional_rating=None, activity_rating=5.0, professional_message="", activity_message="Aprendí mucho"),
+        Reviews(info_activity_id=info_activities[19].id, professional_id=profs[1].user_id, client_id=clients[9].user_id, professional_rating=4.0, activity_rating=None, professional_message="", activity_message=""),
+        Reviews(info_activity_id=info_activities[0].id, professional_id=profs[0].user_id, client_id=clients[1].user_id, professional_rating=None, activity_rating=4.7, professional_message="", activity_message="Muy relajante"),
+        Reviews(info_activity_id=info_activities[1].id, professional_id=profs[2].user_id, client_id=clients[2].user_id, professional_rating=4.2, activity_rating=None, professional_message="Buen guía", activity_message=""),
+        Reviews(info_activity_id=info_activities[2].id, professional_id=profs[1].user_id, client_id=clients[3].user_id, professional_rating=None, activity_rating=3.5, professional_message="", activity_message=""),
+        Reviews(info_activity_id=info_activities[3].id, professional_id=profs[0].user_id, client_id=clients[4].user_id, professional_rating=3.8, activity_rating=None, professional_message="", activity_message="Ruta exigente"),
+        Reviews(info_activity_id=info_activities[4].id, professional_id=profs[1].user_id, client_id=clients[5].user_id, professional_rating=None, activity_rating=4.1, professional_message="", activity_message=""),
+        Reviews(info_activity_id=info_activities[5].id, professional_id=profs[2].user_id, client_id=clients[6].user_id, professional_rating=4.5, activity_rating=None, professional_message="Muy ameno", activity_message=""),
+        Reviews(info_activity_id=info_activities[6].id, professional_id=profs[1].user_id, client_id=clients[7].user_id, professional_rating=None, activity_rating=4.0, professional_message="", activity_message="Interesante"),
+        Reviews(info_activity_id=info_activities[7].id, professional_id=profs[0].user_id, client_id=clients[8].user_id, professional_rating=4.9, activity_rating=None, professional_message="Motivador", activity_message=""),
+        Reviews(info_activity_id=info_activities[8].id, professional_id=profs[2].user_id, client_id=clients[9].user_id, professional_rating=None, activity_rating=4.2, professional_message="", activity_message="Genial"),
+        Reviews(info_activity_id=info_activities[9].id, professional_id=profs[1].user_id, client_id=clients[0].user_id, professional_rating=4.0, activity_rating=5.0, professional_message="Muy educado", activity_message="Muy útil"),
     ]
     db.session.add_all(reviews)
     db.session.commit()
@@ -424,31 +424,31 @@ with app.app_context():
     # Reports
     reports = [
         Reports(
-            message="El profesional llegó tarde y no avisó.",
+            message="El professional llegó tarde y no avisó.",
             user_id=clients[0].user_id,
             target_type=enumReps.user,
-            profesional_target_id=profs[0].user_id,
+            professional_target_id=profs[0].user_id,
             activity_target_id=None
         ),
         Reports(
             message="La actividad no se realizó como estaba descrita.",
             user_id=clients[1].user_id,
             target_type=enumReps.activity,
-            profesional_target_id=None,
+            professional_target_id=None,
             activity_target_id=info_activities[2].id
         ),
         Reports(
-            message="El profesional fue poco amable durante la actividad.",
+            message="El professional fue poco amable durante la actividad.",
             user_id=clients[2].user_id,
             target_type=enumReps.user,
-            profesional_target_id=profs[1].user_id,
+            professional_target_id=profs[1].user_id,
             activity_target_id=None
         ),
         Reports(
             message="La actividad fue cancelada sin previo aviso.",
             user_id=clients[3].user_id,
             target_type=enumReps.activity,
-            profesional_target_id=None,
+            professional_target_id=None,
             activity_target_id=info_activities[5].id
         )]
     db.session.add_all(reports)

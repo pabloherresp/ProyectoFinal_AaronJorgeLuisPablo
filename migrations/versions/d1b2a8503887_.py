@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: ad9e81257d56
+Revision ID: d1b2a8503887
 Revises: 
-Create Date: 2025-06-04 19:54:56.772033
+Create Date: 2025-06-06 01:41:29.099930
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'ad9e81257d56'
+revision = 'd1b2a8503887'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -32,7 +32,6 @@ def upgrade():
     sa.Column('is_active', sa.Boolean(), nullable=False),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('NID'),
-    sa.UniqueConstraint('avatar_url'),
     sa.UniqueConstraint('email'),
     sa.UniqueConstraint('telephone'),
     sa.UniqueConstraint('username')
@@ -51,7 +50,7 @@ def upgrade():
     sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
     sa.PrimaryKeyConstraint('user_id')
     )
-    op.create_table('profesionals',
+    op.create_table('professionals',
     sa.Column('user_id', sa.Integer(), nullable=False),
     sa.Column('bio', sa.String(), nullable=False),
     sa.Column('type', sa.Enum('freelance', 'business', name='enumprof'), nullable=False),
@@ -63,13 +62,13 @@ def upgrade():
     )
     op.create_table('info_activities',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('profesional_id', sa.Integer(), nullable=False),
+    sa.Column('professional_id', sa.Integer(), nullable=False),
     sa.Column('name', sa.String(length=60), nullable=False),
-    sa.Column('desc', sa.String(length=60), nullable=False),
+    sa.Column('desc', sa.String(), nullable=False),
     sa.Column('type', sa.Enum('tourism', 'leisure', 'sport', name='enuminfo'), nullable=False),
     sa.Column('location', sa.String(length=60), nullable=False),
     sa.Column('last_update', sa.DateTime(), nullable=False),
-    sa.ForeignKeyConstraint(['profesional_id'], ['profesionals.user_id'], ),
+    sa.ForeignKeyConstraint(['professional_id'], ['professionals.user_id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('activities',
@@ -105,27 +104,27 @@ def upgrade():
     sa.Column('message', sa.String(), nullable=False),
     sa.Column('user_id', sa.Integer(), nullable=False),
     sa.Column('target_type', sa.Enum('user', 'activity', name='enumreps'), nullable=False),
-    sa.Column('profesional_target_id', sa.Integer(), nullable=True),
+    sa.Column('professional_target_id', sa.Integer(), nullable=True),
     sa.Column('activity_target_id', sa.Integer(), nullable=True),
     sa.Column('creation_date', sa.DateTime(), nullable=False),
     sa.ForeignKeyConstraint(['activity_target_id'], ['info_activities.id'], name='fk_reports_activity_target_id'),
-    sa.ForeignKeyConstraint(['profesional_target_id'], ['profesionals.user_id'], name='fk_reports_profesional_target_id'),
+    sa.ForeignKeyConstraint(['professional_target_id'], ['professionals.user_id'], name='fk_reports_professional_target_id'),
     sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('reviews',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('info_activity_id', sa.Integer(), nullable=False),
-    sa.Column('profesional_id', sa.Integer(), nullable=False),
+    sa.Column('professional_id', sa.Integer(), nullable=False),
     sa.Column('client_id', sa.Integer(), nullable=False),
-    sa.Column('profesional_rating', sa.Float(), nullable=True),
+    sa.Column('professional_rating', sa.Float(), nullable=True),
     sa.Column('activity_rating', sa.Float(), nullable=True),
-    sa.Column('profesional_message', sa.String(), nullable=True),
+    sa.Column('professional_message', sa.String(), nullable=True),
     sa.Column('activity_message', sa.String(), nullable=True),
     sa.Column('creation_date', sa.DateTime(), nullable=False),
     sa.ForeignKeyConstraint(['client_id'], ['clients.user_id'], ),
     sa.ForeignKeyConstraint(['info_activity_id'], ['info_activities.id'], ),
-    sa.ForeignKeyConstraint(['profesional_id'], ['profesionals.user_id'], ),
+    sa.ForeignKeyConstraint(['professional_id'], ['professionals.user_id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('inscriptions',
@@ -150,7 +149,7 @@ def downgrade():
     op.drop_table('favourites')
     op.drop_table('activities')
     op.drop_table('info_activities')
-    op.drop_table('profesionals')
+    op.drop_table('professionals')
     op.drop_table('clients')
     op.drop_table('administrators')
     op.drop_table('users')
