@@ -41,11 +41,11 @@ class Users(db.Model):
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
 
     reports: Mapped[list["Reports"]] = relationship("Reports",back_populates="user")
-    profesional: Mapped["Profesionals"] = relationship("Profesionals",back_populates="user",uselist=False)
+    professional: Mapped["Professionals"] = relationship("Professionals",back_populates="user",uselist=False)
     client: Mapped["Clients"] = relationship("Clients",back_populates="user",uselist=False)
 
     def serialize(self):
-        prof = {name: value for name, value in self.profesional.serialize().items() if name != "user"} if self.profesional else None
+        prof = {name: value for name, value in self.professional.serialize().items() if name != "user"} if self.professional else None
         client = {name: value for name, value in self.client.serialize().items() if name != "user"} if self.client else None
         return {
             "id": self.id,
@@ -59,7 +59,7 @@ class Users(db.Model):
             "is_active": self.is_active,
             "avatar_url": self.avatar_url,
             "reports": [r.id for r in self.reports],
-            "profesional": prof,
+            "professional": prof,
             "client": client
         }
     
@@ -69,12 +69,12 @@ class Reports(db.Model):
     message: Mapped[str] = mapped_column(String, nullable=False)
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
     target_type: Mapped[enumReps] = mapped_column(SQLAEnum(enumReps), nullable=False)
-    profesional_target_id: Mapped[int] = mapped_column(ForeignKey("profesionals.user_id", name="fk_reports_profesional_target_id"), nullable=True)
+    professional_target_id: Mapped[int] = mapped_column(ForeignKey("professionals.user_id", name="fk_reports_professional_target_id"), nullable=True)
     activity_target_id: Mapped[int] = mapped_column(ForeignKey("info_activities.id", name="fk_reports_activity_target_id"), nullable=True)
     creation_date: Mapped[datetime] = mapped_column(DateTime(), default=datetime.utcnow, nullable=False)
 
     user: Mapped["Users"] = relationship("Users", back_populates="reports")
-    profesional: Mapped["Profesionals"] = relationship("Profesionals", back_populates="reports", foreign_keys=[profesional_target_id])
+    professional: Mapped["Professionals"] = relationship("Professionals", back_populates="reports", foreign_keys=[professional_target_id])
     info_activity: Mapped["Info_activity"] = relationship("Info_activity", back_populates="reports", foreign_keys=[activity_target_id])
 
     def serialize(self):
@@ -82,12 +82,12 @@ class Reports(db.Model):
             "id": self.id,
             "message": self.message,
             "user": self.user.serialize() if self.user else None,
-            "profesional": self.profesional.serialize() if self.profesional else None,
+            "professional": self.professional.serialize() if self.professional else None,
             "info_activity": self.info_activity.serialize() if self.info_activity else None
         }
     
-class Profesionals(db.Model):
-    __tablename__ = "profesionals"
+class Professionals(db.Model):
+    __tablename__ = "professionals"
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), primary_key=True)
     bio: Mapped[str] = mapped_column(String)
     type: Mapped[enumProf] = mapped_column(SQLAEnum(enumProf), nullable=False)
@@ -95,12 +95,21 @@ class Profesionals(db.Model):
     tax_address: Mapped[str] = mapped_column(String)
     nuss: Mapped[str] = mapped_column(String(12))
 
-    user: Mapped["Users"] = relationship("Users",back_populates="profesional",uselist=False)
-    info_activities: Mapped[list["Info_activity"]] = relationship("Info_activity", back_populates="profesional")
-    reports: Mapped[list["Reports"]] = relationship("Reports", back_populates="profesional")
-    reviews: Mapped[list["Reviews"]] = relationship(back_populates="profesional")
+    user: Mapped["Users"] = relationship("Users",back_populates="professional",uselist=False)
+    info_activities: Mapped[list["Info_activity"]] = relationship("Info_activity", back_populates="professional")
+    reports: Mapped[list["Reports"]] = relationship("Reports", back_populates="professional")
+    reviews: Mapped[list["Reviews"]] = relationship(back_populates="professional")
 
     def serialize(self):
+        rating = 0
+        count = 0
+        if len(self.reviews) > 0:
+            for review in self.reviews:
+                if review.professional_rating:
+                    rating = rating + review.professional_rating
+                    count += 1
+            rating = rating / count
+
         user = {"email": self.user.email,"username": self.user.username,"name": self.user.name,"surname": self.user.surname,"telephone": self.user.telephone,"NID": self.user.NID,"creation_date": self.user.creation_date,"avatar_url": self.user.avatar_url,"reports": [r.id for r in self.user.reports]}
         return {
             "bio": self.bio,
@@ -108,6 +117,7 @@ class Profesionals(db.Model):
             "business_name": self.business_name,
             "tax_address": self.tax_address,
             "nuss": self.nuss,
+            "rating": rating,
             "info_activities": [a.id for a in self.info_activities],
             "reports": [r.id for r in self.reports],
             "user": user
@@ -118,7 +128,7 @@ class Clients(db.Model):
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), primary_key=True)
     address: Mapped[str] = mapped_column(String, nullable=False)
     city: Mapped[str] = mapped_column(String, nullable=False)
-    birthdate: Mapped[datetime] = mapped_column(DateTime(),  default=datetime.utcnow, nullable=False)
+    birthdate: Mapped[datetime] = mapped_column(DateTime(), nullable=False)
     gender: Mapped[enumClts] = mapped_column(SQLAEnum(enumClts), nullable=False)
 
     user: Mapped["Users"] = relationship("Users",back_populates="client",uselist=False)
@@ -134,7 +144,8 @@ class Clients(db.Model):
             "birthdate": self.birthdate,
             "gender": self.gender.value,
             "user": user,
-            "inscriptions": [i.id for i in self.inscriptions]
+            "inscriptions": [i.id for i in self.inscriptions],
+            "favourites": [fav.info_activity_id for fav in self.favourites]
         }
     
         
@@ -166,7 +177,7 @@ class Activities(db.Model):
             "is_finished": self.is_finished,
             "meeting_point": self.meeting_point,
             "is_active": self.is_active,
-            "profesional": self.profesional.serialize() if self.profesional else None,
+            "professional": self.professional.serialize() if self.professional else None,
             "info_activity": self.info_activity.serialize() if self.info_activity else None,
             "inscriptions": [i.id for i in self.inscriptions]
         }
@@ -195,14 +206,14 @@ class Inscriptions(db.Model):
 class Info_activity(db.Model):
     __tablename__ = "info_activities"
     id: Mapped[int] = mapped_column(primary_key=True)
-    profesional_id: Mapped[int] = mapped_column(ForeignKey("profesionals.user_id"), nullable=False)
+    professional_id: Mapped[int] = mapped_column(ForeignKey("professionals.user_id"), nullable=False)
     name: Mapped[str] = mapped_column(String(60),nullable=False)
     desc: Mapped[str] = mapped_column(String,nullable=False)
     type: Mapped[enumInfo] = mapped_column(SQLAEnum(enumInfo), nullable=False)
     location: Mapped[str] = mapped_column(String(60), nullable=False)
     last_update: Mapped[datetime] = mapped_column(DateTime(),  default=datetime.utcnow, nullable=False)
 
-    profesional: Mapped["Profesionals"] = relationship("Profesionals",back_populates="info_activities",uselist=False)
+    professional: Mapped["Professionals"] = relationship("Professionals",back_populates="info_activities",uselist=False)
     activities: Mapped[list["Activities"]] = relationship("Activities",back_populates="info_activity")
     reports: Mapped[list["Reports"]] = relationship("Reports",back_populates="info_activity")
     favourited_by: Mapped[list["Favourites"]] = relationship(back_populates="activities")
@@ -210,15 +221,21 @@ class Info_activity(db.Model):
     reviews: Mapped[list["Reviews"]] = relationship(back_populates="info_activity")
 
     def serialize(self):
+        rating = 0
+        if self.reviews.length > 0:
+            for review in self.reviews:
+                rating = rating + review.activity_rating
+            rating = rating / self.reviews.length
         return {
             "id": self.id,
             "name": self.name,
             "desc": self.desc,
             "type": self.type.value,
             "last_update": self.last_update,
+            "rating": rating,
             "activities": [a.id for a in self.activities],
             "reports": [r.id for r in self.reports],
-            "profesional": self.profesional.serialize()
+            "professional": self.professional.serialize()
         }
     
 class Favourites(db.Model):
@@ -260,30 +277,30 @@ class Reviews(db.Model):
     __tablename__ = "reviews"
     id: Mapped[int] = mapped_column(primary_key=True)
     info_activity_id: Mapped[int] = mapped_column(ForeignKey("info_activities.id"))
-    profesional_id: Mapped[int] = mapped_column(ForeignKey("profesionals.user_id"))
+    professional_id: Mapped[int] = mapped_column(ForeignKey("professionals.user_id"))
     client_id: Mapped[int] = mapped_column(ForeignKey("clients.user_id"))
-    profesional_rating: Mapped[float] = mapped_column(Float, nullable=True)
+    professional_rating: Mapped[float] = mapped_column(Float, nullable=True)
     activity_rating: Mapped[float] = mapped_column(Float, nullable=True)
-    profesional_message: Mapped[str] = mapped_column(String, nullable=True)
+    professional_message: Mapped[str] = mapped_column(String, nullable=True)
     activity_message: Mapped[str] = mapped_column(String, nullable=True)
     creation_date: Mapped[datetime] = mapped_column(DateTime(),  default=datetime.utcnow, nullable=False)
 
     client: Mapped["Clients"] = relationship(back_populates="reviews")
     info_activity: Mapped["Info_activity"] = relationship(back_populates="reviews")
-    profesional: Mapped["Profesionals"] = relationship(back_populates="reviews")
+    professional: Mapped["Professionals"] = relationship(back_populates="reviews")
     
     def serialize(self):
         return{
             "id": self.id,
             "info_activity_id": self.info_activity_id,
-            "profesional_id": self.profesional_id,
+            "professional_id": self.professional_id,
             "client_id": self.client_id,
-            "profesional_rating": self.profesional_rating,
+            "professional_rating": self.professional_rating,
             "activity_rating": self.activity_rating,
-            "profesional_message": self.profesional_message,
+            "professional_message": self.professional_message,
             "activity_message": self.activity_message,
             "creation_date": self.creation_date,
             "client": self.client.serialize(),
             "info_activity": self.info_activity.serialize(),
-            "profesional": self.profesional.serialize()
+            "professional": self.professional.serialize()
         }
