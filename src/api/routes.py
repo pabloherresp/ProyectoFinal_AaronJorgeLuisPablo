@@ -1,6 +1,6 @@
 from functools import wraps
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, enumClts, enumProf, Users, Clients, Professionals, Administrators, Favourites
+from api.models import db, enumClts, enumProf, Users, Clients, Professionals, Administrators, Favourites, Activities, enumInfo, Info_activity
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 from sqlalchemy import select, delete, and_
@@ -258,3 +258,54 @@ def delete_fav(id):
     except Exception as e:
         return jsonify({"error":"Couldn't delete fav"}), 500
     return jsonify({"success": True})
+
+#Endpoints para Activities
+@api.route('/activities', methods=['GET'])
+def get_activities():
+    stmt = select(Activities)
+    activities = db.session.execute(stmt).scalars().all()
+    response_body = [activity.serialize() for activity in activities]
+
+    return jsonify(response_body), 200
+
+@api.route('/activities/<int:id>', methods=['GET'])
+def get_one_activity(id):
+    stmt = select(Activities).where(Activities.id == id)
+    activity= db.session.execute(stmt).scalar_one_or_none()
+    if activity is None:
+        return jsonify({"Error": "User not found"}), 404
+    return jsonify(activity.serialize()), 200
+
+@api.route('/activities', methods=['POST'])
+def create_activity():
+    data = request.json()
+    if not data or "price" not in data or "slots" not in data or "start_date" not in data or "end_date" not in data or "meeting_point":
+        return jsonify({"error": "Missing fields for creating user."}), 400
+    try:
+        date = data["start_date"].split("/")
+        date_e = data["end_date"].split("/")
+        activity = Activities(price=data["price"], slots=data["slots"], start_date=datetime(int(date[0]), int(date[1]), int(date[2])), end_date=datetime(int(date_e[0]), int(date_e[1]), int(date_e[2])), meeting_point=data["meeting_point"])
+        db.session.add(activity)
+        activity_inf = Info_activity(professional_id=profid.id, name=data["name"], desc=data["desc"], type=enumInfo(data["type"]), location = data["location"])
+        db.session.add(activity_inf)
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": "Couldn't create user"}), 500
+
+#Enpoints para info_activity
+@api.route('/info_activity', methods=['GET'])
+def get_activities_info():
+    stmt = select(Info_activity)
+    activities_info = db.session.execute(stmt).scalars().all()
+    response_body = [activity_info.serialize() for activity_info in activities_info]
+
+    return jsonify(response_body), 200
+
+@api.route('/info_activity/<int:id>', methods=['GET'])
+def get_one_activity_inf(id):
+    stmt = select(Info_activity).where(Info_activity.id == id)
+    activity_info= db.session.execute(stmt).scalar_one_or_none()
+    if activity_info is None:
+        return jsonify({"Error": "User not found"}), 404
+    return jsonify(activity_info.serialize()), 200
