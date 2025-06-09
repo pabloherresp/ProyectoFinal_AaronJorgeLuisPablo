@@ -1,0 +1,19 @@
+.navbg{
+    background-color: #006A71;
+}
+.logo{
+    max-width: 3.5rem;
+    margin-left: 2rem;
+}
+
+.busquedaBarra{
+    width: 100%;
+    max-width: 100%;
+}
+
+@media (min-width: 992px) {
+  .busquedaBarra {
+    width: 60%;
+    max-width: 600px;
+  }
+}
