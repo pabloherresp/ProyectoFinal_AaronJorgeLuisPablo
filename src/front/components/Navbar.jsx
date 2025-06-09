@@ -15,7 +15,7 @@ export const Navbar = () => {
 
 				<div className="collapse navbar-collapse text-center text-lg-start w-100" id="navbarSupportedContent">
 					<ul className="navbar-nav me-auto mb-2 mb-lg-0">
-						<li className="nav-item"><a className="nav-link active" aria-current="page" href="#">Home</a></li>
+						<li className="nav-item"><Link className="nav-link active" to={"/"}>Home</Link></li>
 						<li className="nav-item dropdown">
 							<a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Excursion</a>
 							<ul className="dropdown-menu text-center text-lg-start" aria-labelledby="navbarDropdown">
@@ -38,12 +38,12 @@ export const Navbar = () => {
 							<i className="fa-solid fa-globe me-3"></i><span>EN/ES</span>
 						</li>
 						<li className="nav-item">
-							<button className="btn btn-primary d-flex align-items-center">
+							<button className="btn btn-success myBtn d-flex align-items-center">
 								<i className="fa-solid fa-user me-2"></i>Login
 							</button>
 						</li>
 						<li className="nav-item">
-							<button className="btn btn-primary">Sign up</button>
+							<button className="btn btn-success myBtn">Sign up</button>
 						</li>
 					</ul>
 				</div>

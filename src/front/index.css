@@ -1,14 +1,52 @@
 .navbg{
-    background-color: #006A71;
+    background-color: #317373;
+}
+.footer{
+  background-color: #48A6A7;
 }
 .logo{
     max-width: 3.5rem;
     margin-left: 2rem;
 }
 
+.myBtn{
+  background-color: #48A6A7;
+  color: white;
+}
+
+.btn-success.myBtn:hover{
+  background-color: #9ACBD0 !important;
+  border-color: #0d8d90 !important;
+}
+
 .busquedaBarra{
     width: 100%;
     max-width: 100%;
+}
+
+.iconoInsta{
+  color: rgb(219, 20, 219);
+}
+.iconoInsta :hover{
+  color: rgb(101, 0, 88);
+}
+.iconoYoutube{
+  color: red;
+}
+.iconoYoutube :hover{
+  color: rgb(97, 1, 1);
+}
+.iconoLinkdin{
+  color: blue;
+}
+.iconoLinkdin :hover{
+  color: rgb(0, 0, 120);
+}
+.iconoFace{
+  color: rgb(0, 72, 255);
+}
+.iconoFace :hover{
+  color: rgb(0, 39, 148);
 }
 
 @media (min-width: 992px) {
