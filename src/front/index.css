@@ -71,10 +71,19 @@
 }
 .cardFormat{
   width: 20em;
-  height: 20em;
+  height: auto;
   box-shadow: 0px 2px rgb(161, 161, 161);
   background-color: white;
 }
 .fixBorder{
   object-fit: cover;
+}
+.titleFormat{
+  font-weight: bold;
+  font-size: 1em;
+  line-height: 0.7;
+}
+.textFormat{
+  font-size: 0.85em;
+  color: grey;
 }

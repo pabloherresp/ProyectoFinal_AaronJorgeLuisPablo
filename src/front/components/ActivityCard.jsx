@@ -12,16 +12,20 @@ export const ActivityCard = (props) => {
 
         <div>
             <div className="card cardFormat p-0 rounded">
-
+                
                 <img src={props.img} className="rounded-top-1"></img>
 
-                <h5>{props.title}</h5>
+                <div className="p-3">
+                
+                    <h5 className="titleFormat">{props.title}</h5>
 
-                <p>{props.origin}</p>
+                    <p className="titleFormat">{props.origin}</p>
 
-                <p>{props.description}</p>
+                    <p className="textFormat">{props.description}</p>
 
-                <p>{props.timeleft}</p>
+                    <p className="titleFormat text-center">{props.timeleft}</p>
+
+                </div>
 
             </div>
         </div>

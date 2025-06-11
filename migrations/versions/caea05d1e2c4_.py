@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: c1fb878474ef
+Revision ID: caea05d1e2c4
 Revises: 
-Create Date: 2025-06-06 22:39:44.375414
+Create Date: 2025-06-11 18:29:57.068716
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'c1fb878474ef'
+revision = 'caea05d1e2c4'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -29,6 +29,10 @@ def upgrade():
     sa.Column('NID', sa.String(length=10), nullable=False),
     sa.Column('creation_date', sa.DateTime(), nullable=False),
     sa.Column('avatar_url', sa.String(), nullable=False),
+    sa.Column('address', sa.String(), nullable=False),
+    sa.Column('city', sa.String(), nullable=False),
+    sa.Column('birthdate', sa.DateTime(), nullable=False),
+    sa.Column('gender', sa.Enum('male', 'female', 'not_telling', name='enumclts'), nullable=False),
     sa.Column('is_active', sa.Boolean(), nullable=False),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('NID'),
@@ -38,15 +42,6 @@ def upgrade():
     )
     op.create_table('administrators',
     sa.Column('user_id', sa.Integer(), nullable=False),
-    sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
-    sa.PrimaryKeyConstraint('user_id')
-    )
-    op.create_table('clients',
-    sa.Column('user_id', sa.Integer(), nullable=False),
-    sa.Column('address', sa.String(), nullable=False),
-    sa.Column('city', sa.String(), nullable=False),
-    sa.Column('birthdate', sa.DateTime(), nullable=False),
-    sa.Column('gender', sa.Enum('male', 'female', 'not_telling', name='enumclts'), nullable=False),
     sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
     sa.PrimaryKeyConstraint('user_id')
     )
@@ -86,11 +81,11 @@ def upgrade():
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('favourites',
-    sa.Column('client_id', sa.Integer(), nullable=False),
+    sa.Column('user_id', sa.Integer(), nullable=False),
     sa.Column('info_activity_id', sa.Integer(), nullable=False),
-    sa.ForeignKeyConstraint(['client_id'], ['clients.user_id'], ),
     sa.ForeignKeyConstraint(['info_activity_id'], ['info_activities.id'], ),
-    sa.PrimaryKeyConstraint('client_id', 'info_activity_id')
+    sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
+    sa.PrimaryKeyConstraint('user_id', 'info_activity_id')
     )
     op.create_table('media',
     sa.Column('id', sa.Integer(), nullable=False),
@@ -107,6 +102,7 @@ def upgrade():
     sa.Column('professional_target_id', sa.Integer(), nullable=True),
     sa.Column('activity_target_id', sa.Integer(), nullable=True),
     sa.Column('creation_date', sa.DateTime(), nullable=False),
+    sa.Column('is_checked', sa.Boolean(), nullable=False),
     sa.ForeignKeyConstraint(['activity_target_id'], ['info_activities.id'], name='fk_reports_activity_target_id'),
     sa.ForeignKeyConstraint(['professional_target_id'], ['professionals.user_id'], name='fk_reports_professional_target_id'),
     sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
@@ -116,15 +112,15 @@ def upgrade():
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('info_activity_id', sa.Integer(), nullable=False),
     sa.Column('professional_id', sa.Integer(), nullable=False),
-    sa.Column('client_id', sa.Integer(), nullable=False),
+    sa.Column('user_id', sa.Integer(), nullable=False),
     sa.Column('professional_rating', sa.Float(), nullable=True),
     sa.Column('activity_rating', sa.Float(), nullable=True),
     sa.Column('professional_message', sa.String(), nullable=True),
     sa.Column('activity_message', sa.String(), nullable=True),
     sa.Column('creation_date', sa.DateTime(), nullable=False),
-    sa.ForeignKeyConstraint(['client_id'], ['clients.user_id'], ),
     sa.ForeignKeyConstraint(['info_activity_id'], ['info_activities.id'], ),
     sa.ForeignKeyConstraint(['professional_id'], ['professionals.user_id'], ),
+    sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('inscriptions',
@@ -134,7 +130,7 @@ def upgrade():
     sa.Column('inscription_date', sa.DateTime(), nullable=False),
     sa.Column('is_active', sa.Boolean(), nullable=False),
     sa.ForeignKeyConstraint(['activity_id'], ['activities.id'], ),
-    sa.ForeignKeyConstraint(['user_id'], ['clients.user_id'], ),
+    sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     # ### end Alembic commands ###
@@ -150,7 +146,6 @@ def downgrade():
     op.drop_table('activities')
     op.drop_table('info_activities')
     op.drop_table('professionals')
-    op.drop_table('clients')
     op.drop_table('administrators')
     op.drop_table('users')
     # ### end Alembic commands ###
