@@ -49,6 +49,46 @@
   color: rgb(0, 39, 148);
 }
 
+.logo-img{
+  max-width: 400px;
+  max-height: 400px;
+  display: block;
+}
+
+.justified-text{
+  text-align: justify;
+}
+
+.separador{
+  border-color: #0d8d90;
+}
+
+.valor-card {
+  border: 1px solid;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.valor-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  border-color: #0d8d90 !important;
+}
+
+.fotoCreador {
+  object-fit: cover;
+  height: 150px;
+  border-radius: 50%;
+  margin: 10px auto;
+  width: 150px;
+}
+
+.manifiesto-section {
+  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+              url('src/front/assets/img/fondo-montaña.jpg') no-repeat center center;
+  background-size: cover;
+  border-radius: 1rem;
+}
+
 @media (min-width: 992px) {
   .busquedaBarra {
     width: 60%;
