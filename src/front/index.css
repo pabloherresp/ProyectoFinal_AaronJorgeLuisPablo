@@ -1,0 +1,80 @@
+.navbg{
+    background-color: #317373;
+}
+.footer{
+  background-color: #48A6A7;
+}
+.logo{
+    max-width: 3.5rem;
+    margin-left: 2rem;
+}
+
+.myBtn{
+  background-color: #48A6A7;
+  color: white;
+}
+
+.btn-success.myBtn:hover{
+  background-color: #9ACBD0 !important;
+  border-color: #0d8d90 !important;
+}
+
+.busquedaBarra{
+    width: 100%;
+    max-width: 100%;
+}
+
+.iconoInsta{
+  color: rgb(219, 20, 219);
+}
+.iconoInsta :hover{
+  color: rgb(101, 0, 88);
+}
+.iconoYoutube{
+  color: red;
+}
+.iconoYoutube :hover{
+  color: rgb(97, 1, 1);
+}
+.iconoLinkdin{
+  color: blue;
+}
+.iconoLinkdin :hover{
+  color: rgb(0, 0, 120);
+}
+.iconoFace{
+  color: rgb(0, 72, 255);
+}
+.iconoFace :hover{
+  color: rgb(0, 39, 148);
+}
+
+@media (min-width: 992px) {
+  .busquedaBarra {
+    width: 60%;
+    max-width: 600px;
+  }
+}
+.backgroundBody{
+  background-color: #F2EFE7;
+}
+.font1{
+  color: #006A71;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: bold;
+  letter-spacing: -0.025em;
+}
+.fixLandscape{
+  width: 100%;
+  height: 35em;
+  object-fit: cover;
+}
+.cardFormat{
+  width: 20em;
+  height: 20em;
+  box-shadow: 0px 2px rgb(161, 161, 161);
+  background-color: white;
+}
+.fixBorder{
+  object-fit: cover;
+}

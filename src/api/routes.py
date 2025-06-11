@@ -231,7 +231,8 @@ def delete_fav(id):
         return jsonify({"error":"Couldn't delete fav"}), 500
     return jsonify({"success": True})
 
-#Endpoints para actividades
+#Endpoints para Activities
+
 @api.route('/activities', methods=['GET'])
 def get_activities():
     stmt = select(Activities)
