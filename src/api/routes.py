@@ -3,7 +3,7 @@ from flask import Flask, request, jsonify, url_for, Blueprint
 from api.models import db, enumClts, enumProf, enumInfo, Users, Professionals, Administrators, Favourites, Info_activity, Activities, Inscriptions, Reports, Reviews
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
-from sqlalchemy import select, delete, and_
+from sqlalchemy import select, delete, and_, or_
 from sqlalchemy.exc import IntegrityError, DataError
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
@@ -27,6 +27,8 @@ def admin_required(check_admin):
 
 #Enpoints para tabla Users
 @api.route('/users', methods=['GET'])
+@jwt_required()
+@admin_required
 def get_users():
     stmt = select(Users)
     users = db.session.execute(stmt).scalars().all()
@@ -35,7 +37,14 @@ def get_users():
     return jsonify(response_body), 200
 
 @api.route('/users/<int:id>', methods=['GET'])
+@jwt_required()
 def get_one_user(id):
+    user_id = int(get_jwt_identity())
+    admin = db.session.execute(select(Administrators).where(Administrators.user_id == user_id))
+    
+    if(user_id != id and admin is None):
+        return jsonify({"error": "Forbidden access"}), 403
+    
     stmt = select(Users).where(Users.id == id)
     user = db.session.execute(stmt).scalar_one_or_none()
     if user is None:
@@ -82,8 +91,7 @@ def create_user():
         db.session.delete(user)
         db.session.rollback()
         return jsonify({"error": "Couldn't create user"}), 500
-
-    return jsonify(user.serialize()), 200
+    return jsonify({"success": True, "user": user.serialize()}), 200
 
 @api.route('/login', methods=['POST'])
 def login():
@@ -120,10 +128,10 @@ def delete_user(id):
     user.is_active = not user.is_active
     try:
         db.session.commit()
-        return jsonify({"success": True, "is_active": user.is_active})
     except Exception as e:
         db.session.rollback()
         return jsonify({"error":"Couldn't delete user"})
+    return jsonify({"success": True, "user": user.serialize()}), 200
     
 @api.route('/users/<int:id>', methods=["PUT"])
 @jwt_required()
@@ -158,7 +166,6 @@ def edit_user(id):
 
     try:
         db.session.commit()
-        return jsonify(user.serialize()), 200
     except IntegrityError as e:
         db.session.rollback()
         error = str(e).lower()
@@ -179,6 +186,7 @@ def edit_user(id):
     except Exception:
         db.session.rollback()
         return jsonify({"error": "Couldn't update user"}), 500
+    return jsonify({"success": True, "user": user.serialize()}), 200
 
 #Endpoints para Professional
 @api.route('/professionals', methods=['GET'])
@@ -196,8 +204,12 @@ def get_one_professional(id):
     #response_body = [user.serialize() for user in user_by_id]
     if professional is None:
         return jsonify({"Error": "User not found"}), 404
-    return jsonify(professional.serialize()),200
+    response_body = professional.serialize()
+    del response_body["tax_address"]
+    del response_body["nuss"]
+    return jsonify(response_body),200
 
+#endpoints favoritos
 @api.route('/favs/<int:id>', methods=['POST'])
 @jwt_required()
 def add_fav(id):
@@ -211,6 +223,7 @@ def add_fav(id):
     try:
         db.session.commit()
     except Exception as e:
+        print(e)
         return jsonify({"error":"Couldn't create fav"}), 500
     return jsonify({"success": True})
 
@@ -286,7 +299,49 @@ def create_activity():
         db.session.rollback()
         return jsonify({"error": "Couldn't create activity"}), 500
     
-    return jsonify(activity.serialize()), 200
+    return jsonify({"success": True, "activity": activity.serialize()}), 200
+
+@api.route('/activities/<int:id>', methods=['DELETE'])
+@jwt_required()
+def delete_activity(id):
+    prof_id = int(get_jwt_identity())
+    stmt = select(Activities).where(Activities.id == id)
+    activity = db.session.execute(stmt).scalar_one_or_none()
+    if not activity:
+        return jsonify({"error": "Activity not found"}), 404
+    if activity.info_activity.professional_id != prof_id:
+        return jsonify({"error": "Forbidden access"}), 403
+    activity.is_active = not activity.is_active
+    try:
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error":"Couldn't delete activity"}), 500
+    return jsonify({"success": True, "activity": activity.serialize()}), 200
+
+@api.route('/activities/<int:id>', methods=['PUT'])
+@jwt_required()
+def edit_activity(id):
+    prof_id = int(get_jwt_identity())
+    stmt = select(Activities).where(Activities.id == id)
+    activity = db.session.execute(stmt).scalar_one_or_none()
+    if not activity:
+        return jsonify({"error": "Activity not found"}), 404
+    elif activity.info_activity.professional_id != prof_id:
+        return jsonify({"error": "Forbidden access"}), 403
+    
+    data = request.json
+    activity_cells = ["price", "slots", "start_date", "end_date", "is_finished", "meeting_point"]
+    for cell in activity_cells:
+        if cell in data:
+            setattr(activity, cell, data[cell])
+
+    try:
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": "Couldn't edit data"}), 500
+    return jsonify({"success": True, "activity": activity.serialize()}), 200
 
 #Enpoints para info_activity
 @api.route('/info_activities', methods=['GET'])
@@ -312,13 +367,11 @@ def create_info_activity():
     data = request.json
     if not data or "name" not in data or "desc" not in data or "type" not in data or "location" not in data or "price" not in data or "slots" not in data or "start_date" not in data or "end_date" not in data or "meeting_point" not in data:
         return jsonify({"error": "Missing fields for creating activity."}), 400
-    
     prof_id = int(get_jwt_identity())
     stmt = select(Professionals).where(Professionals.user_id == prof_id)
     prof = db.session.execute(stmt).scalar_one_or_none()
     if prof is None:
         return jsonify({"error": "Given token doesn't match any professional in the database"}), 404
-
     if float(data["price"]) < 0:
         return jsonify({"error": "Price can't be negative"})
     elif int(data["slots"]) < 0:
@@ -329,7 +382,6 @@ def create_info_activity():
     date_e = datetime(int(date_e[0]), int(date_e[1]), int(date_e[2]))
     if date_s > date_e:
         return jsonify({"error": "Start date can't be greater than end date"})
-
     try:
         info_activity = Info_activity(professional_id = prof_id, name=data["name"], desc=data["desc"], type = enumInfo(data["type"]), location=data["location"])
         db.session.add(info_activity)
@@ -346,7 +398,7 @@ def create_info_activity():
         db.session.rollback()
         return jsonify({"error": "Couldn't create activity"}), 500
     
-    return jsonify(activity.serialize()), 200
+    return jsonify({"success": True, "activity": activity.serialize()}), 200
 
 # Endpoints para inscriptions
 @api.route('/inscriptions', methods=['GET'])
@@ -367,6 +419,51 @@ def get_inscription_for_one_user(id):
     if ins is None:
         return jsonify({"error": "Inscription not found"}), 404
     return jsonify(ins.serialize()), 200
+
+@api.route('/inscriptions/', methods=['POST'])
+@jwt_required()
+def create_inscription():
+    user_id = int(get_jwt_identity())
+    data = request.json
+    if not data or not "activity_id" in data:
+        return jsonify({"error": "Missing fields for creating inscription"}), 403
+    
+    stmt = select(Activities).where(Activities.id == data["activity_id"])
+    activity = db.session.execute(stmt).scalar_one_or_none()
+    if not activity:
+        return jsonify({"error": "Activity not found"}), 404
+    if activity.is_active == False or activity.is_finished == True:
+        return jsonify({"error": "You can't join this activity"}), 400
+    elif len(activity.inscriptions) >= activity.slots:
+        return jsonify({"error": "This activity is full"}), 400
+    elif activity.info_activity.professional_id == user_id:
+        return jsonify({"error": "You can't join an activity you've created"}), 400
+
+    inscription = Inscriptions(user_id=user_id, activity_id=data["activity_id"])
+    db.session.add(inscription)
+    try:
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error":"Couldn't create inscription"}), 500
+    return jsonify({"success": True, "inscription": inscription.serialize()}), 200
+
+@api.route('/inscriptions/<int:id>', methods=['DELETE'])
+@jwt_required()
+def delete_inscription(id):
+    user_id = int(get_jwt_identity())
+    stmt = select(Inscriptions).where(and_(Inscriptions.id == id, Inscriptions.user_id == user_id))
+    inscription = db.session.execute(stmt).scalar_one_or_none()
+
+    if not inscription:
+        return jsonify({"error": "Inscription not found"}), 404
+    inscription.is_active = not inscription.is_active
+    try:
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": "Couldn't delete inscription"}), 500
+    return jsonify({"success": True, "inscription": inscription.serialize()}), 200
 
 # Endpoints para reports
 @api.route('/reports', methods=['GET'])
@@ -390,6 +487,39 @@ def get_one_report(id):
         return jsonify({"error":"Reports not found"}), 404
     return jsonify(report.serialize()), 200
 
+@api.route('/reports', methods=['POST'])
+@jwt_required()
+def create_report():
+    user_id = int(get_jwt_identity())
+    data = request.json
+    if not data or not "message" in data or not "activity_target_id" in data or not "professional_target_id" in data or (data["activity_target_id"] is None and data["professional_target_id"] is None):
+        return jsonify({"error": "Missing fields to create report"}), 400
+
+    report = Reports(user_id=user_id, message=data["message"], activity_target_id=data["activity_target_id"], professional_target_id=data["professional_target_id"])
+    db.session.add(report)
+    try:
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": "Couldn't create report"}), 500
+    return jsonify({"success": True, "report": report.serialize()}),200
+
+@api.route('/reports/<int:id>', methods=['DELETE'])
+@jwt_required()
+@admin_required
+def check_report(id):
+    stmt = select(Reports).where(Reports.id == id)
+    report = db.session.execute(stmt).scalar_one_or_none()
+    if report is None:
+        return jsonify({"error": "Report not found"}), 404
+    report.is_checked = not report.is_checked
+    try:
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": "Couldn't toggle report"}), 500
+    return jsonify({"success": True, "report": report.serialize()})
+
 # Endpoints para reviews
 @api.route('/reviews', methods=['GET'])
 def get_reviews():
@@ -408,9 +538,65 @@ def get_one_review(id):
         return jsonify({"error": "No reviews found"})
     return jsonify(review.serialize()), 200
 
+@api.route('/reviews/', methods=['POST'])
+@jwt_required()
+def create_review():
+    user_id = int(get_jwt_identity())
+    data = request.json
+    if not data or "info_activity_id" not in data or "professional_id" not in data or "professional_rating" not in data or "activity_rating" not in data or "professional_message" not in data or "activity_message" not in data:
+        return jsonify({"error": "Missing fields to create review"}), 400
+    
+    review = db.session.execute(select(Reviews).where(and_(Reviews.info_activity_id == data["info_activity_id"], Reviews.user_id == user_id))).scalar_one_or_none()
+    if review is not None:
+        return jsonify({"error": "This activity has already been reviewed"}), 400
 
-# put, delete acitivites, info_activity
-# get, post, put, delete inscriptions
-# get, post reports
-# get, post, put reviews
-# search
+    review = Reviews(user_id = user_id, info_activity_id = data["info_activity_id"], professional_id = data["professional_id"], professional_rating = data["professional_rating"], activity_rating = data["activity_rating"], professional_message = data["professional_message"], activity_message = data["activity_message"])
+    db.session.add(review)
+
+    try:
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": "Couldn't create review"})
+    return jsonify({"success": True, "review": review.serialize()}), 200
+
+@api.route('/reviews/<int:id>', methods=['PUT'])
+@jwt_required()
+def edit_review(id):
+    user_id = int(get_jwt_identity())
+    data = request.json
+    if not data or "info_activity_id" not in data:
+        return jsonify({"error": "Missing fields to edit review"}), 404
+
+    stmt = select(Reviews).where(and_(Reviews.id == id, Reviews.user_id == user_id, Reviews.info_activity_id == data["info_activity_id"]))
+    review = db.session.execute(stmt).scalar_one_or_none()
+    if review is None:
+        return jsonify({"error": "Review couldn't be found"}), 404
+    
+    review_cells = ["professional_rating", "activity_rating", "professional_message", "activity_message"]
+    for cell in review_cells:
+        if cell in data:
+            setattr(review, cell, data[cell])
+    try:
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": "Couldn't edit review"}), 500
+    return jsonify({"success": True, "review": review.serialize()}), 200
+
+# endpoint de búsqueda
+@api.route('/search/<string:value>', methods=['GET'])
+def search_word(value):
+    value = value.lower()
+    if len(value) < 3:
+        return jsonify({"error": "Search value must have at least 3 characters"}), 400
+
+    profs = db.session.execute(select(Professionals).join(Professionals.user).where(or_(Users.username.ilike(f"%{value}%"),Users.name.ilike(f"%{value}%"),Users.surname.ilike(f"%{value}%")))).scalars().all()
+    activities = db.session.execute(select(Activities).join(Activities.info_activity).where(or_(Info_activity.name.ilike(f"%{value}%"),Info_activity.location.ilike(f"%{value}%")))).scalars().all()
+    if profs is None and activities is None:
+        return jsonify({"error": "Search couldn't find matches"}), 404
+    response_body = {"professionals": [{"user_id": prof.user_id, "username": prof.user.username, "name": prof.user.name, "surname": prof.user.surname} for prof in profs], "activities": [{"id": act.id, "name": act.info_activity.name} for act in activities]}
+    return jsonify(response_body), 200
+
+
+# put reviews

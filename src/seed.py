@@ -1,6 +1,6 @@
 from app import app
 from api.models import db, Users, Professionals, Activities, Info_activity, Reviews, Reports, Media, Favourites, Inscriptions, Administrators
-from api.models import enumProf, enumClts, enumInfo, enumReps
+from api.models import enumProf, enumClts, enumInfo
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -399,28 +399,24 @@ with app.app_context():
         Reports(
             message="El professional llegó tarde y no avisó.",
             user_id=users[0].id,
-            target_type=enumReps.user,
             professional_target_id=profs[0].user_id,
             activity_target_id=None
         ),
         Reports(
             message="La actividad no se realizó como estaba descrita.",
             user_id=users[1].id,
-            target_type=enumReps.activity,
             professional_target_id=None,
             activity_target_id=info_activities[2].id
         ),
         Reports(
             message="El professional fue poco amable durante la actividad.",
             user_id=users[2].id,
-            target_type=enumReps.user,
             professional_target_id=profs[1].user_id,
             activity_target_id=None
         ),
         Reports(
             message="La actividad fue cancelada sin previo aviso.",
             user_id=users[3].id,
-            target_type=enumReps.activity,
             professional_target_id=None,
             activity_target_id=info_activities[5].id
         )]
