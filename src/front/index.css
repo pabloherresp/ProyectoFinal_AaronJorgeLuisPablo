@@ -74,6 +74,17 @@
   border-color: #0d8d90 !important;
 }
 
+
+.valor-card2 {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.valor-card2:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  border-color: #0d8d90 !important;
+}
+
 .fotoCreador {
   object-fit: cover;
   height: 150px;
@@ -127,3 +138,11 @@
   font-size: 0.85em;
   color: grey;
 }
+
+.buttonStyle{
+  width: 5em;
+  height: 5em;
+  vertical-align: middle;
+  align-self: anchor-center
+}
+
