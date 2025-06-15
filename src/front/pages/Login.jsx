@@ -22,9 +22,13 @@ export const Login = () => {
             setFormdata({...formData, response: resp.response, error: true})
         else{
             setFormdata({...formData, error: false, response: ""})
-            dispatch({type: "loadUser", payload: {id: resp.id, username: resp.username, avatar_url: resp.avatar_url}})
+			console.log(resp)
+            dispatch({type: "loadUser", payload: {id: resp.id, username: resp.username, avatar_url: resp.avatar_url,is_professional: resp.is_professional}})
             localStorage.setItem("token", resp.token)
-            localStorage.setItem("user", formData.user)
+            localStorage.setItem("username", formData.user)
+			localStorage.setItem("id", resp.id)
+			localStorage.setItem("avatar_url", resp.avatar_url)
+			localStorage.setItem("is_professional", resp.is_professional)
             navigate("/")
 		}
 	}
@@ -46,7 +50,7 @@ export const Login = () => {
 					</div>
 					<div className="col-12 col-md-8 align-self-center">
 						<h3 className="display-3 fw-bold text-center my-2 TextDark">Log In</h3>
-						<p className="text-center fw-semibold mt-3">¿Aún no estás registrado? Haz click <Link className="text-decoration-none" to="/signup">aquí</Link></p>
+						<p className="text-center fw-semibold mt-3">¿Aún no estás registrado? Haga click <Link className="text-decoration-none" to="/signup">aquí</Link></p>
 					</div>
 				</div>
 				<form className="m-3" onSubmit={handleLogin}>
@@ -57,7 +61,7 @@ export const Login = () => {
 					<div class="form-label my-2 w-75 mx-auto">
 						<label className="fs-6 mb-2" for="password">Contraseña</label>
 						<input type="password" name="password" className="form-control" id="password" placeholder="Password" autoComplete="current-password" onChange={handleChange}  value={formData.password}/>
-						<p className="text-center fs-6 my-3">¿Has olvidado tu contraseña? Haz click <Link className="text-decoration-none" to="/">aquí</Link></p>
+						<p className="text-center fs-6 my-3">¿Has olvidado tu contraseña? Haga click <Link className="text-decoration-none" to="/">aquí</Link></p>
 					</div>
 					<div className="row">
 						<input type="submit" value="Iniciar sesión" className="btn btn-primary my-2 w-auto mx-auto fw-bold"/>

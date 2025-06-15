@@ -25,6 +25,18 @@ collection.checkUser = async (name) => {
     }
 }
 
+collection.getOneUser = async (id) => {
+    try {
+        const resp = await fetch(BACKEND_URL + "api/users/" + id, {
+            headers: {"Authorization": get_token()}
+        })
+        const data = await resp.json()
+        return data
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 collection.loginUser = async (userdata) => {
     try{
         const resp = await fetch(BACKEND_URL + "api/login", {
@@ -65,6 +77,39 @@ collection.signupUser = async (userdata) => {
     }catch(error) {
 		console.log(error)
 		return {success: false, response: error.message}
+    }
+}
+
+collection.editUser = async (id, userdata) => {
+    try{
+        const resp = await fetch(BACKEND_URL + "api/users/"+id, {method: "PUT",
+            headers: {
+                "Content-Type":"application/json",
+                "Authorization": get_token()
+            }, body: JSON.stringify(userdata)
+        })
+        const data = await resp.json()
+
+		if(resp.status == 400) throw Error("Missing data")
+		else if(resp.status == 409) throw Error(data.error)
+		else if(!resp.ok) throw Error("Unknown error")
+
+        return data
+    }catch(error) {
+		console.log(error)
+		return {success: false, response: error.message}
+    }
+}
+
+collection.getInscriptionsForUser = async (id) => {
+    try {
+        const resp = await fetch(BACKEND_URL + "api/inscriptions", {
+            headers: {"Authorization": get_token()}
+        })
+        const data = resp.json()
+        return data
+    } catch (error) {
+        
     }
 }
 
