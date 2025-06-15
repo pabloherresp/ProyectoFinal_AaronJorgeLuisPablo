@@ -43,7 +43,7 @@ export const Home = () => {
 				style={{border:0}}
 				loading="lazy"
 				referrerPolicy="no-referrer-when-downgrade"
-				src="https://www.google.com/maps/embed/v1/place?key=AIzaSyDqVn1rHxBNwOX2aX83VcAa3PhLC5J9dJk&q=Plaza+Gulliver,España">
+				src="https://www.google.com/maps/embed/v1/place?key=&q=Plaza+Gulliver,España">
 				</iframe> */}
 		</div>
 	);
