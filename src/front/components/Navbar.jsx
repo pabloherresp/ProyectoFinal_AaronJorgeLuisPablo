@@ -51,7 +51,7 @@ export const Navbar = () => {
 
 					<div className="d-flex justify-content-evenly my-2 gap-3">
 						<form className="mx-auto busquedaBarra input-group">
-							<input className="form-control dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false" type="search" placeholder="Search..." aria-label="Search" value={search} onChange={handleSearch} />
+							<input className="form-control dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false" type="search" placeholder="Buscar..." aria-label="Search" value={search} onChange={handleSearch} />
 							<ul className="dropdown-menu dropdown-menu-end NavbarSearch">
 								{(searchResults.professionals.length > 0 || searchResults.activities.length > 0 ? 
 								<>
@@ -73,7 +73,7 @@ export const Navbar = () => {
 								
 								: <li className="px-2">No se encontraron resultados</li>)}
 							</ul>
-							<button className="btn btn-light" type="submit"><i className="fa-solid fa-magnifying-glass"></i></button>
+							{/* <button className="btn btn-light" type="submit"><i className="fa-solid fa-magnifying-glass"></i></button> */}
 						</form>
 						{!store.user.id ?<>
 							<div className="nav-item">

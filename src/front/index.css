@@ -2,6 +2,10 @@ body{
   background-color: #F2EFE7;
 }
 
+.Page{
+  min-height: 75vh;
+}
+
 .TextDark{
   color: #006A71;
 }
@@ -41,9 +45,11 @@ body{
 .navbg{
     background-color: #317373;
 }
+
 .footer{
   background-color: #48A6A7;
 }
+
 .logo{
     max-width: 3.5rem;
     margin-left: 2rem;
