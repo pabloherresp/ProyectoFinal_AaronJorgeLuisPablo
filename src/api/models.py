@@ -34,7 +34,7 @@ class Users(db.Model):
     telephone: Mapped[str] = mapped_column(String(15), unique=True, nullable=False)
     NID: Mapped[str] = mapped_column(String(10), unique=True, nullable=False)
     creation_date: Mapped[datetime] = mapped_column(DateTime(), default=datetime.utcnow, nullable=False)
-    avatar_url: Mapped[str] = mapped_column(String, nullable=False)
+    avatar_url: Mapped[str] = mapped_column(String, default="0.jpg")
     address: Mapped[str] = mapped_column(String, nullable=False)
     city: Mapped[str] = mapped_column(String, nullable=False)
     birthdate: Mapped[datetime] = mapped_column(DateTime(), nullable=False)

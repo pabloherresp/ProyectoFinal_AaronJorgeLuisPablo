@@ -1,3 +1,4 @@
+import os
 from functools import wraps
 from flask import Flask, request, jsonify, url_for, Blueprint
 from api.models import db, enumClts, enumProf, enumInfo, Users, Professionals, Administrators, Favourites, Info_activity, Activities, Inscriptions, Reports, Reviews
@@ -51,16 +52,22 @@ def get_one_user(id):
         return jsonify({"Error": "User not found"}), 404
     return jsonify(user.serialize()),200
 
+@api.route('/users/<string:name>', methods=['GET'])
+def check_possible(name):
+    stmt = select(Users).where(Users.username == name)
+    user = db.session.execute(stmt).scalar_one_or_none()
+    
+    if user is not None:
+        return jsonify({"error": "User already exists"}), 400
+    return jsonify({"success": True})
+
 @api.route('/signup', methods=['POST'])
 def create_user():
-    data = request.json
-    if not data or "email" not in data or "password" not in data or "username" not in data or "name" not in data or "surname" not in data or "telephone" not in data or "avatar_url" not in data or "city" not in data or "address" not in data or "birthdate" not in data or "gender" not in data or "is_professional" not in data or data["is_professional"] == "true" and ("bio" not in data or "type" not in data or "business_name" not in data or "tax_address" not in data or "nuss" not in data):
-        return jsonify({"error": "Missing fields for creating user."}), 400
-
+    fecha_iso = request.form.get('birthdate')
+    fecha_dt = datetime.fromisoformat(fecha_iso.replace("Z", "+00:00"))
+    user = Users(email=request.form.get("email"), password=generate_password_hash(request.form.get("password")), username=request.form.get("username"), name=request.form.get("name"), surname=request.form.get("surname"), NID=request.form.get("NID"), telephone=request.form.get("telephone"), avatar_url=request.form.get("avatar_url"),city=request.form.get("city"), address=request.form.get("address"), birthdate=fecha_dt, gender=enumClts(request.form.get("gender")))
+    db.session.add(user)
     try:
-        date = data["birthdate"].split("/") #para tener por separado cada uno de los campos de la fecha
-        user = Users(email=data["email"], password=generate_password_hash(data["password"]), username=data["username"], name=data["name"], surname=data["surname"], NID=data["NID"], telephone=data["telephone"], avatar_url=data["avatar_url"],city=data["city"], address=data["address"], birthdate=datetime(int(date[0]), int(date[1]), int(date[2])), gender=enumClts(data["gender"]))
-        db.session.add(user)
         db.session.commit()
     except IntegrityError as e:
         db.session.rollback()
@@ -74,7 +81,7 @@ def create_user():
             message = "User already exists in database"
         elif "telephone" in error:
             message = "Telephone already exists in database"
-        return jsonify({"error": message}), 409
+        return jsonify({"error": True, "response": message}), 409
     except DataError as e:
         db.session.rollback()
         return jsonify({"error": "Provided data is out of bounds"}), 422
@@ -82,15 +89,25 @@ def create_user():
         db.session.rollback()
         return jsonify({"error": "Couldn't create user"}), 500
     
-    try:
-        if data["is_professional"] == "true":
-            prof = Professionals(user_id=user.id, bio=data["bio"], type=enumProf(data["type"]), business_name=data["business_name"], tax_address=data["tax_address"], nuss=data["nuss"])
-            db.session.add(prof)
-        db.session.commit()
-    except Exception as e:
-        db.session.delete(user)
-        db.session.rollback()
-        return jsonify({"error": "Couldn't create user"}), 500
+    if 'avatar' not in request.files:
+        filepath = f"src/front/assets/avatar/0.jpg"
+    else:
+        avatar = request.files.get("avatar")
+        avatar.filename = f"{user.id}.jpg"
+        filepath = f"src/front/assets/avatar/{avatar.filename}"
+        avatar.save(os.path.join(filepath))
+    user.avatar_url = filepath
+    db.session.commit()
+    if request.form.get("is_professional") == "true":
+        prof = Professionals(user_id=user.id, bio=request.form.get("bio"), type=enumProf(request.form.get("type")), business_name=request.form.get("business_name"), tax_address=request.form.get("tax_address"), nuss=request.form.get("nuss"))
+        db.session.add(prof)
+        try:
+            db.session.commit()
+        except Exception as e:
+            db.session.rollback()
+            db.session.delete(user)
+            db.session.commit()
+            return jsonify({"error": "Couldn't create user"}), 500
     return jsonify({"success": True, "user": user.serialize()}), 200
 
 @api.route('/login', methods=['POST'])
@@ -113,7 +130,9 @@ def login():
     response_body = {
         "id": user.id,
         "success": True,
-        "token": token
+        "token": token,
+        "username": user.username,
+        "avatar_url": user.avatar_url
     }
     return jsonify(response_body), 200
 

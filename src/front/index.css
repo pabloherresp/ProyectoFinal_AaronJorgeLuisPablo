@@ -1,3 +1,43 @@
+body{
+  background-color: #F2EFE7;
+}
+
+.TextDark{
+  color: #006A71;
+}
+
+.BannerLogin{
+    background-repeat: repeat-y;
+    background-position-y: top;
+    background-size: 100% auto;
+}
+
+.BannerLoginLeft{
+	background-image: url("src/front/assets/img/login-1.png");
+}
+
+.BannerLoginRight{
+	background-image: url("src/front/assets/img/login-2.png");
+
+}
+
+.NavbarUserPill{
+	height: 40px;
+	background-color: #48A6A7;
+}
+.NavbarUserPill img{
+  height: 40px;
+  width: 40px;
+  overflow: hidden;
+}
+
+.NavbarSearch{
+    max-height: 300px;
+    min-width: 300px;
+    scrollbar-width: thin;
+    overflow: auto;
+}
+
 .navbg{
     background-color: #317373;
 }
@@ -9,9 +49,15 @@
     margin-left: 2rem;
 }
 
-.myBtn{
+.navbarButton{
   background-color: #48A6A7;
   color: white;
+  width: 80px;
+  justify-content: center;
+}
+
+.navbarButton:hover, .NavbarUserPill:hover{
+	background-color: #9ACBD0;
 }
 
 .btn-success.myBtn:hover{
