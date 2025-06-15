@@ -4,7 +4,8 @@ export const initialStore=()=>{
 		user: {
 			id: null,
 			username: "",
-			avatar_url: ""
+			avatar_url: "",
+			is_professional: false
 		}
 	}
 }
@@ -19,7 +20,7 @@ export default function storeReducer(store, action = {}) {
 		case 'loadUser':
 			return{
 				...store,
-				user: {id: action.payload.id, username: action.payload.username, avatar_url: action.payload.avatar_url}
+				user: {id: action.payload.id, username: action.payload.username, avatar_url: action.payload.avatar_url, is_professional: action.payload.is_professional}
 			}
 		case 'closeSession':
 			return{

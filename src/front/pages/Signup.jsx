@@ -73,11 +73,11 @@ export const Signup = () => {
 			<div className="col-12 col-md-8">
 				<div className="row my-4 w-75 mx-auto">
 					<div className="col-6 col-md-4 mx-auto">
-						<img className="img-fluid" src="src\front\assets\img\Logo_Nomadik.png" alt="" />
+						<img className="img-fluid" src="\src\front\assets\img\Logo_Nomadik.png" alt="" />
 					</div>
 					<div className="col-12 col-md-8 align-self-center">
 						<h3 className="display-3 fw-bold text-center my-2 TextDark">Sign Up</h3>
-						<p className="text-center fw-semibold mt-3">¿Ya tienes una cuenta? <Link className="text-decoration-none" to="/login">aquí</Link></p>
+						<p className="text-center fw-semibold mt-3">¿Ya tienes una cuenta? Haga click <Link className="text-decoration-none" to="/login">aquí</Link></p>
 					</div>
 				</div>
 					<form className="m-3" onSubmit={handleSignup}>
@@ -163,7 +163,7 @@ export const Signup = () => {
 							</div>
 							<div className="col-12 col-lg-6">
 								<div class="form-floating my-2 mx-auto">
-									<input required type="password" name="confirmPassword" className="form-control" id="confirmPassword" placeholder="" autoComplete="new-password" onChange={handleChange} value={formData.confirmPassword}/>
+									<input required type="password" name="confirmPassword" className={"form-control " + messages.emailClass} id="confirmPassword" placeholder="" autoComplete="new-password" onChange={handleChange} value={formData.confirmPassword}/>
 									<label className="fs-6" for="confirmPassword">Confirmar contraseña</label>
 								</div>
 							</div>
@@ -184,7 +184,7 @@ export const Signup = () => {
 							</div>
 							<div className="col-12 mb-3">
 								<label for="formFile" class="form-label">Foto de perfil</label>
-								<input className="form-control" type="file" id="formFile" accept="image/*" onChange={(e) => setFormdata({...formData, avatar: e.target.files[0]}) }/>
+								<input className="form-control" type="file" id="formFile" accept="image/jpg" onChange={(e) => setFormdata({...formData, avatar: e.target.files[0]}) }/>
 							</div>
 							<div className="col-12">
 								<div class="form-check my-2 mx-auto">

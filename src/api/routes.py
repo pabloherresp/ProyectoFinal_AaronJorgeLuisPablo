@@ -41,9 +41,8 @@ def get_users():
 @jwt_required()
 def get_one_user(id):
     user_id = int(get_jwt_identity())
-    admin = db.session.execute(select(Administrators).where(Administrators.user_id == user_id))
-    
-    if(user_id != id and admin is None):
+
+    if(user_id != id):
         return jsonify({"error": "Forbidden access"}), 403
     
     stmt = select(Users).where(Users.id == id)
@@ -116,9 +115,9 @@ def login():
     if not data or ("email" not in data and "username" not in data) or "password" not in data:
         return jsonify({"error":"Missing fields for login"}), 400
     if "email" in data:
-        stmt = select(Users).where(Users.email == data["email"])
+        stmt = select(Users).where(and_(Users.email == data["email"], Users.is_active == True))
     elif "username" in data:
-        stmt = select(Users).where(Users.username == data["username"])
+        stmt = select(Users).where(and_(Users.username == data["username"], Users.is_active == True))
     user = db.session.execute(stmt).scalar_one_or_none()
 
     if not user:
@@ -126,13 +125,15 @@ def login():
     if not check_password_hash(user.password, data["password"]):
         return jsonify({"error":"Email/Password don't match"}), 401
     
+    userData = user.serialize()
     token = create_access_token(identity=str(user.id),expires_delta=False)
     response_body = {
-        "id": user.id,
+        "id": userData["id"],
         "success": True,
         "token": token,
-        "username": user.username,
-        "avatar_url": user.avatar_url
+        "username": userData["username"],
+        "avatar_url": userData["avatar_url"],
+        "is_professional": userData["is_professional"]
     }
     return jsonify(response_body), 200
 
@@ -170,11 +171,16 @@ def edit_user(id):
         return jsonify({"error": "Profile info not found"}), 404
 
     if "birthdate" in data:
-        date = data["birthdate"].split("/")
-        data["birthdate"] = datetime(int(date[0]), int(date[1]), int(date[2]))
+        fecha_iso = data['birthdate']
+        data["birthdate"] = datetime.fromisoformat(fecha_iso.replace("Z", "+00:00"))
 
-    user_cells = ["username", "email", "telephone", "avatar_url", "name", "surname", "NID","address", "city", "gender", "birthdate"]
-    prof_cells = ["bio", "type", "business_name", "tax_address", "nuss"]
+    user_cells = ["username", "email", "telephone", "avatar_url", "name", "surname", "NID","address", "city", "birthdate"]
+    prof_cells = ["bio", "business_name", "tax_address", "nuss"]
+
+    if "gender" in data:
+        setattr(user, "gender", enumClts(data["gender"]))
+    if "type" in data:
+        setattr(prof, "type", enumProf(data["type"]))
 
     for cell in user_cells:
         if cell in data:
@@ -423,7 +429,8 @@ def create_info_activity():
 @api.route('/inscriptions', methods=['GET'])
 @jwt_required()
 def get_inscriptions():
-    stmt = select(Inscriptions)
+    user_id = int(get_jwt_identity())
+    stmt = select(Inscriptions).where(Inscriptions.user_id == user_id)
     ins = db.session.execute(stmt).scalars().all()
     if ins is None:
         return jsonify({"error":"Inscriptions not found"})
@@ -433,8 +440,9 @@ def get_inscriptions():
 @api.route('/inscriptions/<int:id>', methods=['GET'])
 @jwt_required()
 def get_inscription_for_one_user(id):
-    stmt = select(Inscriptions).where(Inscriptions.id == id)
-    ins= db.session.execute(stmt).scalar_one_or_none()
+    user_id = int(get_jwt_identity())
+    stmt = select(Inscriptions).where(and_(Inscriptions.id == id,Inscriptions.user_id == user_id))
+    ins = db.session.execute(stmt).scalar_one_or_none()
     if ins is None:
         return jsonify({"error": "Inscription not found"}), 404
     return jsonify(ins.serialize()), 200
