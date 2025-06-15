@@ -41,8 +41,8 @@ export const Inscriptions = () => {
 	},[user])
 
 	return (
-		<div className="container bg-white rounded my-3 py-1">
-			<h4 className="TextDark text-center display-5 fw-semibold">Mis inscripciones</h4>
+		<div className="container bg-white rounded my-3 py-5">
+			<h4 className="TextDark text-center display-5 fw-semibold mb-5">Mis inscripciones</h4>
 			{(inscriptions.length > 0 ?
 					<table className="table table-bordered y-4 p-2">
 						<thead className="table-info">
@@ -58,11 +58,11 @@ export const Inscriptions = () => {
 						{inscriptions.map((item, i)=>{
 							return(
 							<tr key={i}>
-								<td className="ps-2">{item.activity.info_activity.name}</td>
+								<td className="ps-2"><Link className="text-decoration-none" to={"/activity/"+item.activity.id}>{item.activity.info_activity.name}</Link></td>
 								<td className="text-center">{formatDate(new Date(item.activity.start_date))}</td>
 								<td className="text-center">{formatDate(new Date(item.activity.end_date))}</td>
 								<td className="text-center">{item.activity.price + "€"}</td>
-								<td className="text-center">Reseñar</td>
+								<td className="text-center"><Link className="text-decoration-none" to="">Reseñar</Link></td>
 							</tr>)
 							})}
 						</tbody>

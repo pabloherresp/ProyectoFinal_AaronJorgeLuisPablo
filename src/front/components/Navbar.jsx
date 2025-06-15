@@ -39,7 +39,7 @@ export const Navbar = () => {
 				</button>
 
 				<div className="collapse navbar-collapse" id="navbarSupportedContent">
-					<div className="navbar-nav me-auto mb-0 gap-3">
+					<div className="navbar-nav me-auto mb-0 gap-3 w-auto">
 						<Link className="nav-item nav-link active text-white fs-6 ms-auto fw-semibold" to={"/"}>Home</Link>
 						<div className="nav-item dropdown ms-auto">
 							<a className="nav-link dropdown-toggle text-white fw-semibold" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Excursiones</a>
@@ -53,7 +53,6 @@ export const Navbar = () => {
 						<Link className="nav-item nav-link active text-white fs-6 ms-auto fw-semibold" to={"/"}>Contacto</Link>
 					</div>
 
-					<div className="d-flex flex-column justify-content-evenly flex-md-row my-2 gap-3">
 						<form className="mx-auto NavbarSearch input-group">
 							<input className="form-control dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false" type="search" placeholder="Buscar..." aria-label="Search" value={search} onChange={handleSearch} />
 							<ul className="dropdown-menu dropdown-menu-end NavbarSearchDropdown" data-bs-auto-close="outside">
@@ -61,7 +60,7 @@ export const Navbar = () => {
 												<span class="visually-hidden">Loading...</span>
 											</div> : 
 								(searchResults.professionals.length > 0 || searchResults.activities.length > 0 ? 
-								<>
+									<>
 									{searchResults.professionals.map((item, i)=>{
 										return (<li className="px-2" key={i}>
 											<Link className="text-decoration-none text-dark" to={"/professional/"+item.user_id}>
@@ -82,6 +81,7 @@ export const Navbar = () => {
 							</ul>
 							{/* <button className="btn btn-light" type="submit"><i className="fa-solid fa-magnifying-glass"></i></button> */}
 						</form>
+					<div className="d-flex flex-column justify-content-evenly flex-md-row my-2 gap-3">
 						{!store.user.id ?
 							<div className="d-flex gap-3 w-100">
 								<div className="nav-item w-50">

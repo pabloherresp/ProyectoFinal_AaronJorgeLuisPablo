@@ -1,9 +1,18 @@
 body{
+  background-image: url("/src/front/assets/img/bg2.png");
+  background-size: 10%;
+  background-repeat: repeat;
   background-color: #F2EFE7;
 }
 
-.Page{
-  min-height: 75vh;
+.Page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.PageContent {
+  flex: 1;
 }
 
 .TextDark{
@@ -45,7 +54,7 @@ body{
 
 .NavbarSearch{
     min-width: 100px;
-    max-width: 100%;
+    width: fit-content;
 }
 
 .NavbarSearchDropdown{
@@ -206,4 +215,3 @@ body{
   vertical-align: middle;
   align-self: anchor-center
 }
-
