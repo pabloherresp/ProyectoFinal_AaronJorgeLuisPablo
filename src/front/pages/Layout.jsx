@@ -20,10 +20,14 @@ export const Layout = () => {
     },[])
 
     return (
-        <ScrollToTop>
-            <Navbar />
-                <Outlet />
-            <Footer />
-        </ScrollToTop>
+        <div className="Page">
+            <ScrollToTop>
+                <Navbar />
+                <main className="PageContent">
+                    <Outlet />
+                </main>
+                <Footer />
+            </ScrollToTop>
+        </div>
     )
 }
