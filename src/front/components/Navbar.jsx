@@ -28,7 +28,7 @@ export const Navbar = () => {
 	useEffect(()=>{searchText(search)},[search])
 
 	return (
-		<nav className="navbar navbar-expand-md navbar-light navbg p-0">
+		<nav className="navbar navbar-expand-lg navbar-light navbg p-0">
 			<div className="container-fluid text-white">
 				<a className="navbar-brand" href="#">
 					<img className="img-fluid logo" src="/src/front/assets/img/Logo_Nomadik.png" alt="Logo" />
@@ -38,24 +38,24 @@ export const Navbar = () => {
 					<span className="navbar-toggler-icon"></span>
 				</button>
 
-				<div className="collapse navbar-collapse" id="navbarSupportedContent">
-					<div className="navbar-nav me-auto mb-0 gap-3 w-auto">
-						<Link className="nav-item nav-link active text-white fs-6 ms-auto fw-semibold" to={"/"}>Home</Link>
-						<div className="nav-item dropdown ms-auto">
+				<div className="collapse navbar-collapse text-center text-lg-start w-100" id="navbarSupportedContent">
+					<div className="navbar-nav mb-0 gap-3 w-auto d-flex justify-content-center justify-content-lg-start">
+						<Link className="nav-item nav-link active text-white fs-6 fw-semibold" to={"/"}>Home</Link>
+						<div className="nav-item dropdown">
 							<a className="nav-link dropdown-toggle text-white fw-semibold" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Excursiones</a>
-							<ul className="dropdown-menu dropdown-menu-dark NavbarDropdown">
+							<ul className="dropdown-menu dropdown-menu-dark NavbarDropdown text-center text-lg-start">
 								<li><a className="dropdown-item text-white" href="#">Deporte</a></li>
 								<li><a className="dropdown-item text-white" href="#">Ocio</a></li>
 								<li><a className="dropdown-item text-white" href="#">Turismo</a></li>
 							</ul>
 						</div>
-						<Link className="nav-item nav-link active text-white fs-6 ms-auto fw-semibold" to={"/"}>Equipo</Link>
-						<Link className="nav-item nav-link active text-white fs-6 ms-auto fw-semibold" to={"/"}>Contacto</Link>
+						<Link className="nav-item nav-link active text-white fs-6 fw-semibold" to={"/"}>Equipo</Link>
+						<Link className="nav-item nav-link active text-white fs-6 fw-semibold" to={"/"}>Contacto</Link>
 					</div>
 
-						<form className="mx-auto NavbarSearch input-group">
+						<form className="NavbarSearch input-group mx-auto px-2 busquedaBarra my-2 my-lg-0">
 							<input className="form-control dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false" type="search" placeholder="Buscar..." aria-label="Search" value={search} onChange={handleSearch} />
-							<ul className="dropdown-menu dropdown-menu-end NavbarSearchDropdown" data-bs-auto-close="outside">
+							<ul className="dropdown-menu dropdown-menu-center NavbarSearchDropdown busquedaBarra my-2 my-lg-0" data-bs-auto-close="outside">
 								{(searching ? <div class="spinner-border" role="status">
 												<span class="visually-hidden">Loading...</span>
 											</div> : 
