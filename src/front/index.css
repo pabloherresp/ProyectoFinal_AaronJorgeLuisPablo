@@ -59,6 +59,20 @@ body{
     overflow: auto;
 }
 
+h3{
+  color: #006A71;
+}
+
+.btn-Sigup{
+  background-color: #48A6A7;
+  color: white;
+  border: none;
+}
+
+.btn-Sigup:hover{
+  background-color: #3d8e8e;
+}
+
 .navbg{
     background-color: #317373;
 }
@@ -208,4 +222,33 @@ body{
   height: 5em;
   vertical-align: middle;
   align-self: anchor-center
+}
+
+.seccion-titulo {
+  position: relative;
+  display: inline-block;
+  transition: color 0.3s ease;
+  cursor: pointer;
+  overflow: hidden;
+  padding-bottom: 5px;
+}
+
+.seccion-titulo:hover {
+  color: #48A6A7;
+  transform: scale(1.05);
+}
+
+.seccion-titulo::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  width: 0;
+  background-color: #48A6A7;
+  transition: width 0.4s ease;
+}
+
+.seccion-titulo:hover::after {
+  width: 100%;
 }
