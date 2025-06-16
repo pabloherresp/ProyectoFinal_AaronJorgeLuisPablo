@@ -83,10 +83,51 @@ export const Signup = () => {
 				</div>
 					<form className="m-3" onSubmit={handleSignup}>
 						<div className="row w-75 mx-auto">
+							<div className="col-12 col-lg-6">
+								<div class="form-floating my-2 mx-auto">
+									<input required type="text" name="name" className="form-control" id="name" placeholder="" onChange={handleChange} value={formData.name}/>
+									<label className="fs-6" for="name">Nombre</label>
+								</div>
+							</div>
+							<div className="col-12 col-lg-6">
+								<div class="form-floating my-2 mx-auto">
+									<input required type="text" name="surname" className="form-control" id="surname" placeholder="" onChange={handleChange} value={formData.surname}/>
+									<label className="fs-6" for="surname">Apellidos</label>
+								</div>
+							</div>
+							<div className="col-12 col-lg-6">
+								<div class="form-floating my-2 mx-auto">
+		
+									<input required type="text" name="NID" className="form-control" id="nid" placeholder="" onChange={handleChange} value={formData.NID}/>
+									<label className="fs-6" for="nid">Documento de identidad</label>
+								</div>
+							</div>
+							<div className="col-12 col-lg-6">
+								<div class="form-floating my-2 mx-auto">
+									<input required type="text" name="telephone" className="form-control" id="telephone" placeholder="" onChange={handleChange} value={formData.telephone}/>
+									<label className="fs-6" for="telephone">Nº de teléfono</label>
+								</div>
+							</div>
+							<div className="col-12 col-lg-6">
+								<div class="form-floating my-2 mx-auto">
+									<input required type="date" name="birthdate" className="form-control" id="birthdate" placeholder="" onChange={handleChange} value={formData.birthdate}/>
+									<label className="fs-6" for="birthdate">Fecha de nacimiento</label>
+								</div>
+							</div>
+							<div className="col-12 col-lg-6">
+								<div class="form-floating my-2 mx-auto">
+									<select className="form-select" aria-label="Gender select menu" id="gender" name="gender" placeholder="" onChange={handleChange} value={formData.gender}>
+										<option value="MALE" selected>Masculino</option>
+										<option value="FEMALE">Femenino</option>
+										<option value="NOT TELLING">Otro</option>
+									</select>
+									<label className="fs-6" for="gender">Género</label>
+								</div>
+							</div>
 							<div className="col-6">
 								<div class="form-floating my-2 mx-auto">
 									<input required type="text" name="username" className="form-control" id="username" minlength="4" maxLength="16" placeholder="" autoComplete="username" onChange={handleChange} value={formData.username}/>
-									<label className="fs-6" for="username">Nombre de usuario</label>
+									<label className="fs-6" for="username">Username</label>
 								</div>
 							</div>
 							<div className="col-6 align-content-center">
@@ -130,7 +171,75 @@ export const Signup = () => {
 							<div id="passwordHelpBlock" className="col-12 form-text text-danger">
 									{(messages.password ? messages.password : "")}
 							</div>
+							<div className="col-12 col-md-4">
+								<div class="form-floating my-2 mx-auto">
+									<input required type="text" name="city" className="form-control" id="city" placeholder="" onChange={handleChange} value={formData.city}/>
+									<label className="fs-6" for="city">Ciudad</label>
+								</div>
+							</div>
+							<div className="col-12 col-md-8">
+								<div class="form-floating my-2 mx-auto">
+									<input required type="text" name="address" className="form-control" id="address" placeholder="" onChange={handleChange} value={formData.address}/>
+									<label className="fs-6" for="address">Dirección</label>
+								</div>
+							</div>
+							<div className="col-12 mb-3">
+								<label for="formFile" class="form-label">Foto de perfil</label>
+								<input className="form-control" type="file" id="formFile" accept="image/jpg" onChange={(e) => setFormdata({...formData, avatar: e.target.files[0]}) }/>
+							</div>
+							<div className="col-12">
+								<div class="form-check my-2 mx-auto">
+									<input class="form-check-input" name="is_professional" type="checkbox" id="is_professional" onChange={handleCheckboxChange} value={formData.is_professional}/>
+									<label class="form-check-label fs-6" for="checkChecked">
+										Soy profesional
+										<span className="ms-2" data-bs-toggle="tooltip" data-bs-title="Un profesional es un usuario que puede añadir actividades a la plataforma y actúa como responsable de la misma." >
+											<i class="fa-solid fa-circle-info"></i>
+										</span>
+									</label>
+								</div>
+							</div>
+							{ formData.is_professional ? <>
+								<div className="col-12">
+									<div className="form my-2 mx-auto">
+										<label className="fs-6" for="bio">Biografía</label>
+										<div id="bioHelpBlock" className="col-12 form-text">
+												Una desripción sobre ti y lo que quieres que los usuarios puedan leer para conocerte.
+										</div>
+										<textarea name="bio" className="form-control mt-2" style={{ height: '140px' }}  id="bio" placeholder="" onChange={handleChange} value={formData.bio}/>
+									</div>
+								</div>
+							<div className="col-12 col-md-6">
+								<div class="form-floating my-2 mx-auto">
+									<input type="text" name="tax_address" className="form-control" id="tax_address" placeholder="" onChange={handleChange} value={formData.tax_address}/>
+									<label className="fs-6" for="tax_address">Dirección fiscal</label>
+								</div>
+							</div>
 							
+							<div className="col-12 col-md-6">
+								<div class="form-floating my-2 mx-auto">
+									<input type="text" name="business_name" className="form-control" id="business_name" placeholder="" onChange={handleChange} value={formData.business_name}/>
+									<label className="fs-6" for="business_name">Nombre de la empresa</label>
+								</div>
+							</div>
+							
+							<div className="col-12 col-md-6">
+								<div class="form-floating my-2 mx-auto">
+									<input type="text" name="nuss" className="form-control" id="nuss" placeholder="" onChange={handleChange} value={formData.nuss}/>
+									<label className="fs-6" for="nuss">NUSS</label>
+								</div>
+							</div>
+							<div className="col-12 col-lg-6">
+								<div class="form-floating my-2 mx-auto">
+									<select className="form-select" aria-label="Professional type" id="type" name="type" placeholder="" onChange={handleChange} value={formData.type}>
+										<option value="FREELANCE" selected>Autónomo</option>
+										<option value="BUSINESS">Empresa</option>
+									</select>
+									<label className="fs-6" for="gender">Tipo de profesional</label>
+								</div>
+							</div>
+							</> : ""
+							}
+
 							<div className="row">
 								<input type="submit" value="Crear usuario" className="btn btn-primary my-2 w-auto mx-auto fw-bold"/>
 								<p className="text-danger text-center fw-semibold">{formData.response}</p>

@@ -26,7 +26,7 @@ export const Login = () => {
             localStorage.setItem("token", resp.token)
             localStorage.setItem("username", formData.user)
 			localStorage.setItem("id", resp.id)
-			localStorage.setItem("avatar_url", resp.avatar_url)
+			localStorage.setItem("avatar_url", "/" + resp.avatar_url)
 			localStorage.setItem("is_professional", resp.is_professional)
             navigate("/")
 		}

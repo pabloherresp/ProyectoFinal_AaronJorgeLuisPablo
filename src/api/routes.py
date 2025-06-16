@@ -88,15 +88,14 @@ def create_user():
         db.session.rollback()
         return jsonify({"error": "Couldn't create user"}), 500
     
-    if 'avatar' not in request.files:
-        filepath = f"src/front/assets/avatar/0.jpg"
-    else:
+    if 'avatar' in request.files:
         avatar = request.files.get("avatar")
         avatar.filename = f"{user.id}.jpg"
-        filepath = f"src/front/assets/avatar/{avatar.filename}"
+        filepath = f"public/avatar/{avatar.filename}"
         avatar.save(os.path.join(filepath))
-    user.avatar_url = filepath
+        user.avatar_url = avatar.filename
     db.session.commit()
+    
     if request.form.get("is_professional") == "true":
         prof = Professionals(user_id=user.id, bio=request.form.get("bio"), type=enumProf(request.form.get("type")), business_name=request.form.get("business_name"), tax_address=request.form.get("tax_address"), nuss=request.form.get("nuss"))
         db.session.add(prof)
@@ -622,7 +621,7 @@ def search_word(value):
     activities = db.session.execute(select(Activities).join(Activities.info_activity).where(or_(Info_activity.name.ilike(f"%{value}%"),Info_activity.location.ilike(f"%{value}%")))).scalars().all()
     if profs is None and activities is None:
         return jsonify({"error": "Search couldn't find matches"}), 404
-    response_body = {"professionals": [{"user_id": prof.user_id, "username": prof.user.username, "name": prof.user.name, "surname": prof.user.surname} for prof in profs], "activities": [{"id": act.id, "name": act.info_activity.name} for act in activities]}
+    response_body = {"professionals": [{"user_id": prof.user_id, "username": prof.user.username, "name": prof.user.name, "surname": prof.user.surname} for prof in profs], "activities": [{"id": act.id, "name": act.info_activity.name, "location": act.meeting_point} for act in activities]}
     return jsonify(response_body), 200
 
 

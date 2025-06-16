@@ -52,15 +52,9 @@ body{
   background-color: #006A71;
 }
 
-.NavbarSearch{
-    min-width: 100px;
-    width: fit-content;
-}
-
 .NavbarSearchDropdown{
     max-height: 300px;
-    width: auto;
-    min-width: 250px;
+    width: 100%;
     scrollbar-width: thin;
     overflow: auto;
 }
@@ -172,7 +166,7 @@ body{
 
 @media (min-width: 992px) {
   .busquedaBarra {
-    width: 60%;
+    width: 40%;
     max-width: 600px;
   }
 }

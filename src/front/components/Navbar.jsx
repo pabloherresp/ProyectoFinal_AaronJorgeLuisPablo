@@ -53,7 +53,7 @@ export const Navbar = () => {
 						<Link className="nav-item nav-link active text-white fs-6 ms-auto fw-semibold" to={"/"}>Contacto</Link>
 					</div>
 
-						<form className="mx-auto NavbarSearch input-group">
+						<form className="mx-auto busquedaBarra input-group">
 							<input className="form-control dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false" type="search" placeholder="Buscar..." aria-label="Search" value={search} onChange={handleSearch} />
 							<ul className="dropdown-menu dropdown-menu-end NavbarSearchDropdown" data-bs-auto-close="outside">
 								{(searching ? <div class="spinner-border" role="status">
@@ -71,7 +71,7 @@ export const Navbar = () => {
 									{searchResults.activities.map((item, i)=>{
 										return (<li className="px-2" key={i}>
 											<Link className="text-decoration-none text-dark" to={"/activity/"+item.id}>
-												<i className="fa-regular fa-file-lines me-2"></i> {item.name}
+												<i className="fa-regular fa-file-lines me-2"></i> {item.name + " (" + item.location + ")"}
 											</Link>
 										</li>)
 									})}
@@ -85,7 +85,7 @@ export const Navbar = () => {
 						{!store.user.id ?
 							<div className="d-flex gap-3 w-100">
 								<div className="nav-item w-50">
-									<button className="btn navbarButton w-100" onClick={()=>{navigate("/login")}}>Login</button>
+									<button className="btn navbarButton w-100 ms-md-2" onClick={()=>{navigate("/login")}}>Login</button>
 								</div>
 								<div className="nav-item w-50">
 									<button className="btn navbarButton text-nowrap w-100" onClick={()=>{navigate("/signup")}}>Sign up</button>
@@ -93,7 +93,7 @@ export const Navbar = () => {
 							</div> :
 							<div className="dropdown">
 								<div className="shadow nav-item rounded-pill d-flex NavbarUserPill" data-bs-toggle="dropdown" aria-expanded="false">
-									<img className="rounded-circle" src={store.user.avatar_url} alt=""/>
+									<img className="rounded-circle" src={"/public/avatar/"+store.user.avatar_url} alt=""/>
 									<span className="text-white text-capitalize fs-6 fw-semibold ms-2 me-3 align-self-center">{store.user.username}</span>
 									
 								</div>

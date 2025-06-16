@@ -5,8 +5,8 @@ import collection from "../services/collection"
 
 export const PersonalSpace = () => {
 	const {id} = useParams()
-	const { store, dispatch } = useGlobalReducer()
 	const navigate = useNavigate()
+	const {store,dispatch} = useGlobalReducer()
 
 	const [user, setUser] = useState({name: "", surname: "", NID: "", telephone: "", birthdate: null, username: "", email: "", confirmEmail: "", password: "", confirmPassword: "", city: "", address: "", gender: "MALE", avatar: "", is_professional: false, professional:{type: "", tax_address: "", business_name: "", bio: "", nuss: ""}})
 	const [editUser, setEditUser] = useState({})
@@ -18,7 +18,7 @@ export const PersonalSpace = () => {
 		if("error" in resp)
 			navigate("/")
 		else{
-			setUser({...resp,...resp.professional})
+			setUser({...resp, ...resp.professional})
 			setEditUser({...editUser, is_professional: resp.is_professional})
 		}
 	}
@@ -30,6 +30,7 @@ export const PersonalSpace = () => {
 		setUser({
             ...user, [e.target.name]: e.target.value
         })
+		setMessage("")
 	}
 
 	const handleEditUser = async (e) => {
@@ -37,7 +38,11 @@ export const PersonalSpace = () => {
 		const resp = await collection.editUser(id,{...editUser})
 
 		if(resp.success == false) setMessage(resp.response)
-		else setMessage("Usuario editado con éxito.")
+		else {
+			setMessage("Usuario editado con éxito.")
+				localStorage.setItem("username",resp.user.username)
+				dispatch({type: "loadUser", payload: resp.user})
+		}
 	}
 
 	useEffect(() => {
@@ -76,11 +81,11 @@ export const PersonalSpace = () => {
 							<div className="row mb-3">
 								<label for="username" className="col-md-4 col-form-label">Nombre de usuario</label>
 								<div className="col-md-8">
-									<input type="text" className="form-control" name="username" id="username" value={user.username} onChange={handleChange}/>
+									<input type="text" className="form-control" name="username" id="username" minlength="4" maxLength="16" value={user.username} onChange={handleChange}/>
 								</div>
 							</div>
 							<div className="row mb-3">
-								<label for="NID" className="col-md-4 col-form-label">Nombre de usuario</label>
+								<label for="NID" className="col-md-4 col-form-label">Documento de identidad</label>
 								<div className="col-md-8">
 									<input type="text" className="form-control" name="NID" id="NID" value={user.NID} onChange={handleChange}/>
 								</div>
@@ -121,12 +126,6 @@ export const PersonalSpace = () => {
 							</div>
 							{user.is_professional ? <>
 								<div className="row mb-3">
-									<label for="address" className="col-md-4 col-form-label">Biografía</label>
-									<div className="col-md-8">
-										<textarea name="bio" className="form-control mt-2" style={{ height: '140px' }}  id="bio" placeholder="" onChange={handleChange} value={user.bio} />
-									</div>
-								</div>
-								<div className="row mb-3">
 									<label for="address" className="col-md-4 col-form-label">Dirección fiscal</label>
 									<div className="col-md-8">
 										<input type="text" className="form-control" name="tax_address" id="tax_address" value={user.tax_address} onChange={handleChange}/>
@@ -151,6 +150,12 @@ export const PersonalSpace = () => {
 									<label for="address" className="col-md-4 col-form-label">NUSS</label>
 									<div className="col-md-8">
 										<input type="text" className="form-control" name="nuss" id="nuss" value={user.nuss} onChange={handleChange}/>
+									</div>
+								</div>
+								<div className="row mb-3">
+									<label for="address" className="col-md-4 col-form-label">Biografía</label>
+									<div className="col-md-8">
+										<textarea name="bio" className="form-control mt-2" style={{ height: '400px' }}  id="bio" placeholder="" onChange={handleChange} value={user.bio} />
 									</div>
 								</div>
 							</>
