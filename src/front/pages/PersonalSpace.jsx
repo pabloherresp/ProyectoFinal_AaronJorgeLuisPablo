@@ -46,11 +46,20 @@ export const PersonalSpace = () => {
 
 	return (
 		<div className="container bg-white rounded my-3">
-			<div className="container bg-white rounded my-3">
-				<div className="row p-5">
+			<div className="bg-white rounded my-3">
+				<div className="py-5">
 					<h4 className="TextDark text-center display-5 fw-semibold">Datos del usuario</h4>
-					<form className="mt-3" onSubmit={handleEditUser}>
-						<div className="row w-75 mx-auto">
+					<div class="row">
+						<div className="col-8 mx-auto">
+					{ !editable ? 
+							<button className="btn btn-success w-auto mx-auto my-4" onClick={()=>setEditable(!editable)}>Editar valores</button>
+							: <button className="btn btn-secondary w-auto mx-auto" onClick={()=>{
+								getUser()
+								setEditable(false)
+							}}>Cancelar</button>}
+						</div>
+					<form className="mt-3 col-12 col-md-8 mx-auto" onSubmit={handleEditUser}>
+						<div className="row mx-auto">
 						<fieldset disabled={!editable}>
 							<div className="row mb-3">
 								<label for="name" className="col-md-4 col-form-label">Nombre</label>
@@ -146,26 +155,19 @@ export const PersonalSpace = () => {
 								</div>
 							</>
 							: <p hidden className="text-center fw-semibold mt-3">¿Desa hacerse profesional? Haga click <Link className="text-decoration-none" to="/signup-profesional">aquí</Link></p>
-							}
+						}
 								<div className="row">
 									<input type="submit" value="Guardar cambios" className="btn btn-primary my-2 w-auto mx-auto fw-bold"/>
 									{(message?.includes("xito") ?
 									<p className="text-success text-center fw-semibold">Usuario editado con éxito</p>
 									: <p className="text-danger text-center fw-semibold">{message}</p>)
-									}
+								}
 								</div>
 							</fieldset>
 							
 						</div>
 					</form>
-					{ !editable ? 
-							<button className="btn btn-success w-auto mx-auto" onClick={()=>setEditable(!editable)}>Editar valores</button>
-							: <button className="btn btn-secondary w-auto mx-auto" onClick={()=>{
-								getUser()
-								setEditable(false)
-							}}>Cancelar</button>
-
-							}
+					</div>
 				</div>
 			</div>
 		</div>

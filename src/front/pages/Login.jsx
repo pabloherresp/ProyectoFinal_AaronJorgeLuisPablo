@@ -22,7 +22,6 @@ export const Login = () => {
             setFormdata({...formData, response: resp.response, error: true})
         else{
             setFormdata({...formData, error: false, response: ""})
-			console.log(resp)
             dispatch({type: "loadUser", payload: {id: resp.id, username: resp.username, avatar_url: resp.avatar_url,is_professional: resp.is_professional}})
             localStorage.setItem("token", resp.token)
             localStorage.setItem("username", formData.user)

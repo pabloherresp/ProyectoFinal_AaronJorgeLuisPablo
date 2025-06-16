@@ -90,17 +90,18 @@ export const Navbar = () => {
 								<div className="nav-item w-50">
 									<button className="btn navbarButton text-nowrap w-100" onClick={()=>{navigate("/signup")}}>Sign up</button>
 								</div>
-							</div> :<>
-								<div className="shadow nav-item rounded-pill d-flex NavbarUserPill dropdown" data-bs-toggle="dropdown" aria-expanded="false">
+							</div> :
+							<div className="dropdown">
+								<div className="shadow nav-item rounded-pill d-flex NavbarUserPill" data-bs-toggle="dropdown" aria-expanded="false">
 									<img className="rounded-circle" src={store.user.avatar_url} alt=""/>
 									<span className="text-white text-capitalize fs-6 fw-semibold ms-2 me-3 align-self-center">{store.user.username}</span>
 									
 								</div>
-								<ul className="dropdown-menu dropdown-menu-dark dropdown-menu-end NavbarDropdown me-3">
+								<ul className="dropdown-menu dropdown-menu-dark dropdown-menu-end NavbarDropdown me-3 mt-3">
 									<li><Link className="dropdown-item text-white d-flex justify-content-between" to={"/personalspace/" + store.user.id}>
 											<div className="me-3"><i class="fa-solid fa-user fa-sm me-auto"></i></div> <span>Mi espacio personal</span>
 										</Link></li>
-									{store.user.is_professional ? 
+									{store.user?.is_professional ? 
 										<li><Link className="dropdown-item text-white d-flex justify-content-between" to={"/professionalspace/" + store.user.id}>
 												<div><i class="fa-solid fa-suitcase fa-sm"></i></div> <span>Mis actividades</span>
 											</Link></li>
@@ -108,11 +109,13 @@ export const Navbar = () => {
 									<li><Link className="dropdown-item text-white d-flex justify-content-between" to={"/inscriptions/" + store.user.id}>
 											<div><i class="fa-solid fa-file-lines fa-sm"></i></div> <span>Mis inscripciones</span>
 										</Link></li>
-									<li><Link className="dropdown-item text-white d-flex justify-content-between" onClick={()=>{dispatch({type: "closeSession"})}}>
+									<li><Link className="dropdown-item text-white d-flex justify-content-between" onClick={()=>{
+											dispatch({type: "closeSession"})
+											setTimeout(()=>navigate(0), 50)}}>
 										<div><i class="fa-solid fa-power-off fa-sm"></i></div> <span className="ms-auto">Cerrar sesión</span>
 										</Link></li>
 								</ul>
-							</>
+							</div>
 						}
 					</div>
 				</div>

@@ -23,9 +23,11 @@ export default function storeReducer(store, action = {}) {
 				user: {id: action.payload.id, username: action.payload.username, avatar_url: action.payload.avatar_url, is_professional: action.payload.is_professional}
 			}
 		case 'closeSession':
+			localStorage.clear()
 			return{
 				...store,
-				user: {id: null,username: "",avatar_url: ""}
+				user: {id: null, username: "", avatar_url: ""},
+				closed: true
 			}
 		default:
 			throw Error('Unknown action.');
