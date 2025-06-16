@@ -53,16 +53,33 @@ body{
 }
 
 .NavbarSearch{
-    min-width: 100px;
-    width: fit-content;
+  position: relative;
+  width: 100%;
+  max-width: 400px;
 }
 
 .NavbarSearchDropdown{
-    max-height: 300px;
-    width: auto;
-    min-width: 250px;
-    scrollbar-width: thin;
-    overflow: auto;
+  width: 100% !important;
+  left: 0 !important;
+  right: 0 !important;
+  top: 100%;
+  margin-top: 0.2rem;
+  box-sizing: border-box;
+  overflow: auto;
+}
+
+h3{
+  color: #006A71;
+}
+
+.btn-Sigup{
+  background-color: #48A6A7;
+  color: white;
+  border: none;
+}
+
+.btn-Sigup:hover{
+  background-color: #3d8e8e;
 }
 
 .navbg{
@@ -172,7 +189,7 @@ body{
 
 @media (min-width: 992px) {
   .busquedaBarra {
-    width: 60%;
+    width: 80% !important;
     max-width: 600px;
   }
 }
@@ -243,4 +260,33 @@ body{
 }
 .myActivityCard{
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.seccion-titulo {
+  position: relative;
+  display: inline-block;
+  transition: color 0.3s ease;
+  cursor: pointer;
+  overflow: hidden;
+  padding-bottom: 5px;
+}
+
+.seccion-titulo:hover {
+  color: #48A6A7;
+  transform: scale(1.05);
+}
+
+.seccion-titulo::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  width: 0;
+  background-color: #48A6A7;
+  transition: width 0.4s ease;
+}
+
+.seccion-titulo:hover::after {
+  width: 100%;
 }

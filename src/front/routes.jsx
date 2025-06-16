@@ -17,6 +17,7 @@ import {Login} from "./pages/Login"
 import {Signup} from "./pages/Signup"
 import {PersonalSpace} from "./pages/PersonalSpace"
 import {Inscriptions} from "./pages/Inscriptions"
+import {VisionMision} from "./pages/VisionMision"
 
 export const router = createBrowserRouter(
     createRoutesFromElements(
@@ -31,6 +32,7 @@ export const router = createBrowserRouter(
         <Route path="/nosotros" element={<SobreNosotros/>} />
         <Route path="/signup" element={<Signup/>} />
         <Route path="/login" element={<Login/>} />
+        <Route path="/misionyvision" element={<VisionMision/>} />
         <Route path="/personalspace/:id" element={<PersonalSpace />}/>
         <Route path="/inscriptions/:id" element={<Inscriptions />}/>
       </Route>
