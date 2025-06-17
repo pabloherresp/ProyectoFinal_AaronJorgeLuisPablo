@@ -227,6 +227,37 @@ h3{
   color: grey;
 }
 
+.activityTextFormat{
+  font-size: 1.1em;
+  font-family: Arial, Helvetica, sans-serif ;
+  text-align: justify;
+}
+
+.fontFamily{
+
+  font-family: Arial, Helvetica, sans-serif ;
+
+}
+
+.fixSizeDateActivity{
+  font-size: 0.75em;
+}
+
+.fixSizeTitleActivity{
+  font-size: 1.55em;
+}
+
+.container1Activity{
+  width: 70%;
+
+}
+
+.container2Activity{
+  
+  width: 30%;
+  background-color: #006A71;
+}
+
 .buttonStyle{
   width: 2em;
   height: 2em;
@@ -289,4 +320,9 @@ h3{
 
 .seccion-titulo:hover::after {
   width: 100%;
+}
+
+.reviewCard{
+max-width: 35%;
+
 }

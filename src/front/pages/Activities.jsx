@@ -85,14 +85,14 @@ function handleClickMore2(counter){
 
 return(
 
-    <div className="pb-5 container bg-white my-5 rounded myActivityCard">
+    <div className="pb-5 container bg-white my-5 rounded myActivityCard fontFamily">
 
 
         <h1 className="font1 p-5 text-center">Actividades por tipo</h1>
 
         <div className="d-flex justify-content-around">
 
-            <button className="buttonStyle rounded-circle invisible"><i class="fa-solid fa-arrow-left"></i></button>
+            <button className="buttonStyle rounded-circle invisible"><i className="fa-solid fa-arrow-left"></i></button>
 
            <Link className="text-decoration-none valor-card2"  to={'/activities/sport'}><ActivityCard img={"src/front/assets/img/Padel.webp"} title={"Actividades deportivas"} description={"Apúntate a diversas actividades deportivas para mantenerte sano y en forma"}></ActivityCard></Link>
            
@@ -102,7 +102,7 @@ return(
 
            <Link className="text-decoration-none valor-card2" to={'/activities/leisure'}><ActivityCard img={"src/front/assets/img/Poker.webp"} title={"Actividades recreativas"} description={"No te quedes sin sitio en nuestras actividades recreativas donde puedes pasar un buen rato"}></ActivityCard></Link>
 
-            <button className="buttonStyle rounded-circle invisible"><i class="fa-solid fa-arrow-right"></i></button>
+            <button className="buttonStyle rounded-circle invisible"><i className="fa-solid fa-arrow-right"></i></button>
 
         </div>
 
