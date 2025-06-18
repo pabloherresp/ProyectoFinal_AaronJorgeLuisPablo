@@ -18,7 +18,11 @@ collection.returnActivities = async () => {
 
 collection.checkUser = async (name) => {
     try {
-        const resp = await fetch(BACKEND_URL + "api/users/" + name)
+        const resp = await fetch(BACKEND_URL + "api/users/", {
+            method: "POST",
+            headers: {"Content-Type":"application/json"},
+			body: JSON.stringify({name: name})
+        })
         return resp.ok
     } catch (error) {
         console.log(error)
@@ -59,6 +63,21 @@ collection.loginUser = async (userdata) => {
     }
 }
 
+collection.loginToken = async (token) => {
+    try {
+        const resp = await fetch(BACKEND_URL + "api/user", {
+            headers: {"Authorization": get_token()}
+        })
+        const data = await resp.json()
+
+        if(resp.status == 404) throw Error("Usuario no encontrado")
+        return data
+    } catch (error) {
+        console.log(error)
+        return {success: false, response: error.message}
+    }
+}
+
 collection.signupUser = async (userdata) => {
     try{
         const resp = await fetch(BACKEND_URL + "api/signup", {
@@ -66,17 +85,44 @@ collection.signupUser = async (userdata) => {
 			body: userdata
         })
         const data = await resp.json()
-
 		if(resp.status == 400) throw Error("Missing data")
-		else if (resp.status == 401) throw Error("User/Email and Password don't match")
-		else if(resp.status == 409) throw Error(data.response)
-		else if(!resp.ok) throw Error("Unknown error")
-
+		else if(resp.status == 409) throw Error("El email introducido ya existe en la base de datos")
+		else if(!resp.ok) throw Error("Error desconocido")
         return data
 
     }catch(error) {
 		console.log(error)
 		return {success: false, response: error.message}
+    }
+}
+
+collection.createClient = async (userdata) => {
+    try {
+        const resp = await fetch(BACKEND_URL + "api/clients", {
+            method: "POST",
+            headers: {"Authorization": get_token()},
+			body: userdata
+        })
+        const data = await resp.json()
+        return data
+    } catch (error) {
+        console.log(error)
+        return {success: false, response: error.message}
+    }
+}
+
+collection.editClient = async (userdata) => {
+    try {
+        const resp = await fetch(BACKEND_URL + "api/clients", {
+            method: "PUT",
+            headers: {"Authorization": get_token()},
+			body: userdata
+        })
+        const data = await resp.json()
+        return data
+    } catch (error) {
+        console.log(error)
+        return {success: false, response: error.message}
     }
 }
 
@@ -101,7 +147,7 @@ collection.editUser = async (id, userdata) => {
     }
 }
 
-collection.getInscriptionsForUser = async (id) => {
+collection.getInscriptionsForUser = async () => {
     try {
         const resp = await fetch(BACKEND_URL + "api/inscriptions", {
             headers: {"Authorization": get_token()}

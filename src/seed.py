@@ -1,5 +1,5 @@
 from app import app
-from api.models import db, Users, Professionals, Activities, Info_activity, Reviews, Reports, Media, Favourites, Inscriptions, Administrators
+from api.models import db, Users, Professionals, Activities, Info_activity, Reviews, Reports, Media, Favourites, Inscriptions, Administrators, Clients
 from api.models import enumProf, enumClts, enumInfo
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -9,54 +9,45 @@ with app.app_context():
     db.create_all()
 
     # Usuarios
-    users = [ Users( email="ana@example.com",username="anauser",
-            password=generate_password_hash("1234"),name="Ana",surname="López",
-            telephone="600111221",NID="12345678A",avatar_url="https://randomuser.me/api/portraits/women/1.jpg",
-            address="Calle Sol 1",city="Madrid",birthdate=datetime(1990, 5, 20),gender=enumClts.female
-        ),Users(email="luis@example.com", username="luisuser",
-            password=generate_password_hash("1234"),name="Luis",surname="Pérez",
-            telephone="600111222", NID="12345678B", avatar_url="https://randomuser.me/api/portraits/men/2.jpg",
-            address="Calle Luna 2",city="Barcelona",birthdate=datetime(1988, 7, 15),gender=enumClts.male
-        ), Users(email="maria@example.com",username="mariauser",
-            password=generate_password_hash("1234"),name="María",surname="García",
-            telephone="600111223",NID="12345678C",avatar_url="https://randomuser.me/api/portraits/women/3.jpg",
-            address="Avenida del Mar 3",city="Valencia",birthdate=datetime(1992, 3, 10),gender=enumClts.female
-        ),Users(email="juan@example.com",username="juanuser",
-            password=generate_password_hash("1234"),name="Juan",surname="Martínez",
-            telephone="600111224",NID="12345678D",avatar_url="https://randomuser.me/api/portraits/men/4.jpg",
-            address="Calle Río 4",city="Sevilla",birthdate=datetime(1985, 12, 1),gender=enumClts.male
-        ),Users(email="laura@example.com",username="laurauser",
-            password=generate_password_hash("1234"),name="Laura",surname="Sánchez",
-            telephone="600111225",NID="12345678E",avatar_url="https://randomuser.me/api/portraits/women/5.jpg",
-            address="Plaza Mayor 5",city="Bilbao",birthdate=datetime(1995, 8, 30),gender=enumClts.female
-        ),
-        Users(email="carlos@example.com",username="carlosuser",
-            password=generate_password_hash("1234"),name="Carlos",surname="Fernández",
-            telephone="600111226",NID="12345678F",avatar_url="https://randomuser.me/api/portraits/men/6.jpg",
-            address="Calle Olivo 6",city="Granada",birthdate=datetime(1991, 2, 18),gender=enumClts.male
-        ),
-        Users(email="lucia@example.com",username="luciauser",
-            password=generate_password_hash("1234"),name="Lucía",surname="Ruiz",
-            telephone="600111227",NID="12345678G",avatar_url="https://randomuser.me/api/portraits/women/7.jpg",
-            address="Avenida Paz 7",city="Zaragoza",birthdate=datetime(1993, 11, 5),gender=enumClts.female
-        ),
-        Users(email="david@example.com",username="daviduser",
-            password=generate_password_hash("1234"),name="David",surname="Jiménez",
-            telephone="600111228",NID="12345678H",avatar_url="https://randomuser.me/api/portraits/men/8.jpg",
-            address="Calle Jardín 8",city="Málaga",birthdate=datetime(1989, 6, 22),gender=enumClts.male
-        ),
-        Users(email="elena@example.com",username="elenauser",
-            password=generate_password_hash("1234"),name="Elena",surname="Moreno",
-            telephone="600111229",NID="12345678I",avatar_url="https://randomuser.me/api/portraits/women/9.jpg"
-            ,address="Calle Lago 9",city="Alicante",birthdate=datetime(1994, 9, 14),gender=enumClts.female
-        ),
-        Users(email="jorge@example.com",username="jorgeuser",
-            password=generate_password_hash("1234"),name="Jorge",surname="Muñoz",
-            telephone="600111230",NID="12345678J",avatar_url="https://randomuser.me/api/portraits/men/10.jpg",
-            address="Avenida Sierra 10",city="Santander",birthdate=datetime(1987, 4, 27),gender=enumClts.male
-        ),
+    users = [
+        Users( email="ana@example.com", password=generate_password_hash("1234")),
+        Users(email="luis@example.com", password=generate_password_hash("1234")),
+        Users(email="maria@example.com", password=generate_password_hash("1234")),
+        Users(email="juan@example.com", password=generate_password_hash("1234")),
+        Users(email="laura@example.com", password=generate_password_hash("1234")),
+        Users(email="carlos@example.com", password=generate_password_hash("1234")),
+        Users(email="lucia@example.com", password=generate_password_hash("1234")),
+        Users(email="david@example.com", password=generate_password_hash("1234")),
+        Users(email="elena@example.com", password=generate_password_hash("1234")),
+        Users(email="jorge@example.com", password=generate_password_hash("1234")),
     ]
     db.session.add_all(users)
+    db.session.commit()
+
+    clients = [
+        Clients(user_id=users[0].id, username="anauser",name="Ana",surname="López", telephone="600111221", NID="12345678A", avatar_url="0.jpg",
+            address="Calle Sol 1",city="Madrid",birthdate=datetime(1990, 5, 20),gender=enumClts.female, country="España"),
+        Clients(user_id=users[1].id, username="luisuser",name="Luis",surname="Pérez", telephone="600111222", NID="12345678B", avatar_url="0.jpg",
+            address="Calle Luna 2",city="Barcelona",birthdate=datetime(1988, 7, 15),gender=enumClts.male, country="España"),
+        Clients(user_id=users[2].id, username="mariauser",name="María",surname="García", telephone="600111223",NID="12345678C",avatar_url="0.jpg",
+            address="Avenida del Mar 3",city="Valencia",birthdate=datetime(1992, 3, 10),gender=enumClts.female, country="España"),
+        Clients(user_id=users[3].id, username="juanuser",name="Juan",surname="Martínez", telephone="600111224",NID="12345678D",avatar_url="0.jpg",
+            address="Calle Río 4",city="Sevilla",birthdate=datetime(1985, 12, 1),gender=enumClts.male, country="España"),
+        Clients(user_id=users[4].id, username="laurauser",name="Laura",surname="Sánchez", telephone="600111225",NID="12345678E",avatar_url="0.jpg",
+            address="Plaza Mayor 5",city="Bilbao",birthdate=datetime(1995, 8, 30),gender=enumClts.female, country="España"),
+        Clients(user_id=users[5].id, username="carlosuser",name="Carlos",surname="Fernández", telephone="600111226",NID="12345678F",avatar_url="0.jpg",
+            address="Calle Olivo 6",city="Granada",birthdate=datetime(1991, 2, 18),gender=enumClts.male, country="España"),
+        Clients(user_id=users[6].id, username="luciauser",name="Lucía",surname="Ruiz", telephone="600111227",NID="12345678G",avatar_url="0.jpg",
+            address="Avenida Paz 7",city="Zaragoza",birthdate=datetime(1993, 11, 5),gender=enumClts.female, country="España"),
+        Clients(user_id=users[7].id, username="daviduser",name="David",surname="Jiménez", telephone="600111228",NID="12345678H",avatar_url="0.jpg",
+            address="Calle Jardín 8",city="Málaga",birthdate=datetime(1989, 6, 22),gender=enumClts.male, country="España"),
+        Clients(user_id=users[8].id, username="elenauser",name="Elena",surname="Moreno", telephone="600111229",NID="12345678I",avatar_url="0.jpg"
+            ,address="Calle Lago 9",city="Alicante",birthdate=datetime(1994, 9, 14),gender=enumClts.female, country="España"),
+        Clients(user_id=users[9].id, username="jorgeuser",name="Jorge",surname="Muñoz", telephone="600111230",NID="12345678J",avatar_url="0.jpg",
+            address="Avenida Sierra 10",city="Santander",birthdate=datetime(1987, 4, 27),gender=enumClts.male, country="España"),
+    ]
+
+    db.session.add_all(clients)
     db.session.commit()
 
      # Professionales
@@ -212,55 +203,55 @@ with app.app_context():
 
     # Inscripciones
     inscriptions = [
-        Inscriptions(user_id=users[0].id, activity_id=actividades[0].id),
-        Inscriptions(user_id=users[1].id, activity_id=actividades[0].id),
-        Inscriptions(user_id=users[2].id, activity_id=actividades[1].id),
-        Inscriptions(user_id=users[3].id, activity_id=actividades[1].id),
-        Inscriptions(user_id=users[4].id, activity_id=actividades[2].id),
-        Inscriptions(user_id=users[5].id, activity_id=actividades[2].id),
-        Inscriptions(user_id=users[6].id, activity_id=actividades[3].id),
-        Inscriptions(user_id=users[7].id, activity_id=actividades[3].id),
-        Inscriptions(user_id=users[8].id, activity_id=actividades[4].id),
-        Inscriptions(user_id=users[9].id, activity_id=actividades[4].id),
-        Inscriptions(user_id=users[0].id, activity_id=actividades[5].id),
-        Inscriptions(user_id=users[1].id, activity_id=actividades[5].id),
-        Inscriptions(user_id=users[2].id, activity_id=actividades[6].id),
-        Inscriptions(user_id=users[3].id, activity_id=actividades[6].id),
-        Inscriptions(user_id=users[4].id, activity_id=actividades[7].id),
-        Inscriptions(user_id=users[5].id, activity_id=actividades[7].id),
-        Inscriptions(user_id=users[6].id, activity_id=actividades[8].id),
-        Inscriptions(user_id=users[7].id, activity_id=actividades[8].id),
-        Inscriptions(user_id=users[8].id, activity_id=actividades[9].id),
-        Inscriptions(user_id=users[9].id, activity_id=actividades[9].id),
-        Inscriptions(user_id=users[0].id, activity_id=actividades[10].id),
-        Inscriptions(user_id=users[1].id, activity_id=actividades[10].id),
-        Inscriptions(user_id=users[2].id, activity_id=actividades[11].id),
-        Inscriptions(user_id=users[3].id, activity_id=actividades[11].id),
-        Inscriptions(user_id=users[4].id, activity_id=actividades[12].id),
-        Inscriptions(user_id=users[5].id, activity_id=actividades[12].id),
-        Inscriptions(user_id=users[6].id, activity_id=actividades[13].id),
-        Inscriptions(user_id=users[7].id, activity_id=actividades[13].id),
-        Inscriptions(user_id=users[8].id, activity_id=actividades[14].id),
-        Inscriptions(user_id=users[9].id, activity_id=actividades[14].id),
-        Inscriptions(user_id=users[0].id, activity_id=actividades[15].id),
-        Inscriptions(user_id=users[1].id, activity_id=actividades[15].id),
-        Inscriptions(user_id=users[2].id, activity_id=actividades[16].id),
-        Inscriptions(user_id=users[3].id, activity_id=actividades[16].id),
-        Inscriptions(user_id=users[4].id, activity_id=actividades[17].id),
-        Inscriptions(user_id=users[5].id, activity_id=actividades[17].id),
-        Inscriptions(user_id=users[6].id, activity_id=actividades[18].id),
-        Inscriptions(user_id=users[7].id, activity_id=actividades[18].id),
-        Inscriptions(user_id=users[8].id, activity_id=actividades[19].id),
-        Inscriptions(user_id=users[9].id, activity_id=actividades[19].id),
+        Inscriptions(user_id=clients[0].user_id, activity_id=actividades[0].id),
+        Inscriptions(user_id=clients[1].user_id, activity_id=actividades[0].id),
+        Inscriptions(user_id=clients[2].user_id, activity_id=actividades[1].id),
+        Inscriptions(user_id=clients[3].user_id, activity_id=actividades[1].id),
+        Inscriptions(user_id=clients[4].user_id, activity_id=actividades[2].id),
+        Inscriptions(user_id=clients[5].user_id, activity_id=actividades[2].id),
+        Inscriptions(user_id=clients[6].user_id, activity_id=actividades[3].id),
+        Inscriptions(user_id=clients[7].user_id, activity_id=actividades[3].id),
+        Inscriptions(user_id=clients[8].user_id, activity_id=actividades[4].id),
+        Inscriptions(user_id=clients[9].user_id, activity_id=actividades[4].id),
+        Inscriptions(user_id=clients[0].user_id, activity_id=actividades[5].id),
+        Inscriptions(user_id=clients[1].user_id, activity_id=actividades[5].id),
+        Inscriptions(user_id=clients[2].user_id, activity_id=actividades[6].id),
+        Inscriptions(user_id=clients[3].user_id, activity_id=actividades[6].id),
+        Inscriptions(user_id=clients[4].user_id, activity_id=actividades[7].id),
+        Inscriptions(user_id=clients[5].user_id, activity_id=actividades[7].id),
+        Inscriptions(user_id=clients[6].user_id, activity_id=actividades[8].id),
+        Inscriptions(user_id=clients[7].user_id, activity_id=actividades[8].id),
+        Inscriptions(user_id=clients[8].user_id, activity_id=actividades[9].id),
+        Inscriptions(user_id=clients[9].user_id, activity_id=actividades[9].id),
+        Inscriptions(user_id=clients[0].user_id, activity_id=actividades[10].id),
+        Inscriptions(user_id=clients[1].user_id, activity_id=actividades[10].id),
+        Inscriptions(user_id=clients[2].user_id, activity_id=actividades[11].id),
+        Inscriptions(user_id=clients[3].user_id, activity_id=actividades[11].id),
+        Inscriptions(user_id=clients[4].user_id, activity_id=actividades[12].id),
+        Inscriptions(user_id=clients[5].user_id, activity_id=actividades[12].id),
+        Inscriptions(user_id=clients[6].user_id, activity_id=actividades[13].id),
+        Inscriptions(user_id=clients[7].user_id, activity_id=actividades[13].id),
+        Inscriptions(user_id=clients[8].user_id, activity_id=actividades[14].id),
+        Inscriptions(user_id=clients[9].user_id, activity_id=actividades[14].id),
+        Inscriptions(user_id=clients[0].user_id, activity_id=actividades[15].id),
+        Inscriptions(user_id=clients[1].user_id, activity_id=actividades[15].id),
+        Inscriptions(user_id=clients[2].user_id, activity_id=actividades[16].id),
+        Inscriptions(user_id=clients[3].user_id, activity_id=actividades[16].id),
+        Inscriptions(user_id=clients[4].user_id, activity_id=actividades[17].id),
+        Inscriptions(user_id=clients[5].user_id, activity_id=actividades[17].id),
+        Inscriptions(user_id=clients[6].user_id, activity_id=actividades[18].id),
+        Inscriptions(user_id=clients[7].user_id, activity_id=actividades[18].id),
+        Inscriptions(user_id=clients[8].user_id, activity_id=actividades[19].id),
+        Inscriptions(user_id=clients[9].user_id, activity_id=actividades[19].id),
         # Más inscripciones para variedad
-        Inscriptions(user_id=users[0].id, activity_id=actividades[1].id),
-        Inscriptions(user_id=users[1].id, activity_id=actividades[2].id),
-        Inscriptions(user_id=users[2].id, activity_id=actividades[3].id),
-        Inscriptions(user_id=users[3].id, activity_id=actividades[4].id),
-        Inscriptions(user_id=users[4].id, activity_id=actividades[5].id),
-        Inscriptions(user_id=users[5].id, activity_id=actividades[6].id),
-        Inscriptions(user_id=users[6].id, activity_id=actividades[7].id),
-        Inscriptions(user_id=users[7].id, activity_id=actividades[8].id),
+        Inscriptions(user_id=clients[0].user_id, activity_id=actividades[1].id),
+        Inscriptions(user_id=clients[1].user_id, activity_id=actividades[2].id),
+        Inscriptions(user_id=clients[2].user_id, activity_id=actividades[3].id),
+        Inscriptions(user_id=clients[3].user_id, activity_id=actividades[4].id),
+        Inscriptions(user_id=clients[4].user_id, activity_id=actividades[5].id),
+        Inscriptions(user_id=clients[5].user_id, activity_id=actividades[6].id),
+        Inscriptions(user_id=clients[6].user_id, activity_id=actividades[7].id),
+        Inscriptions(user_id=clients[7].user_id, activity_id=actividades[8].id),
     ]
 
     db.session.add_all(inscriptions)
@@ -268,26 +259,26 @@ with app.app_context():
 
     # Favoritos
     favourites = [
-        Favourites(user_id=users[0].id, info_activity_id=info_activities[0].id),
-        Favourites(user_id=users[1].id, info_activity_id=info_activities[0].id),
-        Favourites(user_id=users[2].id, info_activity_id=info_activities[1].id),
-        Favourites(user_id=users[3].id, info_activity_id=info_activities[2].id),
-        Favourites(user_id=users[4].id, info_activity_id=info_activities[3].id),
-        Favourites(user_id=users[5].id, info_activity_id=info_activities[4].id),
-        Favourites(user_id=users[6].id, info_activity_id=info_activities[5].id),
-        Favourites(user_id=users[7].id, info_activity_id=info_activities[6].id),
-        Favourites(user_id=users[8].id, info_activity_id=info_activities[7].id),
-        Favourites(user_id=users[9].id, info_activity_id=info_activities[8].id),
-        Favourites(user_id=users[0].id, info_activity_id=info_activities[9].id),
-        Favourites(user_id=users[1].id, info_activity_id=info_activities[10].id),
-        Favourites(user_id=users[2].id, info_activity_id=info_activities[11].id),
-        Favourites(user_id=users[3].id, info_activity_id=info_activities[12].id),
-        Favourites(user_id=users[4].id, info_activity_id=info_activities[13].id),
-        Favourites(user_id=users[5].id, info_activity_id=info_activities[14].id),
-        Favourites(user_id=users[6].id, info_activity_id=info_activities[15].id),
-        Favourites(user_id=users[7].id, info_activity_id=info_activities[16].id),
-        Favourites(user_id=users[8].id, info_activity_id=info_activities[17].id),
-        Favourites(user_id=users[9].id, info_activity_id=info_activities[18].id),
+        Favourites(user_id=clients[0].user_id, info_activity_id=info_activities[0].id),
+        Favourites(user_id=clients[1].user_id, info_activity_id=info_activities[0].id),
+        Favourites(user_id=clients[2].user_id, info_activity_id=info_activities[1].id),
+        Favourites(user_id=clients[3].user_id, info_activity_id=info_activities[2].id),
+        Favourites(user_id=clients[4].user_id, info_activity_id=info_activities[3].id),
+        Favourites(user_id=clients[5].user_id, info_activity_id=info_activities[4].id),
+        Favourites(user_id=clients[6].user_id, info_activity_id=info_activities[5].id),
+        Favourites(user_id=clients[7].user_id, info_activity_id=info_activities[6].id),
+        Favourites(user_id=clients[8].user_id, info_activity_id=info_activities[7].id),
+        Favourites(user_id=clients[9].user_id, info_activity_id=info_activities[8].id),
+        Favourites(user_id=clients[0].user_id, info_activity_id=info_activities[9].id),
+        Favourites(user_id=clients[1].user_id, info_activity_id=info_activities[10].id),
+        Favourites(user_id=clients[2].user_id, info_activity_id=info_activities[11].id),
+        Favourites(user_id=clients[3].user_id, info_activity_id=info_activities[12].id),
+        Favourites(user_id=clients[4].user_id, info_activity_id=info_activities[13].id),
+        Favourites(user_id=clients[5].user_id, info_activity_id=info_activities[14].id),
+        Favourites(user_id=clients[6].user_id, info_activity_id=info_activities[15].id),
+        Favourites(user_id=clients[7].user_id, info_activity_id=info_activities[16].id),
+        Favourites(user_id=clients[8].user_id, info_activity_id=info_activities[17].id),
+        Favourites(user_id=clients[9].user_id, info_activity_id=info_activities[18].id),
     ]
     db.session.add_all(favourites)
     db.session.commit()
@@ -360,36 +351,36 @@ with app.app_context():
 
     # Reviews
     reviews = [
-        Reviews(info_activity_id=info_activities[0].id, professional_id=profs[0].user_id, user_id=users[0].id, professional_rating=4.5, activity_rating=None, professional_message="Muy professional", activity_message=""),
-        Reviews(info_activity_id=info_activities[1].id, professional_id=profs[2].user_id, user_id=users[1].id, professional_rating=None, activity_rating=4.5, professional_message="", activity_message="Muy interesante"),
-        Reviews(info_activity_id=info_activities[2].id, professional_id=profs[1].user_id, user_id=users[2].id, professional_rating=4.0, activity_rating=None, professional_message="", activity_message=""),
-        Reviews(info_activity_id=info_activities[3].id, professional_id=profs[0].user_id, user_id=users[3].id, professional_rating=None, activity_rating=5.0, professional_message="", activity_message="Ruta preciosa"),
-        Reviews(info_activity_id=info_activities[4].id, professional_id=profs[1].user_id, user_id=users[4].id, professional_rating=5.0, activity_rating=None, professional_message="Buen trato", activity_message=""),
-        Reviews(info_activity_id=info_activities[5].id, professional_id=profs[2].user_id, user_id=users[5].id, professional_rating=None, activity_rating=4.8, professional_message="", activity_message="Museo espectacular"),
-        Reviews(info_activity_id=info_activities[6].id, professional_id=profs[1].user_id, user_id=users[6].id, professional_rating=3.0, activity_rating=None, professional_message="", activity_message=""),
-        Reviews(info_activity_id=info_activities[7].id, professional_id=profs[0].user_id, user_id=users[7].id, professional_rating=None, activity_rating=4.2, professional_message="", activity_message="Muy motivador"),
-        Reviews(info_activity_id=info_activities[8].id, professional_id=profs[2].user_id, user_id=users[8].id, professional_rating=None, activity_rating=4.0, professional_message="", activity_message="Buena comida"),
-        Reviews(info_activity_id=info_activities[9].id, professional_id=profs[1].user_id, user_id=users[9].id, professional_rating=4.1, activity_rating=None, professional_message="", activity_message=""),
-        Reviews(info_activity_id=info_activities[10].id, professional_id=profs[0].user_id, user_id=users[0].id, professional_rating=None, activity_rating=5.0, professional_message="", activity_message="Muy divertido"),
-        Reviews(info_activity_id=info_activities[11].id, professional_id=profs[1].user_id, user_id=users[1].id, professional_rating=4.0, activity_rating=None, professional_message="", activity_message=""),
-        Reviews(info_activity_id=info_activities[12].id, professional_id=profs[0].user_id, user_id=users[2].id, professional_rating=None, activity_rating=None, professional_message="Muy buena ruta", activity_message=""),
-        Reviews(info_activity_id=info_activities[13].id, professional_id=profs[2].user_id, user_id=users[3].id, professional_rating=None, activity_rating=3.5, professional_message="", activity_message=""),
-        Reviews(info_activity_id=info_activities[14].id, professional_id=profs[1].user_id, user_id=users[4].id, professional_rating=4.8, activity_rating=None, professional_message="Creativo", activity_message=""),
-        Reviews(info_activity_id=info_activities[15].id, professional_id=profs[0].user_id, user_id=users[5].id, professional_rating=None, activity_rating=4.0, professional_message="", activity_message=""),
-        Reviews(info_activity_id=info_activities[16].id, professional_id=profs[2].user_id, user_id=users[6].id, professional_rating=None, activity_rating=4.3, professional_message="", activity_message="Arquitectura impresionante"),
-        Reviews(info_activity_id=info_activities[17].id, professional_id=profs[1].user_id, user_id=users[7].id, professional_rating=3.9, activity_rating=None, professional_message="", activity_message=""),
-        Reviews(info_activity_id=info_activities[18].id, professional_id=profs[0].user_id, user_id=users[8].id, professional_rating=None, activity_rating=5.0, professional_message="", activity_message="Aprendí mucho"),
-        Reviews(info_activity_id=info_activities[19].id, professional_id=profs[1].user_id, user_id=users[9].id, professional_rating=4.0, activity_rating=None, professional_message="", activity_message=""),
-        Reviews(info_activity_id=info_activities[0].id, professional_id=profs[0].user_id, user_id=users[1].id, professional_rating=None, activity_rating=4.7, professional_message="", activity_message="Muy relajante"),
-        Reviews(info_activity_id=info_activities[1].id, professional_id=profs[2].user_id, user_id=users[2].id, professional_rating=4.2, activity_rating=None, professional_message="Buen guía", activity_message=""),
-        Reviews(info_activity_id=info_activities[2].id, professional_id=profs[1].user_id, user_id=users[3].id, professional_rating=None, activity_rating=3.5, professional_message="", activity_message=""),
-        Reviews(info_activity_id=info_activities[3].id, professional_id=profs[0].user_id, user_id=users[4].id, professional_rating=3.8, activity_rating=None, professional_message="", activity_message="Ruta exigente"),
-        Reviews(info_activity_id=info_activities[4].id, professional_id=profs[1].user_id, user_id=users[5].id, professional_rating=None, activity_rating=4.1, professional_message="", activity_message=""),
-        Reviews(info_activity_id=info_activities[5].id, professional_id=profs[2].user_id, user_id=users[6].id, professional_rating=4.5, activity_rating=None, professional_message="Muy ameno", activity_message=""),
-        Reviews(info_activity_id=info_activities[6].id, professional_id=profs[1].user_id, user_id=users[7].id, professional_rating=None, activity_rating=4.0, professional_message="", activity_message="Interesante"),
-        Reviews(info_activity_id=info_activities[7].id, professional_id=profs[0].user_id, user_id=users[8].id, professional_rating=4.9, activity_rating=None, professional_message="Motivador", activity_message=""),
-        Reviews(info_activity_id=info_activities[8].id, professional_id=profs[2].user_id, user_id=users[9].id, professional_rating=None, activity_rating=4.2, professional_message="", activity_message="Genial"),
-        Reviews(info_activity_id=info_activities[9].id, professional_id=profs[1].user_id, user_id=users[0].id, professional_rating=4.0, activity_rating=5.0, professional_message="Muy educado", activity_message="Muy útil"),
+        Reviews(info_activity_id=info_activities[0].id, professional_id=profs[0].user_id, user_id=clients[0].user_id, professional_rating=4.5, activity_rating=None, professional_message="Muy professional", activity_message=""),
+        Reviews(info_activity_id=info_activities[1].id, professional_id=profs[2].user_id, user_id=clients[1].user_id, professional_rating=None, activity_rating=4.5, professional_message="", activity_message="Muy interesante"),
+        Reviews(info_activity_id=info_activities[2].id, professional_id=profs[1].user_id, user_id=clients[2].user_id, professional_rating=4.0, activity_rating=None, professional_message="", activity_message=""),
+        Reviews(info_activity_id=info_activities[3].id, professional_id=profs[0].user_id, user_id=clients[3].user_id, professional_rating=None, activity_rating=5.0, professional_message="", activity_message="Ruta preciosa"),
+        Reviews(info_activity_id=info_activities[4].id, professional_id=profs[1].user_id, user_id=clients[4].user_id, professional_rating=5.0, activity_rating=None, professional_message="Buen trato", activity_message=""),
+        Reviews(info_activity_id=info_activities[5].id, professional_id=profs[2].user_id, user_id=clients[5].user_id, professional_rating=None, activity_rating=4.8, professional_message="", activity_message="Museo espectacular"),
+        Reviews(info_activity_id=info_activities[6].id, professional_id=profs[1].user_id, user_id=clients[6].user_id, professional_rating=3.0, activity_rating=None, professional_message="", activity_message=""),
+        Reviews(info_activity_id=info_activities[7].id, professional_id=profs[0].user_id, user_id=clients[7].user_id, professional_rating=None, activity_rating=4.2, professional_message="", activity_message="Muy motivador"),
+        Reviews(info_activity_id=info_activities[8].id, professional_id=profs[2].user_id, user_id=clients[8].user_id, professional_rating=None, activity_rating=4.0, professional_message="", activity_message="Buena comida"),
+        Reviews(info_activity_id=info_activities[9].id, professional_id=profs[1].user_id, user_id=clients[9].user_id, professional_rating=4.1, activity_rating=None, professional_message="", activity_message=""),
+        Reviews(info_activity_id=info_activities[10].id, professional_id=profs[0].user_id, user_id=clients[0].user_id, professional_rating=None, activity_rating=5.0, professional_message="", activity_message="Muy divertido"),
+        Reviews(info_activity_id=info_activities[11].id, professional_id=profs[1].user_id, user_id=clients[1].user_id, professional_rating=4.0, activity_rating=None, professional_message="", activity_message=""),
+        Reviews(info_activity_id=info_activities[12].id, professional_id=profs[0].user_id, user_id=clients[2].user_id, professional_rating=None, activity_rating=None, professional_message="Muy buena ruta", activity_message=""),
+        Reviews(info_activity_id=info_activities[13].id, professional_id=profs[2].user_id, user_id=clients[3].user_id, professional_rating=None, activity_rating=3.5, professional_message="", activity_message=""),
+        Reviews(info_activity_id=info_activities[14].id, professional_id=profs[1].user_id, user_id=clients[4].user_id, professional_rating=4.8, activity_rating=None, professional_message="Creativo", activity_message=""),
+        Reviews(info_activity_id=info_activities[15].id, professional_id=profs[0].user_id, user_id=clients[5].user_id, professional_rating=None, activity_rating=4.0, professional_message="", activity_message=""),
+        Reviews(info_activity_id=info_activities[16].id, professional_id=profs[2].user_id, user_id=clients[6].user_id, professional_rating=None, activity_rating=4.3, professional_message="", activity_message="Arquitectura impresionante"),
+        Reviews(info_activity_id=info_activities[17].id, professional_id=profs[1].user_id, user_id=clients[7].user_id, professional_rating=3.9, activity_rating=None, professional_message="", activity_message=""),
+        Reviews(info_activity_id=info_activities[18].id, professional_id=profs[0].user_id, user_id=clients[8].user_id, professional_rating=None, activity_rating=5.0, professional_message="", activity_message="Aprendí mucho"),
+        Reviews(info_activity_id=info_activities[19].id, professional_id=profs[1].user_id, user_id=clients[9].user_id, professional_rating=4.0, activity_rating=None, professional_message="", activity_message=""),
+        Reviews(info_activity_id=info_activities[0].id, professional_id=profs[0].user_id, user_id=clients[1].user_id, professional_rating=None, activity_rating=4.7, professional_message="", activity_message="Muy relajante"),
+        Reviews(info_activity_id=info_activities[1].id, professional_id=profs[2].user_id, user_id=clients[2].user_id, professional_rating=4.2, activity_rating=None, professional_message="Buen guía", activity_message=""),
+        Reviews(info_activity_id=info_activities[2].id, professional_id=profs[1].user_id, user_id=clients[3].user_id, professional_rating=None, activity_rating=3.5, professional_message="", activity_message=""),
+        Reviews(info_activity_id=info_activities[3].id, professional_id=profs[0].user_id, user_id=clients[4].user_id, professional_rating=3.8, activity_rating=None, professional_message="", activity_message="Ruta exigente"),
+        Reviews(info_activity_id=info_activities[4].id, professional_id=profs[1].user_id, user_id=clients[5].user_id, professional_rating=None, activity_rating=4.1, professional_message="", activity_message=""),
+        Reviews(info_activity_id=info_activities[5].id, professional_id=profs[2].user_id, user_id=clients[6].user_id, professional_rating=4.5, activity_rating=None, professional_message="Muy ameno", activity_message=""),
+        Reviews(info_activity_id=info_activities[6].id, professional_id=profs[1].user_id, user_id=clients[7].user_id, professional_rating=None, activity_rating=4.0, professional_message="", activity_message="Interesante"),
+        Reviews(info_activity_id=info_activities[7].id, professional_id=profs[0].user_id, user_id=clients[8].user_id, professional_rating=4.9, activity_rating=None, professional_message="Motivador", activity_message=""),
+        Reviews(info_activity_id=info_activities[8].id, professional_id=profs[2].user_id, user_id=clients[9].user_id, professional_rating=None, activity_rating=4.2, professional_message="", activity_message="Genial"),
+        Reviews(info_activity_id=info_activities[9].id, professional_id=profs[1].user_id, user_id=clients[0].user_id, professional_rating=4.0, activity_rating=5.0, professional_message="Muy educado", activity_message="Muy útil"),
     ]
     db.session.add_all(reviews)
     db.session.commit()
@@ -398,25 +389,25 @@ with app.app_context():
     reports = [
         Reports(
             message="El professional llegó tarde y no avisó.",
-            user_id=users[0].id,
+            user_id=clients[0].user_id,
             professional_target_id=profs[0].user_id,
             activity_target_id=None
         ),
         Reports(
             message="La actividad no se realizó como estaba descrita.",
-            user_id=users[1].id,
+            user_id=clients[1].user_id,
             professional_target_id=None,
             activity_target_id=info_activities[2].id
         ),
         Reports(
             message="El professional fue poco amable durante la actividad.",
-            user_id=users[2].id,
+            user_id=clients[2].user_id,
             professional_target_id=profs[1].user_id,
             activity_target_id=None
         ),
         Reports(
             message="La actividad fue cancelada sin previo aviso.",
-            user_id=users[3].id,
+            user_id=clients[3].user_id,
             professional_target_id=None,
             activity_target_id=info_activities[5].id
         )]
@@ -424,14 +415,14 @@ with app.app_context():
     db.session.commit()
 
     # Administradores
-    user = Users( email="admin@admin.com",username="admintodopoderoso",
-            password=generate_password_hash("1234"),name="Admin",surname="Pérez",
-            telephone="666888777",NID="90289510A",avatar_url="https://i.pinimg.com/736x/25/cf/5c/25cf5cf090b01de5521e3f086e51637a.jpg",
-            address="Edificio Vengadores, New York", city="New York", birthdate=datetime(1990,1,4), gender=enumClts.male
-        )
+    user = Users( email="admin@admin.com", password=generate_password_hash("1234"))
     db.session.add(user)
     db.session.commit()
+
+    client = Clients (user_id=user.id, username="admintodopoderoso",name="Admin",surname="Pérez",telephone="666888777",NID="90289510A",avatar_url="0.jpg",
+            address="Edificio Vengadores, New York", city="New York", country="Estados Unidos", birthdate=datetime(1990,1,4), gender=enumClts.male)
     admin = Administrators(user_id=user.id)
+    db.session.add(client)
     db.session.add(admin)
     db.session.commit()
 

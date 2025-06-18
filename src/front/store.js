@@ -20,7 +20,7 @@ export default function storeReducer(store, action = {}) {
 		case 'loadUser':
 			return{
 				...store,
-				user: {id: action.payload.id, username: action.payload.username, avatar_url: action.payload.avatar_url, is_professional: action.payload.is_professional}
+				user: action.payload
 			}
 		case 'closeSession':
 			localStorage.clear()

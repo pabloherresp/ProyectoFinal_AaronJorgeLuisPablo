@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: caea05d1e2c4
+Revision ID: ae9101ff7168
 Revises: 
-Create Date: 2025-06-11 18:29:57.068716
+Create Date: 2025-06-17 01:53:15.398470
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'caea05d1e2c4'
+revision = 'ae9101ff7168'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -21,8 +21,19 @@ def upgrade():
     op.create_table('users',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('email', sa.String(length=40), nullable=False),
-    sa.Column('username', sa.String(length=20), nullable=False),
     sa.Column('password', sa.String(), nullable=False),
+    sa.Column('is_active', sa.Boolean(), nullable=False),
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('email')
+    )
+    op.create_table('administrators',
+    sa.Column('user_id', sa.Integer(), nullable=False),
+    sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
+    sa.PrimaryKeyConstraint('user_id')
+    )
+    op.create_table('clients',
+    sa.Column('user_id', sa.Integer(), nullable=False),
+    sa.Column('username', sa.String(length=20), nullable=False),
     sa.Column('name', sa.String(length=20), nullable=False),
     sa.Column('surname', sa.String(length=40), nullable=False),
     sa.Column('telephone', sa.String(length=15), nullable=False),
@@ -31,19 +42,14 @@ def upgrade():
     sa.Column('avatar_url', sa.String(), nullable=False),
     sa.Column('address', sa.String(), nullable=False),
     sa.Column('city', sa.String(), nullable=False),
+    sa.Column('country', sa.String(), nullable=False),
     sa.Column('birthdate', sa.DateTime(), nullable=False),
-    sa.Column('gender', sa.Enum('male', 'female', 'not_telling', name='enumclts'), nullable=False),
-    sa.Column('is_active', sa.Boolean(), nullable=False),
-    sa.PrimaryKeyConstraint('id'),
+    sa.Column('gender', sa.Enum('male', 'female', 'other', 'not_telling', name='enumclts'), nullable=False),
+    sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
+    sa.PrimaryKeyConstraint('user_id'),
     sa.UniqueConstraint('NID'),
-    sa.UniqueConstraint('email'),
     sa.UniqueConstraint('telephone'),
     sa.UniqueConstraint('username')
-    )
-    op.create_table('administrators',
-    sa.Column('user_id', sa.Integer(), nullable=False),
-    sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
-    sa.PrimaryKeyConstraint('user_id')
     )
     op.create_table('professionals',
     sa.Column('user_id', sa.Integer(), nullable=False),
@@ -98,7 +104,6 @@ def upgrade():
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('message', sa.String(), nullable=False),
     sa.Column('user_id', sa.Integer(), nullable=False),
-    sa.Column('target_type', sa.Enum('user', 'activity', name='enumreps'), nullable=False),
     sa.Column('professional_target_id', sa.Integer(), nullable=True),
     sa.Column('activity_target_id', sa.Integer(), nullable=True),
     sa.Column('creation_date', sa.DateTime(), nullable=False),
@@ -146,6 +151,7 @@ def downgrade():
     op.drop_table('activities')
     op.drop_table('info_activities')
     op.drop_table('professionals')
+    op.drop_table('clients')
     op.drop_table('administrators')
     op.drop_table('users')
     # ### end Alembic commands ###

@@ -1,7 +1,7 @@
 import os
 from functools import wraps
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, enumClts, enumProf, enumInfo, Users, Professionals, Administrators, Favourites, Info_activity, Activities, Inscriptions, Reports, Reviews
+from api.models import db, enumClts, enumProf, enumInfo, Users, Professionals, Administrators, Favourites, Info_activity, Activities, Inscriptions, Reports, Reviews, Clients
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 from sqlalchemy import select, delete, and_, or_
@@ -37,6 +37,17 @@ def get_users():
     
     return jsonify(response_body), 200
 
+@api.route('/users/', methods=['POST'])
+def check_possible():
+    data = request.json
+    name = data["name"]
+    stmt = select(Clients).where(Clients.username == name)
+    user = db.session.execute(stmt).scalar_one_or_none()
+    
+    if user is not None:
+        return jsonify({"error": "User already exists"}), 400
+    return jsonify({"success": True})
+
 @api.route('/users/<int:id>', methods=['GET'])
 @jwt_required()
 def get_one_user(id):
@@ -51,62 +62,36 @@ def get_one_user(id):
         return jsonify({"Error": "User not found"}), 404
     return jsonify(user.serialize()),200
 
-@api.route('/users/<string:name>', methods=['GET'])
-def check_possible(name):
-    stmt = select(Users).where(Users.username == name)
+@api.route('/user/', methods=['GET'])
+@jwt_required()
+def get_one_user_by_token():
+    user_id = int(get_jwt_identity())
+    stmt = select(Users).where(Users.id == user_id)
     user = db.session.execute(stmt).scalar_one_or_none()
+    if user is None:
+        return jsonify({"Error": "User not found"}), 404
     
-    if user is not None:
-        return jsonify({"error": "User already exists"}), 400
-    return jsonify({"success": True})
+    response_body = user.serialize()
+    if user.client is None:
+        response_body = {**response_body, "needs_filling": True}
+    return jsonify({**response_body, "success": True}),200
 
 @api.route('/signup', methods=['POST'])
 def create_user():
-    fecha_iso = request.form.get('birthdate')
-    fecha_dt = datetime.fromisoformat(fecha_iso.replace("Z", "+00:00"))
-    user = Users(email=request.form.get("email"), password=generate_password_hash(request.form.get("password")), username=request.form.get("username"), name=request.form.get("name"), surname=request.form.get("surname"), NID=request.form.get("NID"), telephone=request.form.get("telephone"), avatar_url=request.form.get("avatar_url"),city=request.form.get("city"), address=request.form.get("address"), birthdate=fecha_dt, gender=enumClts(request.form.get("gender")))
-    db.session.add(user)
     try:
+        user = Users(email=request.form.get("email"), password=generate_password_hash(request.form.get("password")))
+        db.session.add(user)
         db.session.commit()
     except IntegrityError as e:
         db.session.rollback()
-        error = str(e.__cause__).lower()
-        message = "Unknown error"
-        if "email" in error:
-            message = "Email already exists in database"
-        elif "nid" in error:
-            message = "NID already exists in database"
-        elif "username" in error:
-            message = "User already exists in database"
-        elif "telephone" in error:
-            message = "Telephone already exists in database"
-        return jsonify({"error": True, "response": message}), 409
+        return jsonify({"error": True, "response": e.message}), 409
     except DataError as e:
         db.session.rollback()
-        return jsonify({"error": "Provided data is out of bounds"}), 422
+        return jsonify({"error": "Algunos valores superan los límites especificados"}), 422
     except Exception as e:
         db.session.rollback()
-        return jsonify({"error": "Couldn't create user"}), 500
-    
-    if 'avatar' in request.files:
-        avatar = request.files.get("avatar")
-        avatar.filename = f"{user.id}.jpg"
-        filepath = f"public/avatar/{avatar.filename}"
-        avatar.save(os.path.join(filepath))
-        user.avatar_url = avatar.filename
-    db.session.commit()
-    
-    if request.form.get("is_professional") == "true":
-        prof = Professionals(user_id=user.id, bio=request.form.get("bio"), type=enumProf(request.form.get("type")), business_name=request.form.get("business_name"), tax_address=request.form.get("tax_address"), nuss=request.form.get("nuss"))
-        db.session.add(prof)
-        try:
-            db.session.commit()
-        except Exception as e:
-            db.session.rollback()
-            db.session.delete(user)
-            db.session.commit()
-            return jsonify({"error": "Couldn't create user"}), 500
-    return jsonify({"success": True, "user": user.serialize()}), 200
+        return jsonify({"error": "No se pudo crear el usuario"}), 500
+    return jsonify({"success": True}), 200
 
 @api.route('/login', methods=['POST'])
 def login():
@@ -116,7 +101,7 @@ def login():
     if "email" in data:
         stmt = select(Users).where(and_(Users.email == data["email"], Users.is_active == True))
     elif "username" in data:
-        stmt = select(Users).where(and_(Users.username == data["username"], Users.is_active == True))
+        stmt = select(Users).join(Clients).where(and_(Clients.username == data["username"], Users.is_active == True))
     user = db.session.execute(stmt).scalar_one_or_none()
 
     if not user:
@@ -124,17 +109,17 @@ def login():
     if not check_password_hash(user.password, data["password"]):
         return jsonify({"error":"Email/Password don't match"}), 401
     
-    userData = user.serialize()
     token = create_access_token(identity=str(user.id),expires_delta=False)
-    response_body = {
-        "id": userData["id"],
-        "success": True,
-        "token": token,
-        "username": userData["username"],
-        "avatar_url": userData["avatar_url"],
-        "is_professional": userData["is_professional"]
-    }
-    return jsonify(response_body), 200
+    userData = user.serialize()
+    if user.client is not None:
+        response_body = {
+            "needs_filling": False
+        }
+    else:
+        response_body = {
+            "needs_filling": True
+        }
+    return jsonify({**userData, **response_body, "id": user.id, "success": True, "token": token}), 200
 
 @api.route('/users/<int:id>', methods=['DELETE'])
 @jwt_required()
@@ -172,6 +157,14 @@ def edit_user(id):
     if "birthdate" in data:
         fecha_iso = data['birthdate']
         data["birthdate"] = datetime.fromisoformat(fecha_iso.replace("Z", "+00:00"))
+
+    if 'avatar' in request.files:
+        avatar = request.files.get("avatar")
+        avatar.filename = f"{user.id}.jpg"
+        filepath = f"public/avatar/{avatar.filename}"
+        avatar.save(os.path.join(filepath))
+        user.avatar_url = avatar.filename
+    db.session.commit()
 
     user_cells = ["username", "email", "telephone", "avatar_url", "name", "surname", "NID","address", "city", "birthdate"]
     prof_cells = ["bio", "business_name", "tax_address", "nuss"]
@@ -212,6 +205,78 @@ def edit_user(id):
         return jsonify({"error": "Couldn't update user"}), 500
     return jsonify({"success": True, "user": user.serialize()}), 200
 
+#Endpoints para Client
+@api.route('/clients', methods=['POST'])
+@jwt_required()
+def create_client():
+    try:
+        user_id = int(get_jwt_identity())
+        user = db.session.execute(select(Users).where(Users.id == user_id)).scalar_one_or_none()
+        if not user:
+            return jsonify({"error": "User not found"}), 404
+
+        client = Clients(user_id = user_id, username=request.form.get("username"), name=request.form.get("name"), surname=request.form.get("surname"), telephone=request.form.get("telephone"),
+                        NID=request.form.get("NID"), address=request.form.get("address"), city=request.form.get("city"), country=request.form.get("country"),
+                        gender=enumClts(request.form.get("gender")))
+
+        avatar = request.files.get("avatar")
+        if not avatar:
+            client.avatar_url="0.jpg"
+        else:
+            avatar.filename = f"{user.id}.jpg"
+            filepath = f"public/avatar/{avatar.filename}"
+            avatar.save(os.path.join(filepath))
+            client.avatar_url = avatar.filename
+        
+        fecha_iso = request.form.get('birthdate')
+        if fecha_iso is not None:
+            fecha_dt = datetime.fromisoformat(fecha_iso.replace("Z", "+00:00"))
+            client.birthdate = fecha_dt
+        
+        db.session.add(client)
+        db.session.commit()
+    except Exception as e:
+        print(e)
+        return jsonify({"error": "Error desconocido"})
+    return jsonify({"success": True, "user": user.serialize()})
+
+@api.route('/clients', methods=['PUT'])
+@jwt_required()
+def edit_client():
+    try:
+        user_id = int(get_jwt_identity())
+        client = db.session.execute(select(Clients).where(Clients.user_id == user_id)).scalar_one_or_none()
+        if not client:
+            return jsonify({"error": "User not found"}), 404
+
+        client_cells = ["telephone", "name", "surname", "NID","address", "city", "country"]
+        client.gender= enumClts(request.form.get("gender"))
+        
+        username = request.form.get("username")
+        if username:
+            client.username = username
+
+        for cell in client_cells:
+            setattr(client, cell, request.form.get(cell))
+
+        avatar = request.files.get("avatar")
+        if avatar:
+            avatar.filename = f"{client.user_id}.jpg"
+            filepath = f"public/avatar/{avatar.filename}"
+            avatar.save(os.path.join(filepath))
+            client.avatar_url = avatar.filename
+        
+        fecha_iso = request.form.get('birthdate')
+        print(fecha_iso)
+        if fecha_iso is not None:
+            fecha_dt = datetime.fromisoformat(fecha_iso.replace("Z", "+00:00"))
+            client.birthdate = fecha_dt
+
+        db.session.commit()
+    except Exception as e:
+        print(e)
+        return jsonify({"error": "Error desconocido"})
+    return jsonify({"success": True, "user": client.user.serialize()})
 #Endpoints para Professional
 @api.route('/professionals', methods=['GET'])
 def get_professionals():
