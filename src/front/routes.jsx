@@ -13,6 +13,7 @@ import {Login} from "./pages/Login"
 import {Signup} from "./pages/Signup"
 import {PersonalSpace} from "./pages/PersonalSpace"
 import {Inscriptions} from "./pages/Inscriptions"
+import {DetailsProfessional} from "./pages/DetailsProfessional"
 
 export const router = createBrowserRouter(
     createRoutesFromElements(
@@ -25,12 +26,15 @@ export const router = createBrowserRouter(
         <Route path="/login" element={<Login/>} />
         <Route path="/personalspace/:id" element={<PersonalSpace />}/>
         <Route path="/inscriptions/:id" element={<Inscriptions />}/>
+        <Route path="/detailsprofessional/:id" element={<DetailsProfessional />}/>
       </Route>
     ),
   {
     future: {
       v7_startTransition: true,
-      v7_relativeSplatPath: true
+      v7_relativeSplatPath: true  
     }
   }
 );
+
+
