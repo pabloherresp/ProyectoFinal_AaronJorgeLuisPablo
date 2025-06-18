@@ -315,13 +315,12 @@ h4 {
   display: flex;
   justify-content: center;
 }
-.more-hover {
-      color: blue;             
-}
+
 .biography{
   background-color: #b0e8f3;  
   padding: 20px;   
 }
+
 .report{
   width: 150px;
 }
