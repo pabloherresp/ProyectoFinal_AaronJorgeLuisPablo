@@ -483,12 +483,10 @@ h4 {
   display: flex;
   justify-content: center;
 }
-
-.biography{
-  background-color: #b0e8f3;  
-  padding: 20px;   
+.more-hover {
+      color: blue;             
 }
-
+  
 .report{
   width: 150px;
 }

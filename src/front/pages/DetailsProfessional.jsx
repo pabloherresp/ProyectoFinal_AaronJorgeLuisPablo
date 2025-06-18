@@ -4,7 +4,7 @@ import { CommentBox } from "../components/CommentBox"
 export const DetailsProfessional = () => {
 
     return (
-        <div className="container mt-3 p-0 d-flex flex-column mb-3">
+        <div className="container mt-3 p-0 d-flex flex-column mb-3 fontFamily">
             <div className="profile d-flex justify-content-around">
                 <img className="imagen" src="https://static.wikia.nocookie.net/the-incredibles/images/9/97/Mr-Incredible-GD.png/revision/latest?cb=20231210181752" />
                 <div className="professional p-0">
