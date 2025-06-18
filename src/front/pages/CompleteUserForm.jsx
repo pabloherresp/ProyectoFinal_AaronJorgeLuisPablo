@@ -59,15 +59,19 @@ export const CompleteUserForm = (props) => {
 			...formData, [e.target.name]: e.target.value
 		})
 		if (e.target.name == "username") {
-			let available = false
-			let response = ""
-			if (e.target.value.length > 3) {
-				available = await collection.checkUser(e.target.value)
-				response = (available ? "El nombre de usuario está dispomible" : "Ya existe un usuario con ese nombre")
-			}
-			else
+			if(e.target.value != user.username){
+				let available = false
+				let response = ""
+				if (e.target.value.length > 3) {
+					available = await collection.checkUser(e.target.value)
+					response = (available ? "El nombre de usuario está dispomible" : "Ya existe un usuario con ese nombre")
+				}
+				else
 				response = "Empieza a escribir para comprobar si está disponible."
 			setMessages({ ...messages, usernameStatus: available, username: response })
+		}
+			else
+				setMessages({...messages, username: ""})
 		} else if (e.target.name == "birthdate") {
 			if(e.target.value != ""){
 				setFormdata({...formData, birthdate: (new Date(e.target.value)).toISOString()})
@@ -120,13 +124,13 @@ export const CompleteUserForm = (props) => {
 					</div>
 				{user ? 
 					<form className="row col-md-8 mx-auto" onSubmit={handleCompleteClient}>
-						<div className="col-6 my-2">
+						<div className="col-8 col-sm-6 my-2">
 							<div className="form-floating">
 								<input className="form-control" pattern=".*[a-zA-Z].*" title="El nombre de usuario debe contener al menos tres letras" required type="text" name="username" id="username" minLength="4" maxLength="16" placeholder="" autoComplete="username" onChange={handleChange} value={formData?.username} />
 								<label className="fs-6" htmlFor="username"><span className="text-danger">∗</span> Nombre de usuario</label>
 							</div>
 						</div>
-						<div className="col-6 align-content-center">
+						<div className="col-4 col-sm-6 align-content-center">
 							<div id="checkuserHelpBlock" className={"form-text " + (messages.usernameStatus ? "text-success" : "text-danger")}>
 								{ (messages.usernameStatus ?
 									<i className="fa-solid fa-circle-check text-success me-2"></i>

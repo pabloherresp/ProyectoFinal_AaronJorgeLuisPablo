@@ -277,7 +277,7 @@ class Reviews(db.Model):
             "professional_message": self.professional_message,
             "activity_message": self.activity_message,
             "creation_date": self.creation_date.isoformat(),
-            "user": {"id": self.client.user_id, "username": self.client.username, "avatar_url": self.client.avatar_url},
+            "user": {"id": self.client.user_id, "username": self.client.username, "name": self.client.name, "surname": self.client.surname,"avatar_url": self.client.avatar_url},
             "info_activity": {"id": self.info_activity.id, "name": self.info_activity.name},
             "professional": {"id": self.professional.user_id, "username": self.professional.user.client.username}
         }
