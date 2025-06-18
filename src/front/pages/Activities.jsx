@@ -111,7 +111,7 @@ return(
 
         <div className="d-flex justify-content-around">
 
-            <button className="buttonStyle rounded-circle" onClick={(e)=>handleClickLess1(counter1)}><i class="fa-solid fa-arrow-left"></i></button>
+            <button className="buttonStyle rounded-circle" onClick={(e)=>handleClickLess1(counter1)}><i className="fa-solid fa-arrow-left"></i></button>
 
            <Link className="text-decoration-none valor-card2"  to={'/activities/' + store.all_activities[counter1]?.id}><ActivityCard img={store.all_activities[counter1]?.info_activity.media[0]} title={store.all_activities[counter1]?.info_activity.name} origin={store.all_activities[counter1]?.meeting_point} description={store.all_activities[counter1]?.info_activity.desc.slice(0,100)}></ActivityCard></Link>
 
@@ -119,7 +119,7 @@ return(
 
            <Link className="text-decoration-none valor-card2"  to={'/activities/' + store.all_activities[counter1+2]?.id}><ActivityCard img={store.all_activities [counter1+2]?.info_activity.media[0]} title={store.all_activities[counter1+2]?.info_activity.name} origin={store.all_activities[counter1+2]?.meeting_point} description={store.all_activities[counter1+2]?.info_activity.desc.slice(0,100)}></ActivityCard></Link>
 
-            <button className="buttonStyle rounded-circle" onClick={(e)=>handleClickMore1(counter1)}><i class="fa-solid fa-arrow-right"></i></button>
+            <button className="buttonStyle rounded-circle" onClick={(e)=>handleClickMore1(counter1)}><i className="fa-solid fa-arrow-right"></i></button>
 
         </div>
 
@@ -127,7 +127,7 @@ return(
 
         <div className="d-flex justify-content-around">
 
-            <button className="buttonStyle rounded-circle" onClick={()=>handleClickLess2(counter4)}><i class="fa-solid fa-arrow-left"></i></button>
+            <button className="buttonStyle rounded-circle" onClick={()=>handleClickLess2(counter4)}><i className="fa-solid fa-arrow-left"></i></button>
 
             <Link className="text-decoration-none valor-card2"  to={'/activities/' + returnActive()[counter4]?.id}><ActivityCard img={returnActive()[counter4]?.info_activity.media[0]} title={returnActive()[counter4]?.info_activity.name} origin={returnActive()[counter4]?.meeting_point} description={returnActive()[counter4]?.info_activity.desc.slice(0,100)} timeleft={"Faltan 3 horas"}></ActivityCard></Link>
 
@@ -135,7 +135,7 @@ return(
 
             <Link className="text-decoration-none valor-card2"  to={'/activities/' + returnActive()[counter4+2]?.id}><ActivityCard img={returnActive()[counter4+2]?.info_activity.media[0]} title={returnActive()[counter4+2]?.info_activity.name} origin={returnActive()[counter4+2]?.meeting_point} description={returnActive()[counter4+2]?.info_activity.desc.slice(0,100)} timeleft={"Faltan 2 días"}></ActivityCard></Link>
             
-            <button className="buttonStyle rounded-circle" onClick={()=>handleClickMore2(counter4)}><i class="fa-solid fa-arrow-right"></i></button>
+            <button className="buttonStyle rounded-circle" onClick={()=>handleClickMore2(counter4)}><i className="fa-solid fa-arrow-right"></i></button>
 
         </div>
     </div>

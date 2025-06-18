@@ -10,6 +10,18 @@ export const Navbar = () => {
 	const [search, setSearch] = useState("")
 	const [searchResults, setSearchResults] = useState({ professionals: [], activities: [] })
 	const [searching, setSearching] = useState(false)
+	const [dropdownOpen, setDropdownOpen] = useState(false)
+
+	const dropRef = useRef(null)
+
+	const handleClickExcursiones = () => {
+		if(dropdownOpen){
+			navigate("/activities")
+			setDropdownOpen(false)
+		}
+		else
+			setDropdownOpen(true)
+	}
 
 	const handleSearch = async (e) => {
 		setSearch(e.target.value)
@@ -24,6 +36,18 @@ export const Navbar = () => {
 			setSearching(false)
 		}
 	}
+
+	 useEffect(() => {
+		const handleClickOutside = (e) => {
+			if( dropRef.current && !dropRef.current.contains(event.target))
+				setDropdownOpen(false)
+		}
+
+		document.addEventListener("mousedown", handleClickOutside)
+		return () => {
+			document.removeEventListener("mousedown", handleClickOutside)
+		}
+	}, [])
 
 	useEffect(() => { searchText(search) }, [search])
 
@@ -41,8 +65,8 @@ export const Navbar = () => {
 				<div className="collapse navbar-collapse text-center text-lg-start w-100" id="navbarSupportedContent">
 					<div className="navbar-nav mb-0 gap-3 w-auto d-flex justify-content-center justify-content-lg-start">
 						<Link className="nav-item nav-link active text-white fs-6 fw-semibold" to={"/"}>Home</Link>
-						<div className="nav-item dropdown">
-							<a className="nav-link dropdown-toggle text-white fw-semibold" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Excursiones</a>
+						<div className="nav-item dropdown" ref={dropRef}>
+							<a className="nav-link dropdown-toggle text-white fw-semibold" onClick={handleClickExcursiones} role="button" data-bs-toggle="dropdown" aria-expanded="false">Excursiones</a>
 							<ul className="dropdown-menu dropdown-menu-dark NavbarDropdown text-center text-lg-start">
 								<li><a className="dropdown-item text-white" href="#">Deporte</a></li>
 								<li><a className="dropdown-item text-white" href="#">Ocio</a></li>
