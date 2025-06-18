@@ -88,7 +88,7 @@ h3{
 
 .navbg{
 	/* background-color: #317373; */
-  background-image: linear-gradient(#48A6A7, rgba(0, 0, 0, 0.541)), url("/src/front/assets/img/navbarForest.png");
+  background-image: linear-gradient(#439d9e, rgba(0, 0, 0, 0.671)), url("/src/front/assets/img/navbarForest.png");
   background-repeat: repeat-x;
   background-size: contain;
 }
