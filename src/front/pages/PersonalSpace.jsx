@@ -2,171 +2,137 @@ import React, { useEffect, useState } from "react"
 import useGlobalReducer from "../hooks/useGlobalReducer.jsx"
 import { Link, useNavigate, useParams } from "react-router-dom"
 import collection from "../services/collection"
+import { NewProfessionalBox } from "../components/NewProfessionalBox.jsx";
 
 export const PersonalSpace = () => {
-	const {id} = useParams()
-	const { store, dispatch } = useGlobalReducer()
 	const navigate = useNavigate()
+	const { store, dispatch } = useGlobalReducer()
 
-	const [user, setUser] = useState({name: "", surname: "", NID: "", telephone: "", birthdate: null, username: "", email: "", confirmEmail: "", password: "", confirmPassword: "", city: "", address: "", gender: "MALE", avatar: "", is_professional: false, professional:{type: "", tax_address: "", business_name: "", bio: "", nuss: ""}})
-	const [editUser, setEditUser] = useState({})
-	const [message, setMessage] = useState("")
-	const [editable, setEditable]  = useState(false)
+	const [inscriptions, setInscriptions] = useState(null)
+	const [order, setOrder] = useState("start")
+	const [inverted, setInverted] = useState(-1)
+	const [limit, setLimit] = useState(15)
 
-	const getUser = async () => {
-		const resp = await collection.getOneUser(id)
+	const formatDate = (date) => {
+		return date.toLocaleString("en-GB", { timeZone: "UTC" })
+	}
+
+	const loadInscriptions = async () => {
+		const resp = await collection.getInscriptionsForUser()
 		if("error" in resp)
-			navigate("/")
+			setInscriptions([])
+		else
+			setInscriptions([...resp])
+	}
+
+	const handleClickHead = (text) => {
+		if(text == order)
+			setInverted(-1*inverted)
 		else{
-			setUser({...resp,...resp.professional})
-			setEditUser({...editUser, is_professional: resp.is_professional})
+			setOrder(text)
+			setInverted(-1)
 		}
 	}
 
-	const handleChange = (e) => {
-		setEditUser({
-            ...editUser, [e.target.name]: e.target.value
-        })
-		setUser({
-            ...user, [e.target.name]: e.target.value
-        })
+	const handleSeeMore = () =>{
+		setLimit(limit+10)
 	}
 
-	const handleEditUser = async (e) => {
-		e.preventDefault()
-		const resp = await collection.editUser(id,{...editUser})
-
-		if(resp.success == false) setMessage(resp.response)
-		else setMessage("Usuario editado con éxito.")
+	const compareFunction = (a,b) => {
+		if(order == "name")
+			return inverted * a.activity.info_activity.name.localeCompare(b.activity.info_activity.name)
+		else if(order == "start")
+			return inverted * a.activity.start_date.localeCompare(b.activity.start_date)
+		else if(order == "end")
+			return inverted * a.activity.end_date.localeCompare(b.activity.end_date)
+		else if(order == "price")
+			return inverted * (a.activity.price - b.activity.price)
 	}
 
 	useEffect(() => {
-		getUser()
+		if(!store.user)
+			navigate("/login")
+		else if(store.user.needs_filling == true)
+			navigate("/completeuserform")
+		const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+		const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+		loadInscriptions()
 	}, [])
 
-	return (
-		<div className="container bg-white rounded my-3">
-			<div className="container bg-white rounded my-3">
-				<div className="row p-5">
-					<h4 className="TextDark text-center display-5 fw-semibold">Datos del usuario</h4>
-					<form className="mt-3" onSubmit={handleEditUser}>
-						<div className="row w-75 mx-auto">
-						<fieldset disabled={!editable}>
-							<div className="row mb-3">
-								<label for="name" className="col-md-4 col-form-label">Nombre</label>
-								<div className="col-md-8">
-									<input type="text" className="form-control" name="name" id="name" value={user.name} onChange={handleChange}/>
-								</div>
-							</div>
-							<div className="row mb-3">
-								<label for="surname" className="col-md-4 col-form-label">Apellidos</label>
-								<div className="col-md-8">
-									<input type="text" className="form-control" name="surname" id="surname" value={user.surname} onChange={handleChange}/>
-								</div>
-							</div>
-							<div className="row mb-3">
-								<label for="username" className="col-md-4 col-form-label">Nombre de usuario</label>
-								<div className="col-md-8">
-									<input type="text" className="form-control" name="username" id="username" value={user.username} onChange={handleChange}/>
-								</div>
-							</div>
-							<div className="row mb-3">
-								<label for="NID" className="col-md-4 col-form-label">Nombre de usuario</label>
-								<div className="col-md-8">
-									<input type="text" className="form-control" name="NID" id="NID" value={user.NID} onChange={handleChange}/>
-								</div>
-							</div>
-							<div className="row mb-3">
-								<label for="telephone" className="col-md-4 col-form-label">Teléfono</label>
-								<div className="col-md-8">
-									<input type="text" className="form-control" name="telephone" id="telephone" value={user.telephone} onChange={handleChange}/>
-								</div>
-							</div>
-							<div className="row mb-3">
-								<label for="city" className="col-md-4 col-form-label">Ciudad</label>
-								<div className="col-md-8">
-									<input type="text" className="form-control" name="city" id="city" value={user.city} onChange={handleChange}/>
-								</div>
-							</div>
-							<div className="row mb-3">
-								<label for="address" className="col-md-4 col-form-label">Dirección</label>
-								<div className="col-md-8">
-									<input type="text" className="form-control" name="address" id="address" value={user.address} onChange={handleChange}/>
-								</div>
-							</div>
-							<div class="row mb-3">
-								<label className="col-md-4 col-form-label" for="gender">Género</label>
-								<div className="col-md-8">
-									<select className="form-select" aria-label="Gender select menu" id="gender" name="gender" placeholder="" onChange={handleChange} value={user.gender}>
-										<option value="MALE" selected>Masculino</option>
-										<option value="FEMALE">Femenino</option>
-										<option value="NOT TELLING">Otro</option>
-									</select>
-								</div>
-							</div>
-							<div className="row mb-3">
-								<label for="birthdate" className="col-md-4 col-form-label">Fecha de nacimiento</label>
-								<div className="col-md-8">
-									<input required type="date" name="birthdate" className="form-control" id="birthdate" placeholder="" onChange={handleChange} value={user.birthdate?.split("T")[0]}/>
-								</div>
-							</div>
-							{user.is_professional ? <>
-								<div className="row mb-3">
-									<label for="address" className="col-md-4 col-form-label">Biografía</label>
-									<div className="col-md-8">
-										<textarea name="bio" className="form-control mt-2" style={{ height: '140px' }}  id="bio" placeholder="" onChange={handleChange} value={user.bio} />
-									</div>
-								</div>
-								<div className="row mb-3">
-									<label for="address" className="col-md-4 col-form-label">Dirección fiscal</label>
-									<div className="col-md-8">
-										<input type="text" className="form-control" name="tax_address" id="tax_address" value={user.tax_address} onChange={handleChange}/>
-									</div>
-								</div>
-								<div className="row mb-3">
-									<label for="address" className="col-md-4 col-form-label">Nombre de la empresa</label>
-									<div className="col-md-8">
-										<input type="text" className="form-control" name="business_name" id="business_name" value={user.business_name} onChange={handleChange}/>
-									</div>
-								</div>
-								<div class="row mb-3">
-									<label className="col-md-4 col-form-label" for="gender">Tipo de profesional</label>
-									<div className="col-md-8">
-										<select className="form-select" aria-label="Professional type" id="type" name="type" placeholder="" onChange={handleChange} value={user.type}>
-										<option value="FREELANCE" selected>Autónomo</option>
-										<option value="BUSINESS">Empresa</option>
-									</select>
-									</div>
-								</div>
-								<div className="row mb-3">
-									<label for="address" className="col-md-4 col-form-label">NUSS</label>
-									<div className="col-md-8">
-										<input type="text" className="form-control" name="nuss" id="nuss" value={user.nuss} onChange={handleChange}/>
-									</div>
-								</div>
-							</>
-							: <p hidden className="text-center fw-semibold mt-3">¿Desa hacerse profesional? Haga click <Link className="text-decoration-none" to="/signup-profesional">aquí</Link></p>
-							}
-								<div className="row">
-									<input type="submit" value="Guardar cambios" className="btn btn-primary my-2 w-auto mx-auto fw-bold"/>
-									{(message?.includes("xito") ?
-									<p className="text-success text-center fw-semibold">Usuario editado con éxito</p>
-									: <p className="text-danger text-center fw-semibold">{message}</p>)
-									}
-								</div>
-							</fieldset>
-							
-						</div>
-					</form>
-					{ !editable ? 
-							<button className="btn btn-success w-auto mx-auto" onClick={()=>setEditable(!editable)}>Editar valores</button>
-							: <button className="btn btn-secondary w-auto mx-auto" onClick={()=>{
-								getUser()
-								setEditable(false)
-							}}>Cancelar</button>
 
-							}
+
+	return (
+		<div className="container">
+			<div className="bg-white shadow my-3 rounded">
+				<div className="BgSecondary m-0 p-4 rounded-top shadow">
+					<div className="row">
+						<div className="col-6 col-sm-3 mb-3 mx-auto">
+							<img className="shadow img-fluid rounded-circle NoDeformImg" src={"/avatar/" + (store.user?.avatar_url ? store.user?.avatar_url: "0.jpg")} alt="" />
+						</div>
+						<div className="col-10 col-sm-9 col-md-5 mx-auto my-auto">
+							<h4 className="text-white fs-3 fw-semibold font1 text-capitalize">{store.user?.name + " " + store.user?.surname}</h4>
+							<h4 className="text-white fs-5 fw-semibold font1 text-capitalize"><i className="fa-solid fa-user fa-2xs me-1"></i>{" " + store.user?.username}</h4>
+							<p className="text-light font1 text-capitalize">Miembro desde {(new Date(store.user?.creation_date)).toLocaleDateString("es-ES", {weekday: "long", year: "numeric", month: "long", day: "numeric"})}</p>
+							<p className="text-light font1">{store.user ? store.user.address : ""}</p>
+							<p className="text-light font1">{(store.user ? store.user.city : "") + (store.user.country ? ", " + store.user.country : "")}</p>
+						</div>
+						<div className="col-10 col-md-4 mx-auto my-md-auto mt-4">
+							{store.user.birthdate ? <p className="text-light fw-semibold text-start text-md-end text-capitalize"><i className="fa-solid fa-cake-candles"></i>{" " + (new Date(store.user?.birthdate)).toLocaleDateString("es-ES", {weekday: "long", year: "numeric", month: "long", day: "numeric"})}</p>: ""}
+							{store.user.NID ? <p className="text-light fw-semibold text-start text-md-end">DNI: {store.user.NID}</p>: ""}
+							{store.user.email ? <p className="text-light fw-semibold text-start text-md-end"><i className="fa-regular fa-envelope"></i> {" " + store.user?.email}</p>: ""}
+							{store.user.telephone ? <p className="text-light fw-semibold text-start text-md-end"><i className="fa-solid fa-phone"></i> {" " + store.user?.telephone}</p>: ""}
+						
+							<button type="button" className="btn text-white float-start float-md-end DarkButton" onClick={()=>navigate("/edituser")}>Editar datos</button>
+						</div>
+					</div>
+
 				</div>
+				<div className="py-4">
+					<h4 className="TextDark text-center fs-3 fw-semibold mb-4">Mis inscripciones</h4>
+					{inscriptions ?  
+					(inscriptions?.length > 0 ?
+						<div className="table-responsive mx-1 mx-md-5">
+							<table className="table table-hover y-4 p-2 BgBackground">
+								<thead>
+									<tr className="BgSecondary">
+										<th scope="col" className="text-start ps-3 w-50 TextDark text-nowrap" onClick={()=>handleClickHead("name")}>Nombre {order == "name" ? (inverted > 0 ?  '▲' : '▼') : ""}</th>
+										<th scope="col" className="text-center TextDark text-nowrap" onClick={()=>handleClickHead("start")}>Fecha inicio {order == "start" ? (inverted  > 0 ?  '▲' : '▼') : ""}</th>
+										<th scope="col" className="text-center TextDark text-nowrap" onClick={()=>handleClickHead("end")}>Fecha fin {order == "end" ? (inverted  > 0 ?  '▲' : '▼') : ""}</th>
+										<th scope="col" className="text-center TextDark text-nowrap" onClick={()=>handleClickHead("price")}>Precio {order == "price" ? (inverted  > 0 ?  '▲' : '▼') : ""}</th>
+										<th scope="col" className="text-center TextDark"><i className="fa-solid fa-star"></i></th>
+									</tr>
+								</thead>
+								<tbody className="table-group-divider">
+								{inscriptions.sort(compareFunction).filter((item, i)=>{return i < limit}).map((item, i)=>{
+									return(
+										<tr key={i}>
+										<td className="ps-4"><Link className="text-decoration-none fw-semibold" to={"/activity/"+item.activity.id}>{item.activity.info_activity.name}</Link></td>
+										<td className="text-center fw-semibold align-middle">{formatDate(new Date(item.activity.start_date))}</td>
+										<td className="text-center fw-semibold align-middle">{formatDate(new Date(item.activity.end_date))}</td>
+										<td className="text-center fw-semibold align-middle">{item.activity.price.toFixed(2) + "€"}</td>
+										{formatDate(new Date(item.activity.end_date)) < formatDate(new Date()) ?
+											<td className="text-center fw-semibold align-middle"><Link className="text-decoration-none" to="">Reseñar</Link></td>
+										: <td className="text-center fw-semibold align-middle"><a className="text-decoration-none text-secondary" data-bs-toggle="tooltip" data-bs-title="Esta actividad aún no ha terminado">Reseñar</a></td>
+										}
+									</tr>)
+									})}
+								</tbody>
+							</table>
+							<div className="row mx-auto">
+								{limit < inscriptions.length ? <button className="mx-auto btn w-auto text-decoration-none text-dark fw-semibold border-white" onClick={handleSeeMore}>Ver más</button> : ""}
+							</div>
+						</div>
+						: <p className="text-center">No estás inscrito a ninguna actividad</p>)
+						: <div className="text-center">
+							<div className="spinner-grow LoadingSpinner" role="status">
+								<span className="visually-hidden">Loading...</span>
+							</div>
+						</div> }
+					</div>
+					<div>
+						
+						{store.user.is_professional ? "" : <div className="rounded-bottom overflow-hidden"><NewProfessionalBox/></div> }
+					</div>
 			</div>
 		</div>
 	);
