@@ -387,7 +387,9 @@ h3{
 max-width: 35%;
 
 }
-
+.proActivityPhoto{
+  width: 20%;
+}
 
 .container {
   font-family: Arial, sans-serif;
