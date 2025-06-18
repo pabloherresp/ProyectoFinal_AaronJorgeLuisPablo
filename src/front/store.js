@@ -1,6 +1,7 @@
 export const initialStore=()=>{
 	return{
 		all_activities: [],
+		activity: {},
 		user: {
 			id: null,
 			username: "",
@@ -17,15 +18,22 @@ export default function storeReducer(store, action = {}) {
 				...store,
 				all_activities: action.payload
 			};
+		case 'activity':
+			return {
+				...store,
+				activity: action.payload
+			};
 		case 'loadUser':
 			return{
 				...store,
-				user: {id: action.payload.id, username: action.payload.username, avatar_url: action.payload.avatar_url, is_professional: action.payload.is_professional}
+				user: action.payload
 			}
 		case 'closeSession':
+			localStorage.clear()
 			return{
 				...store,
-				user: {id: null,username: "",avatar_url: ""}
+				user: {id: null, username: "", avatar_url: ""},
+				closed: true
 			}
 		default:
 			throw Error('Unknown action.');

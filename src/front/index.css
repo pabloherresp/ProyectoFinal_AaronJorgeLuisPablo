@@ -15,14 +15,27 @@ body{
   flex: 1;
 }
 
+.BgPrimary{
+  background-color: #006A71;
+}
+.BgSecondary{
+  background-color: #48A6A7;
+}
+.BgTerciary{
+  background-color: #9ACBD0;
+}
+.BgBackground{
+  background-color: #F2EFE7;
+}
+
 .TextDark{
   color: #006A71;
 }
 
 .BannerLogin{
-    background-repeat: repeat-y;
-    background-position-y: top;
-    background-size: 100% auto;
+	background-repeat: repeat-y;
+	background-position-y: top;
+	background-size: 100% auto;
 }
 
 .BannerLoginLeft{
@@ -52,21 +65,32 @@ body{
   background-color: #006A71;
 }
 
-.NavbarSearch{
-    min-width: 100px;
-    width: fit-content;
+.NavbarSearchDropdown{
+	max-height: 300px;
+	width: 100%;
+	scrollbar-width: thin;
+	overflow: auto;
 }
 
-.NavbarSearchDropdown{
-    max-height: 300px;
-    width: auto;
-    min-width: 250px;
-    scrollbar-width: thin;
-    overflow: auto;
+h3{
+  color: #006A71;
+}
+
+.btn-Sigup{
+  background-color: #48A6A7;
+  color: white;
+  border: none;
+}
+
+.btn-Sigup:hover{
+  background-color: #3d8e8e;
 }
 
 .navbg{
-    background-color: #317373;
+	/* background-color: #317373; */
+  background-image: linear-gradient(#439d9e, rgba(0, 0, 0, 0.671)), url("/src/front/assets/img/navbarForest.png");
+  background-repeat: repeat-x;
+  background-size: contain;
 }
 
 .footer{
@@ -74,8 +98,8 @@ body{
 }
 
 .logo{
-    max-width: 3.5rem;
-    margin-left: 2rem;
+	max-width: 3.5rem;
+	margin-left: 2rem;
 }
 
 .navbarButton{
@@ -165,19 +189,20 @@ body{
 
 .manifiesto-section {
   background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
-              url('/src/front/assets/img/fondo-montaña.jpg') no-repeat center center;
+			  url('/src/front/assets/img/fondo-montaña.jpg') no-repeat center center;
   background-size: cover;
   border-radius: 1rem;
 }
 
 @media (min-width: 992px) {
   .busquedaBarra {
-    width: 60%;
-    max-width: 600px;
+	width: 40%;
+	max-width: 600px;
   }
 }
-.backgroundBody{
-  background-color: #F2EFE7;
+.bodyBody{
+  background-color: white;
+  width: 60%;
 }
 .font1{
   color: #006A71;
@@ -192,7 +217,7 @@ body{
 }
 .cardFormat{
   width: 20em;
-  height: auto;
+  height: 22em;
   box-shadow: 0px 2px rgb(161, 161, 161);
   background-color: white;
 }
@@ -209,12 +234,155 @@ body{
   color: grey;
 }
 
-.buttonStyle{
-  width: 5em;
-  height: 5em;
-  vertical-align: middle;
-  align-self: anchor-center
+.activityTextFormat{
+  font-size: 1.1em;
+  font-family: Arial, Helvetica, sans-serif ;
+  text-align: justify;
 }
+
+.fontFamily{
+
+  font-family: Arial, Helvetica, sans-serif ;
+
+}
+
+.fixSizeDateActivity{
+  font-size: 0.75em;
+}
+
+.fixSizeTitleActivity{
+  font-size: 1.55em;
+}
+
+.container1Activity{
+  width: 70%;
+
+}
+
+.container2Activity{
+  
+  width: 30%;
+  background-color: #006A71;
+}
+
+.buttonStyle{
+  width: 2em;
+  height: 2em;
+  vertical-align: middle;
+  align-self: anchor-center;
+  background-color: #F2EFE7;
+  border-color: #006A71;
+   color: #006A71;
+}
+.buttonStyle:hover{
+  border-color: #48A6A7 !important;
+   color: #48A6A7 !important;
+}
+.buttonStyle:active{
+  transform: translateY(0.15em);
+  box-shadow: 0px 0.05em #48A6A7;
+  border-color: #48A6A7 !important;
+  color: #48A6A7 !important;
+}
+.imgCardFormat{
+  max-width:100%;
+  max-height:65%;
+  overflow: hidden;
+}
+.textCardFormat{
+  max-width:100%;
+  max-height:35%;
+}
+.imageCard{
+  max-width:100%;
+}
+.myActivityCard{
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.seccion-titulo {
+  position: relative;
+  display: inline-block;
+  transition: color 0.3s ease;
+  cursor: pointer;
+  overflow: hidden;
+  padding-bottom: 5px;
+}
+
+.seccion-titulo:hover {
+  color: #48A6A7;
+  transform: scale(1.05);
+}
+
+.seccion-titulo::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  width: 0;
+  background-color: #48A6A7;
+  transition: width 0.4s ease;
+}
+
+.seccion-titulo:hover::after {
+  width: 100%;
+}
+
+.DarkButton{
+  background-color: #006A71;
+}
+.DarkButton:hover{
+  background-color: #9ACBD0;
+}
+
+.LoadingSpinner{
+	width: 7rem;
+	height: 7rem;
+	color: #006A71;
+}
+
+@property --NewProfessionalBannerAngle{
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 243deg;
+}
+
+.NewProfessionalBanner{
+	overflow: hidden;
+	margin-top: 50px;
+	cursor: pointer;
+	transition: --NewProfessionalBannerAngle 0.5s 0.1s;
+	background-image: linear-gradient(var(--NewProfessionalBannerAngle), rgba(82, 173, 189, 0.4), rgb(38, 56, 65)),
+	url("/public/media/professionalBoxBackground.jpg");
+	background-size: cover;
+	background-position: center;
+}
+
+.NewProfessionalBanner:hover{
+	--NewProfessionalBannerAngle: 130deg;
+}
+
+.NewProfessionalBanner > p{
+	padding: 200px 40px 40px 40px;
+}
+
+.AvatarFormImage{
+	width: 80px;
+	height: 80px;
+	object-fit:cover;
+}
+
+.NoDeformImg{
+  aspect-ratio: 1/1;
+  object-fit: cover;
+}
+
+.reviewCard{
+max-width: 35%;
+
+}
+
 
 .container {
   font-family: Arial, sans-serif;
