@@ -14,6 +14,29 @@ const chosen = params.id;
 
 let value = 0;
 
+function returnType(){
+    
+    let type = ""
+
+    if(store?.activity?.info_activity?.type==="SPORT"){
+
+        type = "deportiva"
+
+    }
+    else if(store?.activity?.info_activity?.type==="TOURISM"){
+
+        type = "turística"
+    }
+    else if(store?.activity?.info_activity?.type==="LEISURE"){
+
+        type = "lúdica"
+
+    }
+
+    return type
+
+}
+
 function filterActivityReview(){
     let newArray = []
 
@@ -63,6 +86,11 @@ return(
         </div>
 
         <div className="container2Activity">
+            <p className="mt-5"><span className="font2 mx-3 p-1 rounded">Actividad {returnType()}</span></p>
+            <p className="mt-3"><span className="font2 mx-3 p-1 rounded">Publicada el {store?.activity?.creation_date?.slice(0,10)} a las {store?.activity?.creation_date?.slice(11,16)}</span></p>
+            <div className="proActivityPhoto">
+                <img src={"/public/avatar/" + store?.activity?.info_activity?.professional?.user?.avatar_url}></img>
+            </div>
         </div>
 
     </div>
