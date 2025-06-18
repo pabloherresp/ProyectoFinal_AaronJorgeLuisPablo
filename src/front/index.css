@@ -379,16 +379,7 @@ h3{
 }
 
 .reviewCard{
-max-width: 35%;
-
-}
-
-
-.container {
-  font-family: Arial, sans-serif;
-  background-color: white;
-  max-width: 900px;
-  margin: auto;
+  max-width: 35%;
 }
 
 .imagen{
@@ -423,15 +414,6 @@ max-width: 35%;
   color: gold;
 }
 
-.btn {
-  background-color: #ff4c4c;
-  color: white;
-  padding: 10px 15px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
 .comment {
   border-bottom: 1px solid #ccc;
   padding-bottom: 10px;
@@ -458,10 +440,6 @@ max-width: 35%;
   font-size: 18px;
   color: #fbbf24; 
   margin-bottom: 8px;
-}
-
-h4 {
-  margin: 0 0 8px;
 }
 
 .autor-info {
