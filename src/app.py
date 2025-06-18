@@ -27,7 +27,7 @@ app.config["JWT_REFRESH_TOKEN_EXPIRES"] = timedelta(days=30)
 jwt = JWTManager(app)
 
 # Image folder configuration
-UPLOAD_FOLDER = 'src/front/assets/avatar/'
+UPLOAD_FOLDER = 'public/avatar/'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 # database condiguration

@@ -11,11 +11,15 @@ export const ActivityCard = (props) => {
     return (
 
         <div>
-            <div className="card cardFormat p-0 rounded">
-                
-                <img src={props.img} className="rounded-top-1"></img>
+            <div className="card cardFormat p-0 rounded d-flex">
 
-                <div className="p-3">
+                <div className="imgCardFormat">
+                
+                    <img src={props.img} className="rounded-top-1 imageCard"></img>
+
+                </div>
+
+                <div className="p-3 textCardFormat">
                 
                     <h5 className="titleFormat">{props.title}</h5>
 
