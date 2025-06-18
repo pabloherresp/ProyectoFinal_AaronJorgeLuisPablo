@@ -71,7 +71,9 @@ export const PersonalSpace = () => {
 						</div>
 						<div className="col-10 col-sm-9 col-md-5 mx-auto my-auto">
 							<h4 className="text-white fs-3 fw-semibold font1 text-capitalize">{store.user?.name + " " + store.user?.surname}</h4>
-							<h4 className="text-white fs-5 fw-semibold font1 text-capitalize"><i className="fa-solid fa-user fa-2xs me-1"></i>{" " + store.user?.username}</h4>
+								{(store.user?.professional?.business_name ? <h4 className="text-white fs-5 fw-semibold font1 text-capitalize"><i className="fs-5 fa-solid fa-briefcase fs-2xs me-1"></i> {store.user?.professional?.business_name}</h4>: "")}
+							<h4 className="text-white fs-5 fw-semibold font1 text-capitalize"><i className="fa-solid fa-user fa-sm me-2"></i>{" " + store.user?.username}</h4>
+								
 							<p className="text-light font1 text-capitalize">Miembro desde {(new Date(store.user?.creation_date)).toLocaleDateString("es-ES", {weekday: "long", year: "numeric", month: "long", day: "numeric"})}</p>
 							<p className="text-light font1">{store.user ? store.user.address : ""}</p>
 							<p className="text-light font1">{(store.user ? store.user.city : "") + (store.user.country ? ", " + store.user.country : "")}</p>
