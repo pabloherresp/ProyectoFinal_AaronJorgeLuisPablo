@@ -16,6 +16,7 @@ import { SobreNosotros } from "./pages/SobreNosotros";
 import {Login} from "./pages/Login"
 import {Signup} from "./pages/Signup"
 import {CompleteUserForm} from "./pages/CompleteUserForm"
+import {NewProfessionalForm} from "./pages/NewProfessionalForm";
 import {PersonalSpace} from "./pages/PersonalSpace"
 import {VisionMision} from "./pages/VisionMision"
 
@@ -34,6 +35,7 @@ export const router = createBrowserRouter(
         <Route path="/login" element={<Login/>} />
         <Route path="/personalspace" element={<PersonalSpace />}/>
 		    <Route path="/completeuserform/" element={<CompleteUserForm firstTime={true} />} />
+        <Route path="/newprofessionalform/" element={<NewProfessionalForm/>} />
 		    <Route path="/edituser/" element={<CompleteUserForm firstTime={false} />} />
         <Route path="/misionyvision" element={<VisionMision/>} />
         <Route path="/personalspace" element={<PersonalSpace />}/>

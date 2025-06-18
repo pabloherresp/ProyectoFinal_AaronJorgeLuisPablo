@@ -5,7 +5,7 @@ import collection from "../services/collection"
 
 export const CompleteUserForm = (props) => {
 	const [user, setUser] = useState(null)
-	const [formData, setFormdata] = useState({ name: "", surname: "", NID: "", telephone: "", birthdate: undefined, username: "", city: "", country: "", address: "", gender: "NOT TELLING", avatar: "", error: false, response: "" })
+	const [formData, setFormdata] = useState({ name: "", surname: "", NID: "", telephone: "", birthdate: undefined, username: "", city: "", country: "", address: "", gender: "NOT TELLING", avatar: "", bio: "", type: "FREELANCE", business_name: "", tax_address: "", nuss: "", error: false, response: "" })
 	const [messages, setMessages] = useState({ username: "Empieza a escribir para comprobar si está disponible.", usernameClass: "", usernameStatus: false })
 	const [avatarImg,setAvatarImg] = useState("/avatar/0.jpg")
 	const [birthdate,setBirthdate] = useState("")
@@ -42,7 +42,7 @@ export const CompleteUserForm = (props) => {
 				Object.entries(formData).forEach(([clave, valor]) => {
 					request_body.append(clave, valor)
 				});
-				const resp = await collection.editClient(request_body)
+				const resp = await collection.editUser(request_body)
 				console.log(resp)
 				if (!resp.success)
 					setFormdata({ ...formData, error: true, response: resp.response})
@@ -81,12 +81,17 @@ export const CompleteUserForm = (props) => {
 		if ("error" in resp)
 			navigate("/")
 		else {
+			let prof = {}
+			if(resp.is_professional){
+				prof = resp.professional
+				delete resp.professional
+			}
 			setUser(resp)
 			setAvatarImg("/avatar/"+resp.avatar_url)
 			if(resp.birthdate != null)
 				setBirthdate(new Date(resp.birthdate).toISOString().split("T")[0])
 			if (!props.firstTime){
-				setFormdata(resp)
+				setFormdata({...resp, ...prof})
 				setMessages({...messages, username: "", usernameStatus: true})
 			}
 		}
@@ -94,8 +99,6 @@ export const CompleteUserForm = (props) => {
 
 	useEffect(() => {
 		getUser()
-		const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
-		const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
 	}, [])
 
 	return (
@@ -104,17 +107,18 @@ export const CompleteUserForm = (props) => {
 				<div className="col-md-2 m-0 BannerLogin BannerLoginLeft rounded-start"></div>
 				<div className="col-12 col-md-8">
 					<div className="row my-4 col-md-8 mx-auto align-items-center">
-					{props.firstTime ?<>
-						<div className="col-6 col-md-3 mx-auto">
-							<img className="img-fluid" src="\src\front\assets\img\Logo_Nomadik.png" alt="" />
-						</div>
-						<div className="col-6 col-md-9 align-self-center">
-							<p className="TextDark fs-5 fw-semibold mt-3">Necesitamos que completes tu perfil. No podrás realizar algunas acciones hasta que lo hagas.</p>
-						</div>
-					</>
-					: <h3 className="text-center display-5 font1">Datos de usuario</h3>
-				}
-				</div>{user ? 
+						{props.firstTime ?<>
+							<div className="col-6 col-md-3 mx-auto">
+								<img className="img-fluid" src="\src\front\assets\img\Logo_Nomadik.png" alt="" />
+							</div>
+							<div className="col-6 col-md-9 align-self-center">
+								<p className="TextDark fs-5 fw-semibold mt-3">Necesitamos que completes tu perfil. No podrás realizar algunas acciones hasta que lo hagas.</p>
+							</div>
+						</>
+						: <h3 className="text-center display-5 font1">Datos de usuario</h3>
+					}
+					</div>
+				{user ? 
 					<form className="row col-md-8 mx-auto" onSubmit={handleCompleteClient}>
 						<div className="col-6 my-2">
 							<div className="form-floating">
@@ -199,12 +203,48 @@ export const CompleteUserForm = (props) => {
 							<div className="col-9 mb-3">
 								<label htmlFor="avatar" className="form-label col-10">Foto de perfil <span className="ms-2 text-light-emphasis">(Formato .jpg)</span></label>
 								<input className="form-control" type="file" accept="image/jpeg" name="avatar" id="avatar" onChange={(e)=>{
-									setFormdata({...formData, avatar: e.target.files[0]})
-									setAvatarImg(window.URL.createObjectURL(e.target.files[0]))
-								}
-									}  />
+										setFormdata({...formData, avatar: e.target.files[0]})
+										setAvatarImg(window.URL.createObjectURL(e.target.files[0]))}}  />
 							</div>
 						</div>
+						{store.user?.is_professional ? <>
+						<div className="col-12 col-md-6">
+									<div className="form-floating my-2 mx-auto">
+										<input type="text" name="tax_address" className="form-control" id="tax_address" placeholder="" onChange={handleChange} value={formData.tax_address} />
+										<label className="fs-6" htmlFor="tax_address">Dirección fiscal</label>
+									</div>
+								</div>
+								<div className="col-12 col-md-6">
+									<div className="form-floating my-2 mx-auto">
+										<input type="text" name="nuss" className="form-control" id="nuss" placeholder="" onChange={handleChange} value={formData.nuss} />
+										<label className="fs-6" htmlFor="nuss">NUSS</label>
+									</div>
+								</div>
+								<div className="col-12 col-md-6">
+									<div className="form-floating my-2 mx-auto">
+										<select className="form-select" aria-label="Professional type" id="type" name="type" placeholder="" onChange={handleChange} value={formData.type}>
+											<option value="BUSINESS">Empresa</option>
+											<option value="FREELANCE">Autónomo</option>
+										</select>
+										<label className="fs-6" htmlFor="gender">Tipo de profesional</label>
+									</div>
+								</div>
+								<div className="col-12 col-md-6">
+									<div className="form-floating my-2 mx-auto">
+										<input disabled={formData.type == "FREELANCE"} type="text" name="business_name" className="form-control" id="business_name" placeholder="" onChange={handleChange} value={formData.business_name} />
+										<label className="fs-6" htmlFor="business_name">Nombre de la empresa</label>
+									</div>
+								</div>
+								<div className="col-12">
+									<div className="form my-2 mx-auto">
+										<label className="fs-6" htmlFor="bio">Biografía</label>
+										<div id="bioHelpBlock" className="col-12 form-text">
+											Una desripción sobre ti y lo que quieres que los usuarios puedan leer para conocerte.
+										</div>
+										<textarea name="bio" className="form-control mt-2" style={{ height: '280px' }} id="bio" placeholder="" onChange={handleChange} value={formData.bio} />
+									</div>
+								</div>
+								</> : ""}
 						<div className="row">
 						{props.firstTime ? 
 							<input type="submit" value="Crear usuario" className="btn btn-primary my-2 w-auto mx-auto fw-bold" />

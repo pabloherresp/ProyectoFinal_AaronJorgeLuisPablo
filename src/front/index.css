@@ -354,7 +354,7 @@ h3{
 	cursor: pointer;
 	transition: --NewProfessionalBannerAngle 0.5s 0.1s;
 	background-image: linear-gradient(var(--NewProfessionalBannerAngle), rgba(82, 173, 189, 0.4), rgb(38, 56, 65)),
-	url("public/media/professionalBoxBackground.jpg");
+	url("/public/media/professionalBoxBackground.jpg");
 	background-size: cover;
 	background-position: center;
 }

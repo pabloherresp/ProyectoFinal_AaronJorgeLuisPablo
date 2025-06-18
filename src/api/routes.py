@@ -240,7 +240,7 @@ def create_client():
         return jsonify({"error": "Error desconocido"})
     return jsonify({"success": True, "user": user.serialize()})
 
-@api.route('/clients', methods=['PUT'])
+@api.route('/users', methods=['PUT'])
 @jwt_required()
 def edit_client():
     try:
@@ -272,11 +272,24 @@ def edit_client():
             fecha_dt = datetime.fromisoformat(fecha_iso.replace("Z", "+00:00"))
             client.birthdate = fecha_dt
 
+        is_professional = request.form.get("is_professional")
+        if is_professional:
+            print("ENTRADA __----____---__--")
+            prof = db.session.execute(select(Professionals).where(Professionals.user_id == user_id)).scalar_one_or_none()
+            if not prof:
+                return jsonify({"error": "Professional profile not found"}), 404
+            prof_cells =["bio", "nuss", "business_name", "tax_address"]
+            prof.type = enumProf(request.form.get("type"))
+            for cell in prof_cells:
+                setattr(prof, cell, request.form.get(cell))
+
+
         db.session.commit()
     except Exception as e:
         print(e)
         return jsonify({"error": "Error desconocido"})
     return jsonify({"success": True, "user": client.user.serialize()})
+
 #Endpoints para Professional
 @api.route('/professionals', methods=['GET'])
 def get_professionals():
@@ -290,13 +303,28 @@ def get_professionals():
 def get_one_professional(id):
     stmt = select(Professionals).where(Professionals.user_id == id)
     professional = db.session.execute(stmt).scalar_one_or_none()
-    #response_body = [user.serialize() for user in user_by_id]
     if professional is None:
         return jsonify({"Error": "User not found"}), 404
     response_body = professional.serialize()
     del response_body["tax_address"]
     del response_body["nuss"]
     return jsonify(response_body),200
+
+@api.route('/professionals', methods=['POST'])
+@jwt_required()
+def create_professional():
+    try:
+        user_id = int(get_jwt_identity())
+        data = request.json
+        if not data or "bio" not in data or "type" not in data or "business_name" not in data or "tax_address" not in data or "nuss" not in data:
+            return jsonify({"error": "Missing fields to create professional"}), 400
+        prof = Professionals(user_id=user_id, bio=data["bio"], type=enumProf(data["type"]), business_name=data["business_name"], tax_address=data["tax_address"], nuss=data["nuss"])
+        db.session.add(prof)
+        db.session.commit()
+    except Exception as e:
+        print(e)
+        return jsonify({"error": "Couldn't create professional"}), 500
+    return jsonify({"success": True, "user": prof.user.serialize()})
 
 #endpoints favoritos
 @api.route('/favs/<int:id>', methods=['POST'])
