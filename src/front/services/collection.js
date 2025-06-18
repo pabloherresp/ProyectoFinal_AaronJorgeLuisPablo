@@ -16,6 +16,16 @@ collection.returnActivities = async () => {
     }
 }
 
+collection.returnActivity = async (id) => {
+    try{
+        const resp = await fetch(BACKEND_URL + "api/activities/" + id);
+        const data = await resp.json();
+        return data
+    }catch(error){
+        console.log(error)
+    }
+}
+
 collection.checkUser = async (name) => {
     try {
         const resp = await fetch(BACKEND_URL + "api/users/", {

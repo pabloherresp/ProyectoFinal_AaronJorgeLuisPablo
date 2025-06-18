@@ -200,8 +200,9 @@ h3{
 	max-width: 600px;
   }
 }
-.backgroundBody{
-  background-color: #F2EFE7;
+.bodyBody{
+  background-color: white;
+  width: 60%;
 }
 .font1{
   color: #006A71;
@@ -216,7 +217,7 @@ h3{
 }
 .cardFormat{
   width: 20em;
-  height: auto;
+  height: 22em;
   box-shadow: 0px 2px rgb(161, 161, 161);
   background-color: white;
 }
@@ -233,11 +234,70 @@ h3{
   color: grey;
 }
 
+.activityTextFormat{
+  font-size: 1.1em;
+  font-family: Arial, Helvetica, sans-serif ;
+  text-align: justify;
+}
+
+.fontFamily{
+
+  font-family: Arial, Helvetica, sans-serif ;
+
+}
+
+.fixSizeDateActivity{
+  font-size: 0.75em;
+}
+
+.fixSizeTitleActivity{
+  font-size: 1.55em;
+}
+
+.container1Activity{
+  width: 70%;
+
+}
+
+.container2Activity{
+  
+  width: 30%;
+  background-color: #006A71;
+}
+
 .buttonStyle{
-  width: 5em;
-  height: 5em;
+  width: 2em;
+  height: 2em;
   vertical-align: middle;
-  align-self: anchor-center
+  align-self: anchor-center;
+  background-color: #F2EFE7;
+  border-color: #006A71;
+   color: #006A71;
+}
+.buttonStyle:hover{
+  border-color: #48A6A7 !important;
+   color: #48A6A7 !important;
+}
+.buttonStyle:active{
+  transform: translateY(0.15em);
+  box-shadow: 0px 0.05em #48A6A7;
+  border-color: #48A6A7 !important;
+  color: #48A6A7 !important;
+}
+.imgCardFormat{
+  max-width:100%;
+  max-height:65%;
+  overflow: hidden;
+}
+.textCardFormat{
+  max-width:100%;
+  max-height:35%;
+}
+.imageCard{
+  max-width:100%;
+}
+.myActivityCard{
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
 }
 
 .seccion-titulo {
@@ -316,4 +376,9 @@ h3{
 .NoDeformImg{
   aspect-ratio: 1/1;
   object-fit: cover;
+}
+
+.reviewCard{
+max-width: 35%;
+
 }

@@ -1,6 +1,7 @@
 export const initialStore=()=>{
 	return{
 		all_activities: [],
+		activity: {},
 		user: {
 			id: null,
 			username: "",
@@ -16,6 +17,11 @@ export default function storeReducer(store, action = {}) {
 			return {
 				...store,
 				all_activities: action.payload
+			};
+		case 'activity':
+			return {
+				...store,
+				activity: action.payload
 			};
 		case 'loadUser':
 			return{
