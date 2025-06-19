@@ -4,7 +4,7 @@ import React from "react";
 export const SobreNosotros = () => {
     return (
         <>
-            <div className="container my-5 bg-white px-3">
+            <div className="container my-5 bg-white p-0">
 
                 <div className="manifiesto-section my-5 py-5 text-center text-white rounded">
                     <div className="container px-4">
@@ -22,7 +22,7 @@ export const SobreNosotros = () => {
                     <hr className="w-50 mx-auto separador" />
                 </div>
 
-                <div className="row align-items-center">
+                <div className="row align-items-center px-5">
                     <h2 className="text-center fw-bold mt-2 mb-4">¿Qué Somos?</h2>
                     <div className="col-sm-12 col-md-6 col-lg-5 mb-4 mb-md-0">
                         <img
@@ -31,7 +31,7 @@ export const SobreNosotros = () => {
                             alt="Logo"
                         />
                     </div>
-                    <div className="col-sm-12 col-md-6 col-lg-7">
+                    <div className="col-sm-12 col-md-6 col-lg-7 px-lg-5">
                         <p className="justified-text">
                             <strong>Nomadik</strong> nace con la pasión de <strong>explorar, descubrir y conectar</strong>. Somos una plataforma hecha para quienes buscan algo más que un simple destino: buscamos crear <em>experiencias inolvidables</em>, <em>aventuras compartidas</em> y un <strong>estilo de vida activo y consciente</strong>.
                         </p>
@@ -52,10 +52,9 @@ export const SobreNosotros = () => {
                     <hr className="w-50 mx-auto separador" />
                 </div>
 
-                <div className="row">
-                    <h2 className="text-center mt-2 mb-4">Valores Destacados</h2>
-                    <div className="row text-center">
-                        {[
+                <div className="row px-4 text-center">
+                    <h2 className="mt-2 mb-4">Valores Destacados</h2>
+                    {[
                             {
                                 icon: "fa-star",
                                 title: "Sostenibilidad",
@@ -87,14 +86,13 @@ export const SobreNosotros = () => {
                                 </div>
                             </div>
                         ))}
-                    </div>
                 </div>
 
                 <div className="text-center my-5">
                     <hr className="w-50 mx-auto separador" />
                 </div>
 
-                <div className="row text-center">
+                <div className="row text-center px-4">
                     <h2 className="text-center mb-4">Nuestro Equipo</h2>
                     {[
                         {

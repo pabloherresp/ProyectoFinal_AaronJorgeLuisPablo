@@ -7,7 +7,7 @@ export const VisionMision = () => {
     return (
         <>
             <div className="container bg-light mb-5">
-                <div className="row mt-5">
+                <div className="row mt-5 p-lg-0 px-4">
                     <div className="col-sm-12 col-md-6 col-lg-7">
                         <h2 className="mt-5 ms-lg-5 fw-bold seccion-titulo"><i className="fa-solid fa-handshake me-3"></i>Mision</h2>
                         <p className="justified-text ms-lg-5">
@@ -26,7 +26,7 @@ export const VisionMision = () => {
                     <hr className="w-50 mx-auto separador" />
                 </div>
 
-                <div className="row mt-5">
+                <div className="row mt-5 p-lg-0 px-4">
                     <div className="col-sm-12 col-md-6 col-lg-6 order-1 order-md-2">
                         <div className="text-end me-lg-5">
                             <h2 className="mt-5 fw-bold seccion-titulo" >Visión<i className="fa-solid fa-eye ms-3"></i></h2>

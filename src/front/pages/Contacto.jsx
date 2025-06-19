@@ -3,7 +3,7 @@ import React from "react";
 export const Contacto = () => {
     return (
         <>
-            <div className="container p-2">
+            <div className="container p-lg-2 p-4">
                 <div className="row mb-5 mt-5">
                     <div className="col-sm-12 col-md-6 col-lg-6 p-0">
                         <img src="./src/front/assets/img/contacto.png" className="img-fluid img-contactanos" alt="" />
