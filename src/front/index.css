@@ -522,3 +522,18 @@ h4 {
 .report{
   width: 150px;
 }
+
+.img-contactanos{
+  width: 100%;
+  object-fit: cover;
+}
+
+.no-resize{
+  resize: none;
+  width: 100%;
+  height: 200px;
+}
+
+.bg-contacto{
+  background-color: #F2EFE7 ;
+}
