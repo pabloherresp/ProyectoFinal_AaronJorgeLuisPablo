@@ -221,11 +221,18 @@ h3{
   object-fit: cover;
 }
 .cardFormat{
+  height: 22em;
+  max-width: 20em;
+  min-width: 15em;
+  box-shadow: 0px 2px rgb(161, 161, 161);
+  background-color: white;
+}
+/* .cardFormat{
   width: 20em;
   height: 22em;
   box-shadow: 0px 2px rgb(161, 161, 161);
   background-color: white;
-}
+} */
 .fixBorder{
   object-fit: cover;
 }
@@ -291,12 +298,12 @@ h3{
 }
 .imgCardFormat{
   max-width:100%;
-  max-height:65%;
+  max-height:60%;
   overflow: hidden;
 }
 .textCardFormat{
   max-width:100%;
-  max-height:35%;
+  max-height:40%;
 }
 .imageCard{
   max-width:100%;
