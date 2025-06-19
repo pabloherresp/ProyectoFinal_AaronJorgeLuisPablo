@@ -202,10 +202,10 @@ export const CompleteUserForm = (props) => {
 						</div>
 						<div className="row my-3">
 							<div className="col-3 overflow-hidden align-content-center">
-								<img src={avatarImg} id="preview" className="rounded-circle AvatarFormImage"/>
+								<img src={avatarImg} id="preview" className="rounded-circle img-fluid NoDeformImg"/>
 							</div>
 							<div className="col-9 mb-3">
-								<label htmlFor="avatar" className="form-label col-10">Foto de perfil <span className="ms-2 text-light-emphasis">(Formato .jpg)</span></label>
+								<label htmlFor="avatar" className="form-label col-10">Foto de perfil <span className="ms-2 text-light-emphasis">(.jpg)</span></label>
 								<input className="form-control" type="file" accept="image/jpeg" name="avatar" id="avatar" onChange={(e)=>{
 										setFormdata({...formData, avatar: e.target.files[0]})
 										setAvatarImg(window.URL.createObjectURL(e.target.files[0]))}}  />
@@ -255,6 +255,7 @@ export const CompleteUserForm = (props) => {
 							: <div className="d-flex">
 								<input type="submit" value="Editar datos" className="btn btn-primary my-2 w-auto mx-auto fw-bold"/>
 								<input type="reset" value="Reiniciar" className="btn btn-secondary my-2 w-auto mx-auto fw-bold" onClick={getUser}/>
+								<button className="btn btn-danger my-2 w-auto mx-auto fw-bold" onClick={()=>navigate("/personalspace")}>Cancelar</button>
 							</div>
 						}
 						<p className={"text-center fw-semibold " + (formData.error ? "text-danger":"text-success")}>{formData.response}</p>

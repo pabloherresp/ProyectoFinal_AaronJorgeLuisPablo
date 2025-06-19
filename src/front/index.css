@@ -1,8 +1,8 @@
-body{
+body {
   background-image: url("/src/front/assets/img/bg2.png");
   background-size: 10%;
   background-repeat: repeat;
-  background-color: #F2EFE7;
+  background-color: #f2efe7;
 }
 
 .Page {
@@ -15,145 +15,146 @@ body{
   flex: 1;
 }
 
-.BgPrimary{
-  background-color: #006A71;
+.BgPrimary {
+  background-color: #006a71;
 }
-.BgSecondary{
-  background-color: #48A6A7;
+.BgSecondary {
+  background-color: #48a6a7;
 }
-.BgTerciary{
-  background-color: #9ACBD0;
+.BgTerciary {
+  background-color: #9acbd0;
 }
-.BgBackground{
-  background-color: #F2EFE7;
-}
-
-.TextDark{
-  color: #006A71;
+.BgBackground {
+  background-color: #f2efe7;
 }
 
-.BannerLogin{
-	background-repeat: repeat-y;
-	background-position-y: top;
-	background-size: 100% auto;
+.TextDark {
+  color: #006a71;
 }
 
-.BannerLoginLeft{
-	background-image: url("/src/front/assets/img/login-1.png");
+.BannerLogin {
+  background-repeat: repeat-y;
+  background-position-y: top;
+  background-size: 100% auto;
 }
 
-.BannerLoginRight{
-	background-image: url("/src/front/assets/img/login-2.png");
-
+.BannerLoginLeft {
+  background-image: url("/src/front/assets/img/login-1.png");
 }
 
-.NavbarUserPill{
-	height: 40px;
-	background-color: #48A6A7;
+.BannerLoginRight {
+  background-image: url("/src/front/assets/img/login-2.png");
 }
 
-.NavbarUserPill img{
+.NavbarUserPill {
+  height: 40px;
+  background-color: #48a6a7;
+}
+
+.NavbarUserPill img {
   height: 40px;
   width: 40px;
   overflow: hidden;
 }
 
-.NavbarDropdown{
-  background-color: #48A6A7;
+.NavbarDropdown {
+  background-color: #48a6a7;
 }
-.NavbarDropdown li:hover{
-  background-color: #006A71;
-}
-
-.NavbarSearchDropdown{
-	max-height: 300px;
-	width: 100%;
-	scrollbar-width: thin;
-	overflow: auto;
+.NavbarDropdown li:hover {
+  background-color: #006a71;
 }
 
-h3{
-  color: #006A71;
+.NavbarSearchDropdown {
+  max-height: 300px;
+  width: 100%;
+  scrollbar-width: thin;
+  overflow: auto;
 }
 
-.btn-Sigup{
-  background-color: #48A6A7;
+h3 {
+  color: #006a71;
+}
+
+.btn-Sigup {
+  background-color: #48a6a7;
   color: white;
   border: none;
 }
 
-.btn-Sigup:hover{
+.btn-Sigup:hover {
   background-color: #3d8e8e;
 }
 
-.navbg{
-	/* background-color: #317373; */
-  background-image: linear-gradient(#439d9e, rgba(0, 0, 0, 0.671)), url("/src/front/assets/img/navbarForest.png");
+.navbg {
+  /* background-color: #317373; */
+  background-image: linear-gradient(#439d9e, rgba(0, 0, 0, 0.671)),
+    url("/src/front/assets/img/navbarForest.png");
   background-repeat: repeat-x;
   background-size: contain;
 }
 
-.footer{
-  background-color: #48A6A7;
+.footer {
+  background-color: #48a6a7;
 }
 
-.logo{
-	max-width: 3.5rem;
-	margin-left: 2rem;
+.logo {
+  max-width: 3.5rem;
+  margin-left: 2rem;
 }
 
-.navbarButton{
-  background-color: #48A6A7;
+.navbarButton {
+  background-color: #48a6a7;
   color: white;
   width: 80px;
   justify-content: center;
 }
 
-.navbarButton:hover, .NavbarUserPill:hover{
-	background-color: #9ACBD0;
+.navbarButton:hover,
+.NavbarUserPill:hover {
+  background-color: #9acbd0;
 }
 
-.btn-success.myBtn:hover{
-  background-color: #9ACBD0 !important;
+.btn-success.myBtn:hover {
+  background-color: #9acbd0 !important;
   border-color: #0d8d90 !important;
 }
 
-.iconoInsta{
+.iconoInsta {
   color: rgb(219, 20, 219);
 }
-.iconoInsta :hover{
+.iconoInsta :hover {
   color: rgb(101, 0, 88);
 }
-.iconoYoutube{
+.iconoYoutube {
   color: red;
 }
-.iconoYoutube :hover{
+.iconoYoutube :hover {
   color: rgb(97, 1, 1);
 }
-.iconoLinkdin{
+.iconoLinkdin {
   color: blue;
 }
-.iconoLinkdin :hover{
+.iconoLinkdin :hover {
   color: rgb(0, 0, 120);
 }
-.iconoFace{
+.iconoFace {
   color: rgb(0, 72, 255);
 }
-.iconoFace :hover{
+.iconoFace :hover {
   color: rgb(0, 39, 148);
 }
 
-.logo-img{
+.logo-img {
   max-width: 400px;
   max-height: 400px;
   display: block;
 }
 
-.justified-text{
+.justified-text {
   text-align: justify;
 }
 
-.separador{
+.separador {
   border-color: #0d8d90;
 }
 
@@ -167,7 +168,6 @@ h3{
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
   border-color: #0d8d90 !important;
 }
-
 
 .valor-card2 {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -189,23 +189,23 @@ h3{
 
 .manifiesto-section {
   background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
-			  url('/src/front/assets/img/fondo-montaña.jpg') no-repeat center center;
+    url("/src/front/assets/img/fondo-montaña.jpg") no-repeat center center;
   background-size: cover;
   border-radius: 1rem;
 }
 
 @media (min-width: 992px) {
   .busquedaBarra {
-	width: 40%;
-	max-width: 600px;
+    width: 40%;
+    max-width: 600px;
   }
 }
-.bodyBody{
+.bodyBody {
   background-color: white;
   width: 60%;
 }
-.font1{
-  color: #006A71;
+.font1 {
+  color: #006a71;
   font-family: Arial, Helvetica, sans-serif;
   font-weight: bold;
   letter-spacing: -0.025em;
@@ -215,93 +215,89 @@ h3{
   font-family: Arial, Helvetica, sans-serif;
   border: 1px white solid;
 }
-.fixLandscape{
+.fixLandscape {
   width: 100%;
   height: 35em;
   object-fit: cover;
 }
-.cardFormat{
+.cardFormat {
   width: 20em;
   height: 22em;
   box-shadow: 0px 2px rgb(161, 161, 161);
   background-color: white;
 }
-.fixBorder{
+.fixBorder {
   object-fit: cover;
 }
-.titleFormat{
+.titleFormat {
   font-weight: bold;
   font-size: 1em;
   line-height: 0.7;
 }
-.textFormat{
+.textFormat {
   font-size: 0.85em;
   color: grey;
 }
 
-.activityTextFormat{
+.activityTextFormat {
   font-size: 1.1em;
-  font-family: Arial, Helvetica, sans-serif ;
+  font-family: Arial, Helvetica, sans-serif;
   text-align: justify;
 }
 
-.fontFamily{
-
-  font-family: Arial, Helvetica, sans-serif ;
-
+.fontFamily {
+  font-family: Arial, Helvetica, sans-serif;
 }
 
-.fixSizeDateActivity{
+.fixSizeDateActivity {
   font-size: 0.75em;
 }
 
-.fixSizeTitleActivity{
+.fixSizeTitleActivity {
   font-size: 1.55em;
 }
 
-.container1Activity{
+.container1Activity {
   width: 70%;
-
 }
 
-.container2Activity{
-  
+.container2Activity {
   width: 30%;
-  background-color: #006A71;
+  background-color: #006a71;
 }
 
-.buttonStyle{
+.buttonStyle {
   width: 2em;
   height: 2em;
   vertical-align: middle;
   align-self: anchor-center;
-  background-color: #F2EFE7;
-  border-color: #006A71;
-   color: #006A71;
+  background-color: #f2efe7;
+  border-color: #006a71;
+  color: #006a71;
 }
-.buttonStyle:hover{
-  border-color: #48A6A7 !important;
-   color: #48A6A7 !important;
+.buttonStyle:hover {
+  border-color: #48a6a7 !important;
+  color: #48a6a7 !important;
 }
-.buttonStyle:active{
+.buttonStyle:active {
   transform: translateY(0.15em);
-  box-shadow: 0px 0.05em #48A6A7;
-  border-color: #48A6A7 !important;
-  color: #48A6A7 !important;
+  box-shadow: 0px 0.05em #48a6a7;
+  border-color: #48a6a7 !important;
+  color: #48a6a7 !important;
 }
-.imgCardFormat{
-  max-width:100%;
-  max-height:65%;
+.imgCardFormat {
+  max-width: 100%;
+  max-height: 65%;
   overflow: hidden;
 }
-.textCardFormat{
-  max-width:100%;
-  max-height:35%;
+.textCardFormat {
+  max-width: 100%;
+  max-height: 35%;
 }
-.imageCard{
-  max-width:100%;
+.imageCard {
+  max-width: 100%;
 }
-.myActivityCard{
+.myActivityCard {
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
 }
 
@@ -315,7 +311,7 @@ h3{
 }
 
 .seccion-titulo:hover {
-  color: #48A6A7;
+  color: #48a6a7;
   transform: scale(1.05);
 }
 
@@ -326,7 +322,7 @@ h3{
   left: 0;
   height: 3px;
   width: 0;
-  background-color: #48A6A7;
+  background-color: #48a6a7;
   transition: width 0.4s ease;
 }
 
@@ -334,58 +330,68 @@ h3{
   width: 100%;
 }
 
-.DarkButton{
-  background-color: #006A71;
+.DarkButton {
+  background-color: #006a71;
 }
-.DarkButton:hover{
-  background-color: #9ACBD0;
-}
-
-.LoadingSpinner{
-	width: 7rem;
-	height: 7rem;
-	color: #006A71;
+.DarkButton:hover {
+  background-color: #9acbd0;
 }
 
-@property --NewProfessionalBannerAngle{
-  syntax: '<angle>';
+.LoadingSpinner {
+  width: 7rem;
+  height: 7rem;
+  color: #006a71;
+}
+
+@property --NewProfessionalBannerAngle {
+  syntax: "<angle>";
   inherits: false;
   initial-value: 243deg;
 }
 
-.NewProfessionalBanner{
-	overflow: hidden;
-	margin-top: 50px;
-	cursor: pointer;
-	transition: --NewProfessionalBannerAngle 0.5s 0.1s;
-	background-image: linear-gradient(var(--NewProfessionalBannerAngle), rgba(82, 173, 189, 0.4), rgb(38, 56, 65)),
-	url("/public/media/professionalBoxBackground.jpg");
-	background-size: cover;
-	background-position: center;
+.NewProfessionalBanner {
+  overflow: hidden;
+  margin-top: 50px;
+  cursor: pointer;
+  transition: --NewProfessionalBannerAngle 0.5s 0.1s;
+  background-image: linear-gradient(
+      var(--NewProfessionalBannerAngle),
+      rgba(82, 173, 189, 0.4),
+      rgb(38, 56, 65)
+    ),
+    url("/public/media/professionalBoxBackground.jpg");
+  background-size: cover;
+  background-position: center;
 }
 
-.NewProfessionalBanner:hover{
-	--NewProfessionalBannerAngle: 130deg;
+.NewProfessionalBanner:hover {
+  --NewProfessionalBannerAngle: 130deg;
 }
 
-.NewProfessionalBanner > p{
-	padding: 200px 40px 40px 40px;
+.NewProfessionalBanner > p {
+  padding: 200px 40px 40px 40px;
 }
 
-.AvatarFormImage{
-	width: 80px;
-	height: 80px;
-	object-fit:cover;
+.AvatarFormImage {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
 }
 
-.NoDeformImg{
+.NoDeformImg {
   aspect-ratio: 1/1;
   object-fit: cover;
 }
 
-.reviewCard{
-max-width: 35%;
+.reviewCard {
+  max-width: 35%;
+}
 
+.name-gradient {
+  background: linear-gradient(90deg, #e0f7fa, #b2ebf2, #80deea);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0px 1px 1px rgba(255, 255, 255, 0.5);
 }
 .proActivityPhoto{
   width: 20%;
@@ -515,4 +521,19 @@ h4 {
   
 .report{
   width: 150px;
+}
+
+.img-contactanos{
+  width: 100%;
+  object-fit: cover;
+}
+
+.no-resize{
+  resize: none;
+  width: 100%;
+  height: 200px;
+}
+
+.bg-contacto{
+  background-color: #F2EFE7 ;
 }

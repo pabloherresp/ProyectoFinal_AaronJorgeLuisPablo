@@ -19,6 +19,7 @@ import { CompleteUserForm } from "./pages/CompleteUserForm"
 import { NewProfessionalForm } from "./pages/NewProfessionalForm";
 import { PersonalSpace } from "./pages/PersonalSpace"
 import { DetailsProfessional } from "./pages/DetailsProfessional"
+import {Contacto} from "./pages/Contacto"
 import { VisionMision } from "./pages/VisionMision"
 
 export const router = createBrowserRouter(
@@ -39,6 +40,7 @@ export const router = createBrowserRouter(
       <Route path="/newprofessionalform/" element={<NewProfessionalForm />} />
       <Route path="/edituser/" element={<CompleteUserForm firstTime={false} />} />
       <Route path="/misionyvision" element={<VisionMision />} />
+      <Route path="/contacto" element={<Contacto/>} />
       <Route path="/personalspace" element={<PersonalSpace />} />
       <Route path="/detailsprofessional/:id" element={<DetailsProfessional />} />
     </Route>
