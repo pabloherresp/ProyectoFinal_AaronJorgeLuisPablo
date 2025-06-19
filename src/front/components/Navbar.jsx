@@ -74,7 +74,7 @@ export const Navbar = () => {
 							</ul>
 						</div>
 						<Link className="nav-item nav-link active text-white fs-6 fw-semibold" to={"/"}>Equipo</Link>
-						<Link className="nav-item nav-link active text-white fs-6 fw-semibold" to={"/"}>Contacto</Link>
+						<Link className="nav-item nav-link active text-white fs-6 fw-semibold" to={"/contacto"}>Contacto</Link>
 					</div>
 
 					<form className="mx-auto busquedaBarra input-group">
