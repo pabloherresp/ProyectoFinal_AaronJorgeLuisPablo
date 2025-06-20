@@ -3,6 +3,8 @@ import useGlobalReducer from "../hooks/useGlobalReducer.jsx"
 import { Link, useNavigate, useParams } from "react-router-dom"
 import collection from "../services/collection"
 import { NewProfessionalBox } from "../components/NewProfessionalBox.jsx";
+import { ActivityCard } from "../components/ActivityCard.jsx";
+import { CommentBox } from "../components/CommentBox.jsx";
 
 export const PersonalSpace = () => {
 	const navigate = useNavigate()
@@ -76,7 +78,7 @@ export const PersonalSpace = () => {
 						</div>
 
 						<div className="row">
-							<div className="col-8 col-md-3 justify-content-center align-content-center px-lg-2 ms-auto">
+							<div className="col-8 col-md-3 justify-content-center align-content-center px-lg-2 ms-5">
 								<img className="shadow img-fluid rounded-circle NoDeformImg my-auto"
 									src={"/avatar/" + (store.user?.avatar_url ? store.user?.avatar_url : "0.jpg")} alt="avatar"
 								/>
@@ -151,7 +153,7 @@ export const PersonalSpace = () => {
 									className="btn text-white DarkButton mt-2"
 									onClick={() => navigate("/edituser")}
 								>
-									Editar datos
+									<i className="fa-solid fa-pen-to-square me-2"></i>Editar datos
 								</button>
 							</div>
 						</div>
@@ -164,20 +166,23 @@ export const PersonalSpace = () => {
 							className={`nav-link ${activeTab === 'inscripciones' ? 'active' : ''}`}
 							onClick={() => setActiveTab('inscripciones')}
 						>
-							Inscripciones
+							<i className="fa-solid fa-book me-2"></i>Inscripciones
 						</button>
 					</li>
 					<li className="nav-item">
 						<button
-							className={`nav-link ${activeTab === 'otra' ? 'active' : ''}`}
+							className={`nav-link ${activeTab === 'favoritos' ? 'active' : ''}`}
 							onClick={() => setActiveTab('favoritos')}
 						>
 							<i className="fa-solid fa-star me-2 text-warning"></i>Favoritos
 						</button>
 					</li>
 					<li className="nav-item">
-						<button className="nav-link disabled" aria-disabled="true">
-							Deshabilitado
+						<button
+							className={`nav-link ${activeTab === 'reseñas' ? 'active' : ''}`}
+							onClick={() => setActiveTab('reseñas')}
+						>
+							<i className="fa-solid fa-comments me-2"></i>Reseñas
 						</button>
 					</li>
 				</ul>
@@ -271,6 +276,20 @@ export const PersonalSpace = () => {
 
 					{activeTab === 'favoritos' && (
 						<div className="py-4">
+							<div className="row d-flex justify-content-around px-4 py-3">
+								{store.user.favourites.map((el, i) => {
+									return <div key={i} className="col-sm-12 col-md-6 col-lg-3">
+										<ActivityCard title={el.activity.name} description={el.activity.desc} img={el.activity.media}
+											origin={el.activity.location} />
+									</div>
+								})}
+							</div>
+						</div>
+					)}
+
+					{activeTab === 'reseñas' && (
+						<div className="py-4">
+							<CommentBox/>
 						</div>
 					)}
 				</div>
