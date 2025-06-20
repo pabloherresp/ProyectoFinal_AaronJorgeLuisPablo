@@ -79,9 +79,17 @@ def get_one_user_by_token():
 @api.route('/signup', methods=['POST'])
 def create_user():
     try:
+        admin = db.session.execute(select(Administrators)).scalars()
+
         user = Users(email=request.form.get("email"), password=generate_password_hash(request.form.get("password")))
         db.session.add(user)
         db.session.commit()
+        
+        if not admin:
+            new_admin = Administrators(user_id = user.id)
+            db.session.add(new_admin)
+            db.session.commit()
+            
     except IntegrityError as e:
         db.session.rollback()
         return jsonify({"error": True, "response": e.message}), 409
@@ -91,6 +99,7 @@ def create_user():
     except Exception as e:
         db.session.rollback()
         return jsonify({"error": "No se pudo crear el usuario"}), 500
+    
     return jsonify({"success": True}), 200
 
 @api.route('/login', methods=['POST'])
@@ -710,11 +719,11 @@ def search_word(value):
     if len(value) < 3:
         return jsonify({"error": "Search value must have at least 3 characters"}), 400
 
-    profs = db.session.execute(select(Professionals).join(Professionals.user).where(or_(Users.username.ilike(f"%{value}%"),Users.name.ilike(f"%{value}%"),Users.surname.ilike(f"%{value}%")))).scalars().all()
+    profs = db.session.execute(select(Professionals).join(Professionals.user).join(Users.client).where(or_(Clients.username.ilike(f"%{value}%"),Clients.name.ilike(f"%{value}%"),Clients.surname.ilike(f"%{value}%")))).scalars().all()
     activities = db.session.execute(select(Activities).join(Activities.info_activity).where(or_(Info_activity.name.ilike(f"%{value}%"),Info_activity.location.ilike(f"%{value}%")))).scalars().all()
     if profs is None and activities is None:
         return jsonify({"error": "Search couldn't find matches"}), 404
-    response_body = {"professionals": [{"user_id": prof.user_id, "username": prof.user.username, "name": prof.user.name, "surname": prof.user.surname} for prof in profs], "activities": [{"id": act.id, "name": act.info_activity.name, "location": act.meeting_point} for act in activities]}
+    response_body = {"professionals": [{"user_id": prof.user_id, "username": prof.user.client.username, "name": prof.user.client.name, "surname": prof.user.client.surname} for prof in profs], "activities": [{"id": act.id, "name": act.info_activity.name, "location": act.meeting_point} for act in activities]}
     return jsonify(response_body), 200
 
 
