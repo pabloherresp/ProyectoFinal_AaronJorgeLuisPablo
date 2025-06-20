@@ -348,33 +348,46 @@ h3 {
   color: #006a71;
 }
 
-@property --NewProfessionalBannerAngle {
+@property --NewBannerAngle {
   syntax: "<angle>";
   inherits: false;
   initial-value: 243deg;
 }
+@property --NewSignupY {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 150%;
+}
 
-.NewProfessionalBanner {
+.NewProfessionalBanner , .NewSignUpBanner{
   overflow: hidden;
   margin-top: 50px;
   cursor: pointer;
-  transition: --NewProfessionalBannerAngle 0.5s 0.1s;
-  background-image: linear-gradient(
-      var(--NewProfessionalBannerAngle),
-      rgba(82, 173, 189, 0.4),
-      rgb(38, 56, 65)
-    ),
-    url("/public/media/professionalBoxBackground.jpg");
-  background-size: cover;
+  transition: --NewBannerAngle 0.9s 0.3s;
+  background-size: var(--NewSignupY);
+}
+.NewProfessionalBanner{background-image: linear-gradient(var(--NewBannerAngle),rgba(82, 173, 189, 0.4),rgb(38, 56, 65)),
+  url("/public/media/professionalBoxBackground.jpg");
   background-position: center;
 }
+.NewSignUpBanner{background-image: linear-gradient(var(--NewBannerAngle),rgba(16, 53, 12, 0.4),rgb(34, 52, 75)),
+  url("/public/media/signUpBoxBackground.jpg");
+  background-position: 50% 20%;
+  transition: --NewSignupY 0.9s 0.3s, --NewBannerAngle 0.9s 0.3s;
+}
 
-.NewProfessionalBanner:hover {
-  --NewProfessionalBannerAngle: 130deg;
+.NewProfessionalBanner:hover, .NewSignUpBanner:hover {
+  --NewBannerAngle: 130deg;
+}
+.NewSignUpBanner:hover{
+  --NewSignupY: 100%;
 }
 
 .NewProfessionalBanner > p {
   padding: 200px 40px 40px 40px;
+}
+.NewSignUpBanner > p {
+  padding: 100px 20px 20px 20px;
 }
 
 .AvatarFormImage {
