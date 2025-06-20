@@ -1,33 +1,35 @@
 import React, { useEffect, useState } from "react"
-import rigoImageUrl from "../assets/img/rigo-baby.jpg"
-import useGlobalReducer from "../hooks/useGlobalReducer.jsx"
 import { NewProfessionalBox } from "../components/NewProfessionalBox.jsx"
 import collection from "../services/collection"
-import Fuse from 'fuse.js';
 import { ActivityCard } from "../components/ActivityCard.jsx"
 import { Link } from "react-router-dom"
+import { CommentBox } from "../components/CommentBox.jsx"
 
 export const Home = () => {
-	const { store, dispatch } = useGlobalReducer()
 	const [activities, setActivities] = useState([])
-	const [locations,setLocations] = useState([])
-
-	const fuse = new Fuse(activities, {  //// BORRAR??????????????????????????????????????????????????????????????
-		includeScore: true,
-		threshold: 1,
-		isCaseSensitive: false,
-		keys: ['info_activity.location', 'meeting_point'] 
-	})
+	const [reviews, setReviews] = useState([])
 
 	const loadActivities = async () => {
 		const resp = await collection.returnActivities()
 		setActivities(resp)
-		let lo = resp.map((item)=>item.info_activity.location)
-		setLocations(lo)
 	}
+
+	const loadReviews = async () => {
+		const resp = await collection.getReviews()
+		setReviews(resp)
+	}
+
+	const shuffle = (input) => { 
+			for (let i = input.length - 1; i > 0; i--) { 
+				const j = Math.floor(Math.random() * (i + 1)); 
+				[input[i], input[j]] = [input[j], input[i]]; 
+			} 
+			return input; 
+		}; 
 
 	useEffect(() => {
 		loadActivities()
+		loadReviews()
 	}, [])
 
 	return (
@@ -70,16 +72,38 @@ export const Home = () => {
 				<div className="container my-2">
 					<div className="bg-white rounded overflow-hidden">
         				<h1 className="font1 p-5 text-center">Algunas de nuestras actividades</h1>
+						{activities.length > 0 ? 
 						<div className="row row-cols-md-3 mx-2">
-							{activities?.filter((item)=>item.is_active && !item.is_finished).filter((item,index)=>index < 9).map((item,index,arr)=>
+							{(shuffle(activities?.filter((item)=>item.is_active && !item.is_finished)).filter((item,index)=>index < 9).map((item,index,arr)=>
 								<div key={index} className={"col-12 col-md-6 col-lg-4 my-2" + (index == (arr.length - 1) && index % 2 != 0 ? " d-block d-md-none d-lg-block" : "")}>
 									<Link className="text-decoration-none valor-card2" to={'/activities/' + item.id}><ActivityCard img={item.info_activity.media[0]} title={item.info_activity.name} origin={item.meeting_point} description={item.info_activity.desc} timeleft={item.start_date}></ActivityCard></Link>
 								</div>
-								)}
-						<Link className="mx-auto my-auto col-3 btn w-auto text-decoration-none text-dark fw-semibold fs-4" to="/activities">Ver más</Link>
+								)) }
+							<Link className="mx-auto my-auto col-3 btn w-auto text-decoration-none text-dark fw-semibold fs-4" to="/activities">Ver más</Link>
 						</div>
-        				<h1 className="font1 p-5 text-center">Algunos usuarios satisfechos</h1>
+								: <div className="text-center">
+									<div className="spinner-grow LoadingSpinner" role="status">
+										<span className="visually-hidden">Loading...</span>
+									</div>
+								</div>}
+						
+						<div className="p-0 NewSignUp d-flex flex-row-reverse" onClick={()=>navigate("/signup")}>
+							<p className="text-white fs-2 font1 col-12 col-md-6 text-center text-md-end">¿Quieres poder añadir tus propias actividades a la web y ayudar a otros a disfrutar de la experiencia de Nomadik?<br/>Haz click aquí</p>
+						</div>
 
+        				<h1 className="font1 p-5 text-center">Algunos usuarios satisfechos</h1>
+							{reviews.length > 0 ? 
+							<div className="row row-cols-md-3 mx-2">
+								{reviews.filter((item)=>item.activity_rating != null && item.activity_message != "").sort((a,b)=>a.activity_rating - b.activity_rating).filter((item,index)=>index < 6).map((item,index,arr)=>
+									<div key={index} className={"col-12 col-md-6 col-lg-4 my-2" + (index == (arr.length - 1) && index % 2 != 0 ? " d-block d-md-none d-lg-block" : "")}>
+										<Link className="text-decoration-none valor-card2" to={'/activities/' + item.id}><CommentBox/></Link>
+									</div>)}
+							</div>
+								: <div className="text-center">
+									<div className="spinner-grow LoadingSpinner" role="status">
+										<span className="visually-hidden">Loading...</span>
+									</div>
+									</div>}
 						<NewProfessionalBox/>
 					</div>
 				</div>

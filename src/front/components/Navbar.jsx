@@ -79,23 +79,25 @@ export const Navbar = () => {
 
 					<form className="mx-auto busquedaBarra input-group">
 						<input className="form-control dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false" type="search" placeholder="Buscar..." aria-label="Search" value={search} onChange={handleSearch} />
-						<ul className="dropdown-menu dropdown-menu-center NavbarSearchDropdown busquedaBarra my-2 my-lg-0" data-bs-auto-close="outside">
-							{(searching ? <div className="spinner-border" role="status">
-								<span className="visually-hidden">Loading...</span>
-							</div> :
+						<ul className="dropdown-menu dropdown-menu-center NavbarSearchDropdown my-2 my-lg-0" data-bs-auto-close="outside">
+							{(searching ? <div className="text-center">
+											<div className="spinner-border mx-auto" role="status">
+											<span className="visually-hidden">Loading...</span>
+											</div>
+										</div> :
 								(searchResults.professionals.length > 0 || searchResults.activities.length > 0 ?
 									<>
-										{searchResults.professionals.map((item, i) => {
-											return (<li className="px-2" key={i}>
-												<Link className="text-decoration-none text-dark" to={"/professional/" + item.user_id}>
-													<i className="fa-regular fa-user me-2"></i> {item.name + " " + item.surname}
-												</Link>
-											</li>)
-										})}
 										{searchResults.activities.map((item, i) => {
 											return (<li className="px-2" key={i}>
 												<Link className="text-decoration-none text-dark" to={"/activity/" + item.id}>
 													<i className="fa-regular fa-file-lines me-2"></i> {item.name + " (" + item.location + ")"}
+												</Link>
+											</li>)
+										})}
+										{searchResults.professionals.map((item, i) => {
+											return (<li className="px-2" key={i}>
+												<Link className="text-decoration-none text-dark" to={"/professional/" + item.user_id}>
+													<i className="fa-regular fa-user me-2"></i> {item.name + " " + item.surname}
 												</Link>
 											</li>)
 										})}
