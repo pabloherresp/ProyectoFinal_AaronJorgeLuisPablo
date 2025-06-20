@@ -68,18 +68,16 @@ export const PersonalSpace = () => {
 					<div className="container-fluid p-0">
 						<div className="row justify-content-center">
 							<div className="col-12 text-center mb-4">
-								<h1 className="text-white fw-bold display-3 text-capitalize name-gradient font1 m-0">
+								<h1 className="text-white fw-bold display-4 text-capitalize name-gradient font1 m-0">
 									{store.user?.name + " " + store.user?.surname}
 								</h1>
 							</div>
 						</div>
 
 						<div className="row">
-							<div className="col-12 col-md-3 text-center">
-								<img
-									className="shadow img-fluid rounded-circle NoDeformImg mb-3"
-									src={"/avatar/" + (store.user?.avatar_url ? store.user?.avatar_url : "0.jpg")}
-									alt="avatar"
+							<div className="col-8 col-md-3 justify-content-center align-content-center px-lg-2 ms-auto">
+								<img className="shadow img-fluid rounded-circle NoDeformImg my-auto"
+									src={"/avatar/" + (store.user?.avatar_url ? store.user?.avatar_url : "0.jpg")} alt="avatar"
 								/>
 							</div>
 							<div className="col-12 col-md-4 ms-auto d-flex flex-column align-items-center align-items-md-start my-3">

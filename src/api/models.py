@@ -83,7 +83,7 @@ class Clients(db.Model):
                 "birthdate": self.birthdate.isoformat() if self.birthdate else None,
                 "gender": self.gender.value,
                 "inscriptions": [i.id for i in self.inscriptions],
-                "favourites": [fav.info_activity_id for fav in self.favourites],
+                "favourites": [fav.serialize() for fav in self.favourites],
                 "reviews": [rev.id for rev in self.reviews] if self.reviews else None
             }
 
@@ -221,15 +221,12 @@ class Favourites(db.Model):
     __tablename__ = "favourites"
     user_id: Mapped[int] = mapped_column(ForeignKey("clients.user_id"), primary_key=True)
     info_activity_id: Mapped[int] = mapped_column(ForeignKey("info_activities.id"), primary_key=True)
-
     client: Mapped["Clients"] = relationship(back_populates="favourites")
     activity: Mapped["Info_activity"] = relationship(back_populates="favourited_by")
 
     def serialize(self):
         return{
-            "user_id": self.user_id,
-            "info_activity_id": self.info_activity_id,
-            "user": self.client.serialize(),
+            "user": {"id": self.user_id, "username": self.client.username},
             "activity": self.activity.serialize()
         }
 
