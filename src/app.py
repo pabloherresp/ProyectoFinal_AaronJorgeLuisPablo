@@ -13,6 +13,8 @@ from api.commands import setup_commands
 from flask_jwt_extended import JWTManager
 from flask_cors import CORS
 from datetime import timedelta
+from flask_mail import Mail, Message
+from api.mail.mail_config import mail
 
 ENV = "development" if os.getenv("FLASK_DEBUG") == "1" else "production"
 static_file_dir = os.path.join(os.path.dirname(
@@ -25,6 +27,16 @@ app.url_map.strict_slashes = False
 app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY")
 app.config["JWT_REFRESH_TOKEN_EXPIRES"] = timedelta(days=30)
 jwt = JWTManager(app)
+
+# Email configuration
+app.config['MAIL_SERVER']= 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 465
+app.config['MAIL_USERNAME'] = os.getenv("EMAIL_USERNAME")
+app.config['MAIL_PASSWORD'] = os.getenv("EMAIL_PASSWORD")
+app.config['MAIL_USE_SSL'] = True
+app.config['MAIL_DEFAULT_SENDER'] = ('Pepe', 'pepe@pepe.pe')
+app.config['MAIL_DEFAULT_SENDER'] = ("Soporte Nomadik", "nomadik.help@gmail.com")
+mail.init_app(app)
 
 # Image folder configuration
 UPLOAD_FOLDER = 'public/avatar/'

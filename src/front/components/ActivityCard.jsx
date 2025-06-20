@@ -3,11 +3,6 @@ import React from "react"
 export const ActivityCard = (props) => {
 
 
-
-
-
-
-
     return (
 
             <div className="card cardFormat p-0 rounded d-flex">
