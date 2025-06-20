@@ -4,7 +4,6 @@ import useGlobalReducer from "../hooks/useGlobalReducer"
 import { ActivityCard } from "../components/ActivityCard"
 import collection from "../services/collection"
 import { Link } from "react-router-dom";
-import React, { useState } from "react";
 
 export const Sport = () => {
 
@@ -17,19 +16,14 @@ var fechaEnMiliseg = Date.now();
 var fechaActual = new Date(fechaEnMiliseg)
 
 
-    console.log(new Date(fecha) + fechaActual)
 
 var resultado = new Date(fecha) - fechaActual
-console.log("resultado: " + resultado)
 
 var diferencia = resultado / (86400000)
-console.log("diferencia: " + diferencia)
 
 var dias = Math.floor(diferencia)
-console.log("días: " + dias)
 
 var horas = Math.floor((diferencia - dias) * 24)
-console.log("horas: " + horas)
 
 if(dias== 0){
     return (horas>1 ? `Faltan ${horas} horas` : `Falta ${horas}  hora`)
@@ -51,12 +45,6 @@ useEffect(()=>{
 
 },[])
 
-useEffect(()=>{
-
-    console.log(store.all_activities)
-    
-
-},[store])
 
 
 function returnActive(){
@@ -101,7 +89,7 @@ return(
         <h1 className="font1 p-5 mt-5 text-center">Actividades deportivas activas</h1>
 
         <div className="row justify-content-around">
-           {returnActive().map((activity,i) => <Link className="text-decoration-none valor-card2 mt-4" to={'/activities/' + activity.id}><ActivityCard className="mw-100" img={activity.info_activity.media[0]} title={activity.info_activity.name} origin={activity.meeting_point} description={activity.info_activity.desc.slice(0,40)} timeleft={returnCounter(returnActive()[i]?.start_date)}></ActivityCard></Link>)}
+           {returnActive().map((activity,i) => <Link className="text-decoration-none valor-card2 col-lg-4 col-md-6 col-sm-12 mt-4" to={'/activities/' + activity.id}><ActivityCard className="mw-100" img={activity.info_activity.media[0]} title={activity.info_activity.name} origin={activity.meeting_point} description={activity.info_activity.desc.slice(0,40)} timeleft={returnCounter(returnActive()[i]?.start_date)}></ActivityCard></Link>)}
         </div>
     </div>
 

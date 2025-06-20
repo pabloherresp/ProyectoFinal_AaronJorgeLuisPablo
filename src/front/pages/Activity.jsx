@@ -18,12 +18,6 @@ let value = 0;
 
 const GOOGLE_MAPS_API = import.meta.env.VITE_GOOGLE_MAPS_API
 
-// const utcDate1 = new Date(Date.UTC(store?.activity?.start_date?.slice(0,4), (store?.activity?.start_date?.slice(5,7))-1, store?.activity?.start_date?.slice(8,10), store?.activity?.start_date?.slice(11,13), store?.activity?.start_date?.slice(14,16)));
-
-/*
-store?.activity?.start_date?.slice(0,4),store?.activity?.start_date?.slice(5,7),store?.activity?.start_date?.slice(8,10),store?.activity?.start_date?.slice(11,13),store?.activity?.start_date?.slice(14,16)
-*/
-
 
 
 function parseDate(date){
