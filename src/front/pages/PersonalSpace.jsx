@@ -3,6 +3,8 @@ import useGlobalReducer from "../hooks/useGlobalReducer.jsx"
 import { Link, useNavigate, useParams } from "react-router-dom"
 import collection from "../services/collection"
 import { NewProfessionalBox } from "../components/NewProfessionalBox.jsx";
+import { ActivityCard } from "../components/ActivityCard.jsx";
+import { CommentBox } from "../components/CommentBox.jsx";
 
 export const PersonalSpace = () => {
 	const navigate = useNavigate()
@@ -12,6 +14,7 @@ export const PersonalSpace = () => {
 	const [order, setOrder] = useState("start")
 	const [inverted, setInverted] = useState(-1)
 	const [limit, setLimit] = useState(15)
+	const [activeTab, setActiveTab] = useState('inscripciones');
 
 	const formatDate = (date) => {
 		return date.toLocaleString("en-GB", { timeZone: "UTC" })
@@ -75,7 +78,7 @@ export const PersonalSpace = () => {
 						</div>
 
 						<div className="row">
-							<div className="col-8 col-md-3 justify-content-center align-content-center px-lg-2 ms-auto">
+							<div className="col-8 col-md-3 justify-content-center align-content-center px-lg-2 ms-5">
 								<img className="shadow img-fluid rounded-circle NoDeformImg my-auto"
 									src={"/avatar/" + (store.user?.avatar_url ? store.user?.avatar_url : "0.jpg")} alt="avatar"
 								/>
@@ -150,54 +153,147 @@ export const PersonalSpace = () => {
 									className="btn text-white DarkButton mt-2"
 									onClick={() => navigate("/edituser")}
 								>
-									Editar datos
+									<i className="fa-solid fa-pen-to-square me-2"></i>Editar datos
 								</button>
 							</div>
 						</div>
 					</div>
 				</div>
-				<div className="py-4">
-					<h4 className="TextDark text-center fs-3 fw-semibold mb-4">Mis inscripciones</h4>
-					{inscriptions ?
-						(inscriptions?.length > 0 ?
-							<div className="table-responsive mx-1 mx-md-5">
-								<table className="table table-hover y-4 p-2 BgBackground">
-									<thead>
-										<tr className="BgSecondary">
-											<th scope="col" className="text-start ps-3 w-50 TextDark text-nowrap" onClick={() => handleClickHead("name")}>Nombre {order == "name" ? (inverted > 0 ? '▲' : '▼') : ""}</th>
-											<th scope="col" className="text-center TextDark text-nowrap" onClick={() => handleClickHead("start")}>Fecha inicio {order == "start" ? (inverted > 0 ? '▲' : '▼') : ""}</th>
-											<th scope="col" className="text-center TextDark text-nowrap" onClick={() => handleClickHead("end")}>Fecha fin {order == "end" ? (inverted > 0 ? '▲' : '▼') : ""}</th>
-											<th scope="col" className="text-center TextDark text-nowrap" onClick={() => handleClickHead("price")}>Precio {order == "price" ? (inverted > 0 ? '▲' : '▼') : ""}</th>
-											<th scope="col" className="text-center TextDark"><i className="fa-solid fa-star"></i></th>
-										</tr>
-									</thead>
-									<tbody className="table-group-divider">
-										{inscriptions.sort(compareFunction).filter((item, i) => { return i < limit }).map((item, i) => {
-											return (
-												<tr key={i}>
-													<td className="ps-4"><Link className="text-decoration-none fw-semibold" to={"/activity/" + item.activity.id}>{item.activity.info_activity.name}</Link></td>
-													<td className="text-center fw-semibold align-middle">{formatDate(new Date(item.activity.start_date))}</td>
-													<td className="text-center fw-semibold align-middle">{formatDate(new Date(item.activity.end_date))}</td>
-													<td className="text-center fw-semibold align-middle">{item.activity.price.toFixed(2) + "€"}</td>
-													{formatDate(new Date(item.activity.end_date)) < formatDate(new Date()) ?
-														<td className="text-center fw-semibold align-middle"><Link className="text-decoration-none" to="">Reseñar</Link></td>
-														: <td className="text-center fw-semibold align-middle"><a className="text-decoration-none text-secondary" data-bs-toggle="tooltip" data-bs-title="Esta actividad aún no ha terminado">Reseñar</a></td>
-													}
-												</tr>)
-										})}
-									</tbody>
-								</table>
-								<div className="row mx-auto">
-									{limit < inscriptions.length ? <button className="mx-auto btn w-auto text-decoration-none text-dark fw-semibold border-white" onClick={handleSeeMore}>Ver más</button> : ""}
+
+				<ul className="nav nav-underline d-flex justify-content-evenly mt-4">
+					<li className="nav-item">
+						<button
+							className={`nav-link ${activeTab === 'inscripciones' ? 'active' : ''}`}
+							onClick={() => setActiveTab('inscripciones')}
+						>
+							<i className="fa-solid fa-book me-2"></i>Inscripciones
+						</button>
+					</li>
+					<li className="nav-item">
+						<button
+							className={`nav-link ${activeTab === 'favoritos' ? 'active' : ''}`}
+							onClick={() => setActiveTab('favoritos')}
+						>
+							<i className="fa-solid fa-star me-2 text-warning"></i>Favoritos
+						</button>
+					</li>
+					<li className="nav-item">
+						<button
+							className={`nav-link ${activeTab === 'reseñas' ? 'active' : ''}`}
+							onClick={() => setActiveTab('reseñas')}
+						>
+							<i className="fa-solid fa-comments me-2"></i>Reseñas
+						</button>
+					</li>
+				</ul>
+
+				<div className="tab-content">
+					{activeTab === 'inscripciones' && (
+						<div className="py-4">
+							<h4 className="TextDark text-center fs-3 fw-semibold mb-4">Mis inscripciones</h4>
+							{inscriptions ? (
+								inscriptions.length > 0 ? (
+									<div className="table-responsive mx-1 mx-md-5">
+										<table className="table table-hover y-4 p-2 BgBackground">
+											<thead>
+												<tr className="BgSecondary">
+													<th scope="col" className="text-start ps-3 w-50 TextDark text-nowrap" onClick={() => handleClickHead("name")}>
+														Nombre {order === "name" ? (inverted > 0 ? '▲' : '▼') : ""}
+													</th>
+													<th scope="col" className="text-center TextDark text-nowrap" onClick={() => handleClickHead("start")}>
+														Fecha inicio {order === "start" ? (inverted > 0 ? '▲' : '▼') : ""}
+													</th>
+													<th scope="col" className="text-center TextDark text-nowrap" onClick={() => handleClickHead("end")}>
+														Fecha fin {order === "end" ? (inverted > 0 ? '▲' : '▼') : ""}
+													</th>
+													<th scope="col" className="text-center TextDark text-nowrap" onClick={() => handleClickHead("price")}>
+														Precio {order === "price" ? (inverted > 0 ? '▲' : '▼') : ""}
+													</th>
+													<th scope="col" className="text-center TextDark">
+														<i className="fa-solid fa-star"></i>
+													</th>
+												</tr>
+											</thead>
+											<tbody className="table-group-divider">
+												{inscriptions
+													.sort(compareFunction)
+													.filter((item, i) => i < limit)
+													.map((item, i) => (
+														<tr key={i}>
+															<td className="ps-4">
+																<Link className="text-decoration-none fw-semibold" to={"/activity/" + item.activity.id}>
+																	{item.activity.info_activity.name}
+																</Link>
+															</td>
+															<td className="text-center fw-semibold align-middle">
+																{formatDate(new Date(item.activity.start_date))}
+															</td>
+															<td className="text-center fw-semibold align-middle">
+																{formatDate(new Date(item.activity.end_date))}
+															</td>
+															<td className="text-center fw-semibold align-middle">
+																{item.activity.price.toFixed(2) + "€"}
+															</td>
+															{formatDate(new Date(item.activity.end_date)) < formatDate(new Date()) ? (
+																<td className="text-center fw-semibold align-middle">
+																	<Link className="text-decoration-none" to="">
+																		Reseñar
+																	</Link>
+																</td>
+															) : (
+																<td className="text-center fw-semibold align-middle">
+																	<a className="text-decoration-none text-secondary" data-bs-toggle="tooltip" data-bs-title="Esta actividad aún no ha terminado">
+																		Reseñar
+																	</a>
+																</td>
+															)}
+														</tr>
+													))}
+											</tbody>
+										</table>
+										<div className="row mx-auto">
+											{limit < inscriptions.length ? (
+												<button className="mx-auto btn w-auto text-decoration-none text-dark fw-semibold border-white" onClick={handleSeeMore}>
+													Ver más
+												</button>
+											) : (
+												""
+											)}
+										</div>
+									</div>
+								) : (
+									<p className="text-center">No estás inscrito a ninguna actividad</p>
+								)
+							) : (
+								<div className="text-center">
+									<div className="spinner-grow LoadingSpinner" role="status">
+										<span className="visually-hidden">Loading...</span>
+									</div>
 								</div>
+							)}
+						</div>
+					)}
+
+					{activeTab === 'favoritos' && (
+						<div className="py-4">
+							<div className="row d-flex justify-content-around px-4 py-3">
+								{store.user.favourites.map((el, i) => {
+									return <div key={i} className="col-sm-12 col-md-6 col-lg-3">
+										<ActivityCard title={el.activity.name} description={el.activity.desc} img={el.activity.media}
+											origin={el.activity.location} />
+									</div>
+								})}
 							</div>
-							: <p className="text-center">No estás inscrito a ninguna actividad</p>)
-						: <div className="text-center">
-							<div className="spinner-grow LoadingSpinner" role="status">
-								<span className="visually-hidden">Loading...</span>
-							</div>
-						</div>}
+						</div>
+					)}
+
+					{activeTab === 'reseñas' && (
+						<div className="py-4">
+							<CommentBox/>
+						</div>
+					)}
 				</div>
+
 				<div>
 
 					{store.user.is_professional ? "" : <div className="rounded-bottom overflow-hidden"><NewProfessionalBox /></div>}
