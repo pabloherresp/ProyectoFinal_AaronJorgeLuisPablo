@@ -10,6 +10,7 @@ export const ActivityCard = (props) => {
 
     return (
 
+
         <div>
             <div className="card cardFormat p-0 rounded d-flex">
 
