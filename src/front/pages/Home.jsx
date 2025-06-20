@@ -42,7 +42,7 @@ export const Home = () => {
 						<button type="button" data-bs-target="#homeCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
 						<button type="button" data-bs-target="#homeCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
 					</div>
-					<div className="carousel-inner">
+					<div className="carousel-inner HomeCar">
 						<div className="carousel-item active HomeCarSlide" data-bs-interval="9000">
 							<div className="carousel-caption d-block">
 								<h5>Vive experiencias inolvidables</h5>

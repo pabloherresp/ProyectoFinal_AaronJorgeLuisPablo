@@ -83,6 +83,27 @@ collection.loginUser = async (userdata) => {
     }
 }
 
+collection.resetPassword = async (email) => {
+    try {
+        const resp = await fetch(BACKEND_URL + "api/reset_password", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({"email": email})
+        })
+        if(!resp.ok)
+            return {success: false, message: "No se ha encontrado un usuario con este email"}
+        else
+            return {success: true}
+    } catch (error) {
+        console.log(error)
+        return {success: false, message: "Error desconocido"}
+    }
+}
+
+collection.changePassword = async () => {
+    
+}
+
 collection.loginToken = async (token) => {
     try {
         const resp = await fetch(BACKEND_URL + "api/user", {
