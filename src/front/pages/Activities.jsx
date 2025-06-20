@@ -13,7 +13,7 @@ export const Activities = () => {
 
 
 
-const {store, dispatch} = useGlobalReducer()
+    const {store, dispatch} = useGlobalReducer()
 
 
 useEffect(()=>{

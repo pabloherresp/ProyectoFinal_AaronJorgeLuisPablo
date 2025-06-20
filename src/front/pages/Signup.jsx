@@ -94,13 +94,13 @@ export const Signup = () => {
 							<div className="col-12 col-lg-6">
 								<div className="my-2 mx-auto">
 									<label className="fs-6 fw-semibold mb-2" htmlFor="email">Email</label>
-									<input required type="email" name="email" className="form-control" id="email" placeholder="" autoComplete="username" onChange={handleChange} value={formData.email} />
+									<input required type="email" name="email" className="form-control" id="email" placeholder="name@gmail.com" autoComplete="username" onChange={handleChange} value={formData.email} />
 								</div>
 							</div>
 							<div className="col-12 col-lg-6">
 								<div className="my-2 mx-auto">
 									<label className="fs-6 fw-semibold mb-2" htmlFor="confirmEmail">Confirmar email</label>
-									<input required type="email" name="confirmEmail" className="form-control" id="confirmEmail" placeholder="" onChange={handleChange} value={formData.confirmEmail} />
+									<input required type="email" name="confirmEmail" className="form-control" id="confirmEmail" placeholder="name@gmail.com" onChange={handleChange} value={formData.confirmEmail} />
 								</div>
 							</div>
 							<div id="emailHelpBlock" className="col-12 form-text text-danger">
@@ -109,13 +109,13 @@ export const Signup = () => {
 							<div className="col-12 col-lg-6">
 								<div className="my-2 mx-auto">
 									<label className="fs-6 fw-semibold mb-2" htmlFor="password">Contraseña</label>
-									<input required type="password" name="password" className="form-control" id="password" placeholder="" autoComplete="new-password" onChange={handleChange} value={formData.password} />
+									<input required type="password" name="password" className="form-control" id="password" placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;" autoComplete="new-password" onChange={handleChange} value={formData.password} />
 								</div>
 							</div>
 							<div className="col-12 col-lg-6">
 								<div className="my-2 mx-auto">
 									<label className="fs-6 fw-semibold mb-2" htmlFor="confirmPassword">Confirmar contraseña</label>
-									<input required type="password" name="confirmPassword" className={"form-control " + messages.emailClass} id="confirmPassword" placeholder="" autoComplete="new-password" onChange={handleChange} value={formData.confirmPassword} />
+									<input required type="password" name="confirmPassword" className={"form-control " + messages.emailClass} id="confirmPassword" placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;" autoComplete="new-password" onChange={handleChange} value={formData.confirmPassword} />
 								</div>
 							</div>
 							<div id="passwordHelpBlock" className="col-12 form-text text-danger">

@@ -100,8 +100,24 @@ collection.resetPassword = async (email) => {
     }
 }
 
-collection.changePassword = async () => {
-    
+collection.changePassword = async (token, password) => {
+    try {
+        const resp = await fetch(BACKEND_URL + "api/password", {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + token
+            },
+            body: JSON.stringify({"password": password})
+        })
+        if(!resp.ok)
+            return {success: false, message: "Error al cambiar contraseña"}
+        else
+            return {success: true}
+    } catch (error) {
+        console.log(error)
+        return {success: false, message: "Error desconocido"}
+    }
 }
 
 collection.loginToken = async (token) => {

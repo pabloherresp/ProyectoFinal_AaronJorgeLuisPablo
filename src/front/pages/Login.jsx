@@ -67,7 +67,7 @@ export const Login = () => {
 						</div>
 						<div className="form-label my-3 w-75 mx-auto">
 							<label className="fs-6 mb-2 fw-semibold" htmlFor="password">Contraseña</label>
-							<input type="password" name="password" className="form-control" id="password" placeholder="Password" autoComplete="current-password" onChange={handleChange} value={formData.password} />
+							<input type="password" name="password" className="form-control" id="password" placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;" autoComplete="current-password" onChange={handleChange} value={formData.password} />
 							<p className="text-center fs-6 my-3 fw-semibold">¿Has olvidado tu contraseña? Haga click <Link className="text-decoration-none" data-bs-toggle="modal" data-bs-target="#resetPasswordModal">aquí</Link></p>
 
 						</div>

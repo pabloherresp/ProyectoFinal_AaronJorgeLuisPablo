@@ -12,8 +12,8 @@ def send_email(address, token, name):
             <div>
             <h3>Reset your password</h3>
             <p>Hola, {name}, haz click en el enlace de abajo para poder restaurar tu contraseña.</p>
-            <a href="https://glowing-space-succotash-9g76r4xvgggh9xww-3000.app.github.dev/reset?token={token}">Haz click aquí</a>
-            <img src="http://localhost:3000/src/front/assets/img/Logo_Nomadik.png"
+            <a href="{os.getenv("FRONTEND_URL")}resetpassword?token={token}">Haz click aquí</a>
+            <img src="https://raw.githubusercontent.com/4GeeksAcademy/FS-PT-101_ProyectoFinal_AaronJorgeLuisPablo/refs/heads/dev/src/front/assets/img/Logo_Nomadik.png">
             </div>
             '''
         else:

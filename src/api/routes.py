@@ -750,7 +750,7 @@ def search_word(value):
     response_body = {"professionals": [{"user_id": profs[result[2]].user_id, "username": profs[result[2]].user.client.username, "name": profs[result[2]].user.client.name, "surname": profs[result[2]].user.client.surname} for result in prof_results if result[1] > thresold], "activities": [{"id": activities[result[2]].id, "name": activities[result[2]].info_activity.name, "location": activities[result[2]].meeting_point } for result in act_results if result[1] > thresold]}
     return jsonify(response_body), 200
 
-#
+# Reset y cambio de contraseña
 @api.route("/reset_password", methods=['POST'])
 def check_mail():
     try:
@@ -759,32 +759,28 @@ def check_mail():
         if not user:
             return jsonify({'success': False, 'error': 'User with given email not found'}),404
         
-        token = create_access_token(identity=user.id)
+        token = create_access_token(identity=str(user.id))
         result = send_email(data['email'], token, f"{user.client.name} {user.client.surname}")
-        print(result)
         return jsonify({'success': True}), 200
     except Exception as e:
         print(e)
         return jsonify({'success': False, 'error': 'something went wrong'})
 
-@api.route('/password_update', methods=['PUT'])
+@api.route('/password', methods=['PUT'])
 @jwt_required()
 def password_update():
     try:
         data = request.json
-        #extraemos el id del token que creamos en la linea 98
         id = get_jwt_identity()
-        #buscamos usuario por id
-        user = Users.query.get(id)
-        #actualizamos password del usuario
-        user.password = data['password']
-        #alacenamos los cambios
+        user = db.session.execute(select(Users).where(Users.id == id)).scalar_one_or_none()
+        user.password = generate_password_hash(data['password'])
+        
         db.session.commit()
-        return jsonify({'success': True, 'msg': 'Contraseña actualizada exitosamente, intente iniciar sesion'}), 200
     except Exception as e:
+        print(e)
         db.session.rollback()
-        print (f"Error al enviar el correo: {str(e)}")
-        return jsonify({'success': False, 'msg': f"Error al enviar el correo: {str(e)}"})
+        return jsonify({'success': False, "error": "Error al cambiar la contraseña"}), 500
+    return jsonify({'success': True}), 200
 
 # put reviews
 
