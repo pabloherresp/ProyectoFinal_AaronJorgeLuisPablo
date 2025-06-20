@@ -9,6 +9,7 @@ from sqlalchemy.exc import IntegrityError, DataError
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 from datetime import datetime
+from rapidfuzz import process, fuzz
 
 api = Blueprint('api', __name__)
 
@@ -79,9 +80,17 @@ def get_one_user_by_token():
 @api.route('/signup', methods=['POST'])
 def create_user():
     try:
+        admin = db.session.execute(select(Administrators)).scalars()
+
         user = Users(email=request.form.get("email"), password=generate_password_hash(request.form.get("password")))
         db.session.add(user)
         db.session.commit()
+        
+        if not admin:
+            new_admin = Administrators(user_id = user.id)
+            db.session.add(new_admin)
+            db.session.commit()
+            
     except IntegrityError as e:
         db.session.rollback()
         return jsonify({"error": True, "response": e.message}), 409
@@ -91,6 +100,7 @@ def create_user():
     except Exception as e:
         db.session.rollback()
         return jsonify({"error": "No se pudo crear el usuario"}), 500
+    
     return jsonify({"success": True}), 200
 
 @api.route('/login', methods=['POST'])
@@ -642,7 +652,7 @@ def check_report(id):
 # Endpoints para reviews
 @api.route('/reviews', methods=['GET'])
 def get_reviews():
-    stmt = select(Reviews)
+    stmt = select(Reviews).join(Clients).join(Users).where(Users.is_active)
     reviews = db.session.execute(stmt).scalars().all()
     if reviews is None:
         return jsonify({"error": "No reviews found"})
@@ -706,15 +716,35 @@ def edit_review(id):
 # endpoint de búsqueda
 @api.route('/search/<string:value>', methods=['GET'])
 def search_word(value):
-    value = value.lower()
     if len(value) < 3:
         return jsonify({"error": "Search value must have at least 3 characters"}), 400
 
-    profs = db.session.execute(select(Professionals).join(Professionals.user).where(or_(Users.username.ilike(f"%{value}%"),Users.name.ilike(f"%{value}%"),Users.surname.ilike(f"%{value}%")))).scalars().all()
-    activities = db.session.execute(select(Activities).join(Activities.info_activity).where(or_(Info_activity.name.ilike(f"%{value}%"),Info_activity.location.ilike(f"%{value}%")))).scalars().all()
-    if profs is None and activities is None:
+    profs = db.session.execute(select(Professionals).join(Professionals.user).join(Users.client)).scalars().all()
+    activities = db.session.execute(select(Activities).join(Activities.info_activity)).scalars().all()
+
+    prof_strings = [f"{prof.user.client.username} {prof.user.client.name} {prof.user.client.surname}" for prof in profs]
+    act_strings = [f"{a.info_activity.name} {a.info_activity.location} {a.meeting_point}" for a in activities]
+
+    prof_results = process.extract(
+        value,
+        prof_strings,
+        scorer=fuzz.partial_ratio,
+        processor=None,
+        limit=5
+    )
+    act_results = process.extract(
+        value,
+        act_strings,
+        scorer=fuzz.partial_ratio,
+        processor=None,
+        limit = 5
+    )
+
+    if len(prof_results) == 0 and len(act_results) == 0:
         return jsonify({"error": "Search couldn't find matches"}), 404
-    response_body = {"professionals": [{"user_id": prof.user_id, "username": prof.user.username, "name": prof.user.name, "surname": prof.user.surname} for prof in profs], "activities": [{"id": act.id, "name": act.info_activity.name, "location": act.meeting_point} for act in activities]}
+    
+    thresold = 30
+    response_body = {"professionals": [{"user_id": profs[result[2]].user_id, "username": profs[result[2]].user.client.username, "name": profs[result[2]].user.client.name, "surname": profs[result[2]].user.client.surname} for result in prof_results if result[1] > thresold], "activities": [{"id": activities[result[2]].id, "name": activities[result[2]].info_activity.name, "location": activities[result[2]].meeting_point } for result in act_results if result[1] > thresold]}
     return jsonify(response_body), 200
 
 
