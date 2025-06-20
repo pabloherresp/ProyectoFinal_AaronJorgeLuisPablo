@@ -18,10 +18,20 @@ collection.returnActivities = async () => {
 
 collection.returnActivity = async (id) => {
     try{
-        const resp = await fetch(BACKEND_URL + "api/activities/" + id);
-        const data = await resp.json();
+        const resp = await fetch(BACKEND_URL + "api/activities/" + id)
+        const data = await resp.json()
         return data
     }catch(error){
+        console.log(error)
+    }
+}
+
+collection.getReviews = async () => {
+    try {
+        const resp = await fetch(BACKEND_URL + "api/reviews/")
+        const data = await resp.json()
+        return data
+    } catch (error) {
         console.log(error)
     }
 }
@@ -71,6 +81,27 @@ collection.loginUser = async (userdata) => {
 		console.log(error)
 		return {success: false, response: error.message}
     }
+}
+
+collection.resetPassword = async (email) => {
+    try {
+        const resp = await fetch(BACKEND_URL + "api/reset_password", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({"email": email})
+        })
+        if(!resp.ok)
+            return {success: false, message: "No se ha encontrado un usuario con este email"}
+        else
+            return {success: true}
+    } catch (error) {
+        console.log(error)
+        return {success: false, message: "Error desconocido"}
+    }
+}
+
+collection.changePassword = async () => {
+    
 }
 
 collection.loginToken = async (token) => {

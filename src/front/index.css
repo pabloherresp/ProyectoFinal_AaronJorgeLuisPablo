@@ -46,9 +46,10 @@ body {
   background-image: url("/src/front/assets/img/login-2.png");
 }
 
-.NavbarUserPill {
-  height: 40px;
-  background-color: #48a6a7;
+.NavbarUserPill{
+	height: 40px;
+	background-color: #48A6A7;
+  cursor: pointer;
 }
 
 .NavbarUserPill img {
@@ -85,10 +86,8 @@ h3 {
   background-color: #3d8e8e;
 }
 
-.navbg {
-  /* background-color: #317373; */
-  background-image: linear-gradient(#439d9e, rgba(0, 0, 0, 0.671)),
-    url("/src/front/assets/img/navbarForest.png");
+.navbg{
+  background-image: linear-gradient(#439d9e, rgba(0, 0, 0, 0.671)), url("/src/front/assets/img/navbarForest.png");
   background-repeat: repeat-x;
   background-size: contain;
 }
@@ -114,10 +113,10 @@ h3 {
   background-color: #9acbd0;
 }
 
-.btn-success.myBtn:hover {
-  background-color: #9acbd0 !important;
+/* .btn-success.myBtn:hover{
+  background-color: #9ACBD0 !important;
   border-color: #0d8d90 !important;
-}
+} */
 
 .iconoInsta {
   color: rgb(219, 20, 219);
@@ -221,6 +220,9 @@ h3 {
   object-fit: cover;
 }
 .cardFormat{
+  min-width: 15em;
+  height: 25em;
+.cardFormat{
   height: 22em;
   max-width: 20em;
   min-width: 15em;
@@ -244,6 +246,12 @@ h3 {
 .textFormat {
   font-size: 0.85em;
   color: grey;
+  display: -webkit-box;
+  line-clamp: 2;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .activityTextFormat {
@@ -350,33 +358,46 @@ h3 {
   color: #006a71;
 }
 
-@property --NewProfessionalBannerAngle {
+@property --NewBannerAngle {
   syntax: "<angle>";
   inherits: false;
   initial-value: 243deg;
 }
+@property --NewSignupY {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 150%;
+}
 
-.NewProfessionalBanner {
+.NewProfessionalBanner , .NewSignUpBanner{
   overflow: hidden;
   margin-top: 50px;
   cursor: pointer;
-  transition: --NewProfessionalBannerAngle 0.5s 0.1s;
-  background-image: linear-gradient(
-      var(--NewProfessionalBannerAngle),
-      rgba(82, 173, 189, 0.4),
-      rgb(38, 56, 65)
-    ),
-    url("/public/media/professionalBoxBackground.jpg");
-  background-size: cover;
+  transition: --NewBannerAngle 0.9s 0.3s;
+  background-size: var(--NewSignupY);
+}
+.NewProfessionalBanner{background-image: linear-gradient(var(--NewBannerAngle),rgba(82, 173, 189, 0.4),rgb(38, 56, 65)),
+  url("/media/professionalBoxBackground.jpg");
   background-position: center;
 }
+.NewSignUpBanner{background-image: linear-gradient(var(--NewBannerAngle),rgba(16, 53, 12, 0.4),rgb(34, 52, 75)),
+  url("/media/signUpBoxBackground.jpg");
+  background-position: 50% 20%;
+  transition: --NewSignupY 0.9s 0.3s, --NewBannerAngle 0.9s 0.3s;
+}
 
-.NewProfessionalBanner:hover {
-  --NewProfessionalBannerAngle: 130deg;
+.NewProfessionalBanner:hover, .NewSignUpBanner:hover {
+  --NewBannerAngle: 130deg;
+}
+.NewSignUpBanner:hover{
+  --NewSignupY: 100%;
 }
 
 .NewProfessionalBanner > p {
   padding: 200px 40px 40px 40px;
+}
+.NewSignUpBanner > p {
+  padding: 100px 20px 20px 20px;
 }
 
 .AvatarFormImage {
@@ -396,6 +417,7 @@ h3 {
 
 .name-gradient {
   background: linear-gradient(90deg, #e0f7fa, #b2ebf2, #80deea);
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   text-shadow: 0px 1px 1px rgba(255, 255, 255, 0.5);
@@ -499,10 +521,6 @@ h3 {
   margin-bottom: 8px;
 }
 
-h4 {
-  margin: 0 0 8px;
-}
-
 .autor-info {
   display: flex;
   align-items: center;
@@ -528,6 +546,27 @@ h4 {
   
 .report{
   width: 150px;
+}
+
+.HomeCar{
+  background-color: #006a71;
+}
+
+.HomeCarSlide{
+  width: 100%;
+  height: 500px;
+  background-size: cover;
+  background-position: center;
+}
+
+.HomeCarSlide:nth-child(1){
+  background-image: radial-gradient(rgba(0, 0, 0, 0.2),rgba(0, 0, 0, 0.8)), url("/media/tourist-bus.jpg");
+}
+.HomeCarSlide:nth-child(2){
+  background-image: radial-gradient(rgba(0, 0, 0, 0.2),rgba(0, 0, 0, 0.8)), url("/media/coast-walk.jpg");
+}
+.HomeCarSlide:nth-child(3){
+  background-image: radial-gradient(rgba(0, 0, 0, 0.2),rgba(0, 0, 0, 0.8)), url("/media/surf-wave.jpg");
 }
 
 .img-contactanos{
