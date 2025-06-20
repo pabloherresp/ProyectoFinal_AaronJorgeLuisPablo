@@ -18,20 +18,13 @@ export const Activities = () => {
 
         var fechaActual = new Date(fechaEnMiliseg)
 
-
-        console.log(new Date(fecha) + fechaActual)
-
         var resultado = fechaActual - new Date(fecha)
-        console.log("resultado: " + resultado)
 
         var diferencia = resultado / (86400000)
-        console.log("diferencia: " + diferencia)
 
         var dias = Math.floor(diferencia)
-        console.log("días: " + dias)
 
         var horas = Math.floor((diferencia - dias) * 24)
-        console.log("horas: " + horas)
 
         if (dias == 0) {
             return (horas > 1 ? `Realizado hace ${horas} horas` : `Realizado hace ${horas}  hora`)
@@ -48,24 +41,24 @@ export const Activities = () => {
 
     useEffect(() => {
 
-        const scrollContainer = document.querySelector('.scroll-horizontal');
+        const scrollContainer2 = document.querySelector('.scroll2');
 
-        scrollContainer.addEventListener('wheel', (e) => {
+        scrollContainer2.addEventListener('wheel', (e) => {
             e.preventDefault();
-            scrollContainer.scrollLeft += e.deltaY;
+            scrollContainer2.scrollLeft += e.deltaY;
+        });
+
+        const scrollContainer1 = document.querySelector('.scroll1');
+
+        scrollContainer1.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            scrollContainer1.scrollLeft += e.deltaY;
         });
 
         collection.returnActivities().then(data => dispatch({ type: 'activities', payload: data }))
 
 
     }, [])
-
-    useEffect(() => {
-
-        console.log(store.all_activities)
-
-
-    }, [store])
 
 
     function returnActive() {
@@ -147,14 +140,14 @@ export const Activities = () => {
 
             <h1 className="font1 p-5 mt-5 text-center">Excursiones</h1>
 
-            <div className="d-flex overflow-auto gap-3 p-3 scroll-horizontal d-block d-lg-none">
+            <div className="d-flex overflow-auto gap-3 p-3 scroll-horizontal scroll2 d-block d-lg-none">
 
                 {store.all_activities?.map((item) => <Link className="text-decoration-none valor-card2 mt-4" to={'/activities/' + item.id}><ActivityCard img={item.info_activity.media[0]} title={item.info_activity.name} origin={item.meeting_point} description={item.info_activity.desc.slice(0, 100)}></ActivityCard></Link>)}
 
             </div>
 
             <div className="d-none d-lg-block">
-                <div className="d-flex justify-content-around">
+                <div className="d-flex justify-content-around gap-3">
                     <button className="buttonStyle rounded-circle" onClick={(e) => handleClickLess1(counter1)}><i className="fa-solid fa-arrow-left"></i></button>
                     <div className="row">
 
@@ -175,14 +168,14 @@ export const Activities = () => {
 
             <h1 className="font1 p-5 mt-5 text-center">Actividades realizadas previamente</h1>
 
-            <div className="d-flex overflow-auto gap-3 p-3 scroll-horizontal d-block d-lg-none">
+            <div className="d-flex overflow-auto gap-3 p-3 scroll-horizontal scroll1 d-block d-lg-none">
 
                 {returnActive()?.map((item) => <Link className="text-decoration-none valor-card2 mt-4" to={'/activities/' + item.id}><ActivityCard img={item.info_activity.media[0]} title={item.info_activity.name} origin={item.meeting_point} description={item.info_activity.desc.slice(0, 40)} timeleft={returnCounter(item.start_date)}></ActivityCard></Link>)}
 
             </div>
 
             <div className="d-none d-lg-block">
-                <div className="d-flex justify-content-around">
+                <div className="d-flex justify-content-around gap-3">
                     <button className="buttonStyle rounded-circle" onClick={(e) => handleClickLess2(counter4)}><i className="fa-solid fa-arrow-left"></i></button>
                     <div className="row">
 
