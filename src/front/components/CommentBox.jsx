@@ -20,3 +20,5 @@ export const CommentBox = () => {
     </div>
   );
 }
+
+export default CommentBox

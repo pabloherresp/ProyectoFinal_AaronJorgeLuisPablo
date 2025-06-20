@@ -2,6 +2,7 @@ import { useEffect } from "react"
 import { useParams } from "react-router-dom"
 import useGlobalReducer from "../hooks/useGlobalReducer"
 import collection from "../services/collection"
+import CommentBox from "../components/CommentBox"
 
 export const Activity = () => {
 
@@ -16,6 +17,50 @@ let value = 0;
 
 
 const GOOGLE_MAPS_API = import.meta.env.VITE_GOOGLE_MAPS_API
+
+
+
+function parseDate(date){
+
+    const utcDate1 = new Date(date);
+    const options = {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+
+    };
+
+    return utcDate1.toLocaleString("es-ES", options)
+
+}
+
+function parseFullDate(date){
+
+    const utcDate1 = new Date(date);
+    const options = {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+
+    };
+
+    return utcDate1.toLocaleString("es-ES", options)
+
+}
+
+function parseTime(date){
+
+    const utcDate1 = new Date(date);
+    const options = {
+        hour: "numeric",
+        minute: "numeric"
+
+    };
+
+    return utcDate1.toLocaleString("es-ES", options)
+
+}
 
 
 
@@ -42,20 +87,20 @@ function returnType(){
 
 }
 
-function filterActivityReview(){
-    let newArray = []
+// function filterActivityReview(){
+//     let newArray = []
 
-    for(let i = 0; i<store?.activity?.info_activity?.reviews.length;i++){
+//     for(let i = 0; i<store?.activity?.info_activity?.reviews.length;i++){
 
-        if(store.activity?.info_activity?.reviews[i]?.activity_rating != null){
+//         if(store.activity?.info_activity?.reviews[i]?.activity_rating != null){
             
-            newArray.push(store.activity.info_activity.reviews[i])
+//             newArray.push(store.activity.info_activity.reviews[i])
 
-        }
-    }
+//         }
+//     }
     
-    return newArray
-}
+//     return newArray
+// }
 
 useEffect(()=>{
 
@@ -81,19 +126,24 @@ return(
         <p className="activityTextFormat p-5">{store.activity?.info_activity?.desc}</p>
         <img className="px-5 pb-5" src={store.activity?.info_activity?.media[value]}></img>
         <h3 className="px-5 pt-5">Comentarios</h3>
-       {filterActivityReview().map((review, i) =><div className="m-5 card reviewCard" key={i}> 
+       {/* {filterActivityReview().map((review, i) =><div className="m-5 card reviewCard" key={i}> 
             <div className="d-flex">
                 <h5 className="p-2 fixSizeTitleActivity">{review.user.username} · {review.activity_rating}</h5>   
             </div>
             <p className="px-2 pt-2">{review.activity_message}</p> 
             <p className="px-2 fst-italic fixSizeDateActivity">Creado el {review.creation_date.slice(0,10)} a las {review.creation_date.slice(11,16)}</p>
-        </div>)} 
+        </div>)}  */}
+
+        <CommentBox/>
         
         </div>
 
-        <div className="container2Activity">
+        <div className="container2Activity rounded-end">
             <p className="mt-5"><span className="font2 mx-3 p-1 rounded">Actividad {returnType()}</span></p>
-            <p className="mt-3"><span className="font2 mx-3 p-1 rounded">Publicada el {store?.activity?.creation_date?.slice(0,10)} a las {store?.activity?.creation_date?.slice(11,16)}</span></p>
+            <div className="d-flex mx-3">
+                <p className="mt-3"><span className="font2 p-1 rounded">Publicado </span></p>
+                <p className="mt-3"><span className="font2 mx-3 p-1 rounded">{parseFullDate(store?.activity?.creation_date)}</span></p>
+            </div>
             <div className="mt-3 mx-3 p-1 d-flex">
                 <div className="proActivityPhoto">
                     <img className="imgProfessionalAct rounded-circle" src={"/public/avatar/" + store?.activity?.info_activity?.professional?.user?.avatar_url}></img>
@@ -103,12 +153,24 @@ return(
                     <p className="mt-3"><span className="font2 p-1 rounded">{store?.activity?.info_activity?.professional?.rating?.toFixed(2)}</span></p>
                 </div>
             </div>
-            <p className="mt-3"><span className="font2 mx-3 p-1 rounded">Empieza el {store?.activity?.start_date?.slice(0,10)} a las {store?.activity?.start_date?.slice(11,16)}</span></p>
-            <p className="mt-3"><span className="font2 mx-3 p-1 rounded">Termina el {store?.activity?.end_date?.slice(0,10)} a las {store?.activity?.end_date?.slice(11,16)}</span></p>
+            <div className="d-flex">
+                <p className="mt-3"><span className="font2 mx-3 p-1 rounded">Fecha inicio</span></p>
+                <p className="mt-3"><span className="font2 p-1 rounded">{parseDate(store?.activity?.start_date)}</span></p>
+                <p className="mt-3"><span className="font2 mx-3 p-1 rounded">{parseTime(store?.activity?.start_date)}</span></p>
+            </div>
+            <div className="d-flex">
+                <p className="mt-3"><span className="font2 mx-3 p-1 rounded">Fecha fin</span></p>
+                <p className="mt-3"><span className="font2 p-1 rounded">{parseDate(store?.activity?.end_date)}</span></p>
+                <p className="mt-3"><span className="font2 mx-3 p-1 rounded">{parseTime(store?.activity?.end_date)}</span></p>
+            </div>
 
             <div className="d-flex">
-            <p className="mt-3"><span className="font2 mx-3 p-1 rounded">Precio {store?.activity?.price}€</span></p>
-            <p className="mt-3"><span className="font2 p-1 rounded">Plazas {store?.activity?.slots}</span></p>
+                <p className="mt-3"><span className="font2 mx-3 p-1 rounded">Precio </span></p>
+                <p className="mt-3"><span className="font2 p-1 rounded">{store?.activity?.price}€</span></p>
+            </div>
+            <div className="d-flex">
+                <p className="mt-3"><span className="font2 mx-3 p-1 rounded">Plazas </span></p>
+                <p className="mt-3"><span className="font2 p-1 rounded">{store?.activity?.slots}</span></p>
             </div>
             <p className="font2 mx-3 p-1 mt-3 rounded text-center">Location meeting</p>
             <div className="containerMap mt-3 mx-3">
@@ -122,6 +184,7 @@ return(
                 </iframe>
             </div>
             <p className="font2 mx-3 p-1 mt-3 rounded text-center">{store?.activity?.meeting_point}</p>
+        <CommentBox/>
             
         </div>
 
