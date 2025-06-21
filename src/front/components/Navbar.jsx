@@ -64,17 +64,17 @@ export const Navbar = () => {
 
 				<div className="collapse navbar-collapse text-center text-lg-start w-100" id="navbarSupportedContent">
 					<div className="navbar-nav mb-0 gap-3 w-auto d-flex justify-content-center justify-content-lg-start">
-						<Link className="nav-item nav-link active text-white fs-6 fw-semibold" to={"/"}>Home</Link>
+						<Link className="nav-item nav-link active text-white fs-6 fw-semibold navbarLink" to={"/"}>Inicio</Link>
 						<div className="nav-item dropdown" ref={dropRef}>
-							<a className="nav-link dropdown-toggle text-white fw-semibold" onClick={handleClickExcursiones} role="button" data-bs-toggle="dropdown" aria-expanded="false">Excursiones</a>
+							<a className="nav-link dropdown-toggle text-white fw-semibold navbarLink" onClick={handleClickExcursiones} role="button" data-bs-toggle="dropdown" aria-expanded="false">Excursiones</a>
 							<ul className="dropdown-menu dropdown-menu-dark NavbarDropdown text-center text-lg-start">
 								<li><a className="dropdown-item text-white" href="#">Deporte</a></li>
 								<li><a className="dropdown-item text-white" href="#">Ocio</a></li>
 								<li><a className="dropdown-item text-white" href="#">Turismo</a></li>
 							</ul>
 						</div>
-						<Link className="nav-item nav-link active text-white fs-6 fw-semibold" to={"/"}>Equipo</Link>
-						<Link className="nav-item nav-link active text-white fs-6 fw-semibold" to={"/contacto"}>Contacto</Link>
+						<Link className="nav-item nav-link active text-white fs-6 fw-semibold navbarLink" to={"/"}>Equipo</Link>
+						<Link className="nav-item nav-link active text-white fs-6 fw-semibold navbarLink me-2" to={"/contacto"}>Contacto</Link>
 					</div>
 
 					<form className="mx-auto busquedaBarra input-group">
@@ -111,10 +111,10 @@ export const Navbar = () => {
 						{!store.user.id ?
 							<div className="d-flex gap-3 w-100">
 								<div className="nav-item w-50">
-									<button className="btn navbarButton w-100 ms-md-2" onClick={() => { navigate("/login") }}>Login</button>
+									<button className="btn navbarButton fw-semibold w-100 ms-md-2" onClick={() => { navigate("/login") }}>Login</button>
 								</div>
 								<div className="nav-item w-50">
-									<button className="btn navbarButton text-nowrap w-100" onClick={() => { navigate("/signup") }}>Sign up</button>
+									<button className="btn navbarButton fw-semibold text-nowrap w-100" onClick={() => { navigate("/signup") }}>Sign up</button>
 								</div>
 							</div> :
 							<div className="dropdown w-100">

@@ -78,7 +78,7 @@ export const Home = () => {
 						<div className="row row-cols-md-3 mx-2">
 							{(shuffle(activities?.filter((item)=>item.is_active && !item.is_finished)).filter((item,index)=>index < 9).map((item,index,arr)=>
 								<div key={index} className={"col-12 col-md-6 col-lg-4 my-2" + (index == (arr.length - 1) && index % 2 == 0 ? " d-block d-md-none d-lg-block" : "")}>
-									<Link className="text-decoration-none valor-card2" to={'/activities/' + item.id}><ActivityCard img={item.info_activity.media[0]} title={item.info_activity.name} origin={item.meeting_point} description={item.info_activity.desc} timeleft={item.start_date}></ActivityCard></Link>
+									<Link className="text-decoration-none valor-card2" to={'/activities/' + item.id}><ActivityCard activity={item}/></Link>
 								</div>
 								)) }
 							<Link className="mx-auto my-auto col-3 btn w-auto text-decoration-none text-dark fw-semibold fs-4" to="/activities">Ver más</Link>
@@ -98,7 +98,7 @@ export const Home = () => {
 							<div className="row row-cols-md-3 mx-2 pb-5">
 								{reviews.filter((item)=>item.activity_rating != null && item.activity_message != "").sort((a,b)=>a.activity_rating - b.activity_rating).filter((item,index)=>index < 6).map((item,index,arr)=>
 									<div key={index} className={"col-12 col-md-6 col-lg-4 my-2" + (index == (arr.length - 1) && index % 2 != 0 ? " d-block d-md-none d-lg-block" : "")}>
-										<Link className="text-decoration-none valor-card2" to={'/activities/' + item.id}><CommentBox/></Link>
+										<Link className="text-decoration-none valor-card2" to={'/activities/' + item.id}><CommentBox review={item}/></Link>
 									</div>)}
 							</div>
 								: <div className="text-center">

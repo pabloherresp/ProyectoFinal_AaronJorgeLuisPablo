@@ -227,4 +227,21 @@ collection.search = async (text) => {
     }
 }
 
+collection.createReport = async (message, prof_id, act_id = null) => {
+    try {
+        const resp = await fetch(BACKEND_URL + "api/reports", {
+            method: "POST",
+            headers: {
+                "Content-Type":"application/json",
+                "Authorization": get_token()
+            }, body: JSON.stringify({message: message, activity_target_id: act_id, professional_target_id: prof_id})
+        })
+        const data = resp.json()
+        return data
+    } catch (error) {
+        console.log(error)
+        return {error: "No se pudo realizar el reporte"}
+    }
+}
+
 export default collection

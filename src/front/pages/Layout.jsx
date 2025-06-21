@@ -34,8 +34,8 @@ export const Layout = () => {
     return (
         <div className="Page">
             <ScrollToTop>
-                <Navbar />
-                <main className="PageContent">
+                <Navbar/>
+                <main className="PageContent d-flex justify-content-center align-items-center">
                     <Outlet />
                 </main>
                 <Footer />

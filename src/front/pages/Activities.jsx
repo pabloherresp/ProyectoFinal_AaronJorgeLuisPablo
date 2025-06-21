@@ -13,8 +13,6 @@ export const Activities = () => {
     const [counter4, setCounter4] = useState(0);
 
     function returnCounter(fecha) {
-
-
         var fechaEnMiliseg = Date.now();
 
         var fechaActual = new Date(fechaEnMiliseg)
@@ -40,14 +38,14 @@ export const Activities = () => {
 
         const scrollContainer2 = document.querySelector('.scroll2');
 
-        scrollContainer2.addEventListener('wheel', (e) => {
+        scrollContainer2.addEventListener('wheel',(e) => {
             e.preventDefault();
             scrollContainer2.scrollLeft += e.deltaY;
         });
 
         const scrollContainer1 = document.querySelector('.scroll1');
 
-        scrollContainer1.addEventListener('wheel', (e) => {
+        scrollContainer1.addEventListener('wheel' ,(e) => {
             e.preventDefault();
             scrollContainer1.scrollLeft += e.deltaY;
         });
@@ -139,7 +137,7 @@ export const Activities = () => {
 
             <div className="d-flex overflow-auto gap-3 p-3 scroll-horizontal scroll2 d-block d-lg-none">
 
-                {store.all_activities?.map((item) => <Link className="text-decoration-none valor-card2 mt-4" to={'/activities/' + item.id}><ActivityCard img={item.info_activity.media[0]} title={item.info_activity.name} origin={item.meeting_point} description={item.info_activity.desc.slice(0, 100)}></ActivityCard></Link>)}
+                {store.all_activities?.map((item,index) => <Link key={index} className="text-decoration-none valor-card2 mt-4" to={'/activities/' + item.id}><ActivityCard img={item.info_activity.media[0]} title={item.info_activity.name} origin={item.meeting_point} description={item.info_activity.desc.slice(0, 100)}></ActivityCard></Link>)}
 
             </div>
 
@@ -167,7 +165,7 @@ export const Activities = () => {
 
             <div className="d-flex overflow-auto gap-3 p-3 scroll-horizontal scroll1 d-block d-lg-none">
 
-                {returnActive()?.map((item) => <Link className="text-decoration-none valor-card2 mt-4" to={'/activities/' + item.id}><ActivityCard img={item.info_activity.media[0]} title={item.info_activity.name} origin={item.meeting_point} description={item.info_activity.desc.slice(0, 40)} timeleft={returnCounter(item.start_date)}></ActivityCard></Link>)}
+                {returnActive()?.map((item,index) => <Link key={index} className="text-decoration-none valor-card2 mt-4" to={'/activities/' + item.id}><ActivityCard img={item.info_activity.media[0]} title={item.info_activity.name} origin={item.meeting_point} description={item.info_activity.desc.slice(0, 40)} timeleft={returnCounter(item.start_date)}></ActivityCard></Link>)}
 
             </div>
 

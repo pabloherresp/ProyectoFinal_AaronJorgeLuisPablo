@@ -297,7 +297,7 @@ class Reports(db.Model):
         return {
             "id": self.id,
             "message": self.message,
-            "user": {"id": self.client.user_id, "username": self.client.username} if self.user else None,
+            "user": {"id": self.client.user_id, "username": self.client.username} if self.client else None,
             "professional": {"id": self.professional.user_id, "username": self.professional.user.client.username} if self.professional else None,
             "info_activity": {"id": self.info_activity.id, "name": self.info_activity.name} if self.info_activity else None,
             "is_checked": self.is_checked,

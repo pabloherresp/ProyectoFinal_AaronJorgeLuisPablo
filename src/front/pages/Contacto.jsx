@@ -14,18 +14,18 @@ export const Contacto = () => {
                         <form action="" className="px-4">
                             <div className="row">
                                 <div className="col-sm-12 col-lg-10 mb-lg-3">
-                                    <label for="exampleFormControlInput1" className="form-label">Nombre completo</label>
+                                    <label htmlFor="exampleFormControlInput1" className="form-label">Nombre completo</label>
                                     <input type="text" className="form-control" id="exampleFormControlInput1" placeholder="Ingresar nombre" />
                                 </div>
                                 <div className="col-sm-12 col-lg-10 mb-lg-3">
-                                    <label for="exampleFormControlInput1" className="form-label">E-mail</label>
+                                    <label htmlFor="exampleFormControlInput1" className="form-label">E-mail</label>
                                     <input type="email" className="form-control" id="exampleFormControlInput1" placeholder="name@example.com" />
                                 </div>
                             </div>
                             <div className="row">
                                 <div className="col-12">
-                                    <div class="mb-3 mt-2">
-                                        <label for="exampleFormControlTextarea1" className="form-label">Example textarea</label>
+                                    <div className="mb-3 mt-2">
+                                        <label htmlFor="exampleFormControlTextarea1" className="form-label">Example textarea</label>
                                         <textarea className="form-control no-resize" id="exampleFormControlTextarea1" rows="3"></textarea>
                                     </div>
                                 </div>

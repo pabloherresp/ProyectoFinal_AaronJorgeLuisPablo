@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import useGlobalReducer from "../hooks/useGlobalReducer"
 import collection from "../services/collection"
@@ -7,7 +7,10 @@ export const Login = () => {
 	const { store, dispatch } = useGlobalReducer()
 	const [formData, setFormdata] = useState({ user: "", password: "", response: " ", error: false })
 	const [modalEmail, setModalEmail] = useState("")
-	const [modalResult, setModalResult] = useState({success: false, message: ""})
+	const [modalResult, setModalResult] = useState({ success: false, message: "" })
+
+	const emailModalField = useRef(null)
+
 	const navigate = useNavigate()
 
 	const handleLogin = async (e) => {
@@ -32,11 +35,14 @@ export const Login = () => {
 	const handleReset = async (e) => {
 		e.preventDefault()
 		const resp = await collection.resetPassword(modalEmail)
-		if (!resp.success)
-			setModalResult({success: false, message: "No se encontró un usuario con ese mail"})
-		else{
-			setModalResult({success: true, message: "Correo de recuperación enviado, compruebe su bandeja de correo electrónico"})
-			setTimeout(()=>navigate(0), 4000)
+		emailModalField.current.disabled = true
+		if (!resp.success) {
+			setModalResult({ success: false, message: "No se encontró un usuario con ese mail" })
+			setTimeout(()=>emailModalField.current.disabled = false,1000)
+		}
+		else {
+			setModalResult({ success: true, message: "Correo de recuperación enviado, compruebe su bandeja de correo electrónico" })
+			setTimeout(() => navigate(0), 4000)
 		}
 	}
 
@@ -63,11 +69,11 @@ export const Login = () => {
 					<form className="m-3" onSubmit={handleLogin}>
 						<div className="form-label my-3 w-75 mx-auto">
 							<label className="fs-6 mb-2 fw-semibold" htmlFor="email">Email o nombre de usuario</label>
-							<input type="text" name="user" className="form-control" id="email" placeholder="name@gmail.com" autoComplete="current-email" onChange={handleChange} value={formData.user} />
+							<input required type="text" name="user" className="form-control" id="email" placeholder="name@gmail.com" autoComplete="current-email" onChange={handleChange} value={formData.user} />
 						</div>
 						<div className="form-label my-3 w-75 mx-auto">
 							<label className="fs-6 mb-2 fw-semibold" htmlFor="password">Contraseña</label>
-							<input type="password" name="password" className="form-control" id="password" placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;" autoComplete="current-password" onChange={handleChange} value={formData.password} />
+							<input required type="password" name="password" className="form-control" id="password" placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;" autoComplete="current-password" onChange={handleChange} value={formData.password} />
 							<p className="text-center fs-6 my-3 fw-semibold">¿Has olvidado tu contraseña? Haga click <Link className="text-decoration-none" data-bs-toggle="modal" data-bs-target="#resetPasswordModal">aquí</Link></p>
 
 						</div>
@@ -77,7 +83,7 @@ export const Login = () => {
 						</div>
 					</form>
 					<div className="modal fade" id="resetPasswordModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-						<div className="modal-dialog">
+						<div className="modal-dialog modal-dialog-centered">
 							<div className="modal-content">
 								<form onSubmit={handleReset}>
 									<div className="modal-header BgSecondary">
@@ -87,15 +93,16 @@ export const Login = () => {
 									<div className="modal-body">
 										<div className="mb-3">
 											<label htmlFor="modalEmail" className="form-label">Correo electrónico</label>
-											<input type="email" className="form-control" id="modalEmail" placeholder="name@example.com" name="modalEmail" onChange={(e) => setModalEmail(e.target.value)} />
+											<input ref={emailModalField} type="email" className="form-control" id="modalEmail" placeholder="name@example.com" value={modalEmail} name="modalEmail" onChange={(e) => setModalEmail(e.target.value)} />
 										</div>
-										<p className={modalResult.success ? "text-success" : "text-danger"}>
-											{modalResult.message}
-										</p>
+										<div className="PlaceholderP">
+											<p className={"text-center " + (modalResult.success ? "text-success" : "text-danger")}>
+												{modalResult.message}
+											</p>
+										</div>
 									</div>
 									<div className="modal-footer">
-										<button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-										<button type="submit" className="btn btn-primary">Save changes</button>
+										<button type="submit" className="btn Button fw-semibold">Enviar</button>
 									</div>
 								</form>
 							</div>

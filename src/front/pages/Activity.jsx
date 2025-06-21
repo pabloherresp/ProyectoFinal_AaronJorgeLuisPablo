@@ -108,15 +108,6 @@ useEffect(()=>{
 
 },[])
 
-
-useEffect(()=>{
-
-    console.log(store.activity)
-    
-
-},[store])
-
-
 return(
     <div className="p-0 container bg-white my-5 rounded myActivityCard d-flex fontFamily">
 
