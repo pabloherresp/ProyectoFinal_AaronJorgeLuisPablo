@@ -13,33 +13,33 @@ export const Layout = () => {
 
     const login = async () => {
         const resp = await collection.loginToken()
-        if(!resp.success)
-            dispatch({type: "closeSession"})
+        if (!resp.success)
+            dispatch({ type: "closeSession" })
         else
-            dispatch({type: "loadUser", payload: resp})
+            dispatch({ type: "loadUser", payload: resp })
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         let token = localStorage.getItem("token")
-        if(token){
+        if (token) {
             login()
         }
-    },[])
+    }, [])
 
-    useEffect(()=>{
-        if(store.user.needs_filling == true)
+    useEffect(() => {
+        if (store.user.needs_filling == true)
             navigate("/completeuserform")
-    },[store.user])
+    }, [store.user])
 
     return (
-        <div className="Page">
-            <ScrollToTop>
-                <Navbar/>
+        <ScrollToTop>
+            <div className="Page">
+                <Navbar />
                 <main className="PageContent d-flex justify-content-center align-items-center">
                     <Outlet />
                 </main>
                 <Footer />
-            </ScrollToTop>
-        </div>
+            </div>
+        </ScrollToTop>
     )
 }

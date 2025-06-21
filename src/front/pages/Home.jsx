@@ -77,8 +77,8 @@ export const Home = () => {
 						{activities.length > 0 ? 
 						<div className="row row-cols-md-3 mx-2">
 							{(shuffle(activities?.filter((item)=>item.is_active && !item.is_finished)).filter((item,index)=>index < 9).map((item,index,arr)=>
-								<div key={index} className={"col-12 col-md-6 col-lg-4 my-2" + (index == (arr.length - 1) && index % 2 == 0 ? " d-block d-md-none d-lg-block" : "")}>
-									<Link className="text-decoration-none valor-card2" to={'/activities/' + item.id}><ActivityCard activity={item}/></Link>
+								<div key={index} className={"col-12 col-md-6 col-lg-4 my-2 p-3" + (index == (arr.length - 1) && index % 2 == 0 ? " d-block d-md-none d-lg-block" : "")}>
+									<Link className="text-decoration-none m-0 p-0" to={'/activities/' + item.id}><ActivityCard activity={item}/></Link>
 								</div>
 								)) }
 							<Link className="mx-auto my-auto col-3 btn w-auto text-decoration-none text-dark fw-semibold fs-4" to="/activities">Ver más</Link>

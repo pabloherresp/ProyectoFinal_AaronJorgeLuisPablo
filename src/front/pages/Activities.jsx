@@ -7,56 +7,56 @@ import { Link } from "react-router-dom";
 import React, { useState } from "react";
 
 export const Activities = () => {
-    const {store, dispatch} = useGlobalReducer()
+    const { store, dispatch } = useGlobalReducer()
 
     const [counter1, setCounter1] = useState(0);
     const [counter4, setCounter4] = useState(0);
 
-    function returnCounter(fecha){
+    function returnCounter(fecha) {
 
 
-    var fechaEnMiliseg = Date.now() + 7200000;
+        var fechaEnMiliseg = Date.now() + 7200000;
 
-    var fechaActual = new Date(fechaEnMiliseg)
+        var fechaActual = new Date(fechaEnMiliseg)
 
 
 
-    var resultado = new Date(fecha) - fechaActual
+        var resultado = new Date(fecha) - fechaActual
 
-    var diferencia = resultado / (86400000)
+        var diferencia = resultado / (86400000)
 
-    var dias = Math.floor(diferencia)
+        var dias = Math.floor(diferencia)
 
-    var horas = Math.floor((diferencia - dias) * 24)
+        var horas = Math.floor((diferencia - dias) * 24)
 
-    if(dias<0){
+        if (dias < 0) {
 
-        return "Actividad finalizada"
+            return "Actividad finalizada"
 
-        
-    }
-else{
-    if(dias== 0){
-            return (horas>1 ? `Faltan ${horas} horas` : `Falta ${horas}  hora`)
+
         }
-        else{
-            return (dias>1 ? `Faltan ${dias}  días` : `Falta  ${dias}  día`) + (horas>1 ? ` y  ${horas}  horas` : ` y  ${horas}  hora`)
+        else {
+            if (dias == 0) {
+                return (horas > 1 ? `Faltan ${horas} horas` : `Falta ${horas}  hora`)
+            }
+            else {
+                return (dias > 1 ? `Faltan ${dias}  días` : `Falta  ${dias}  día`) + (horas > 1 ? ` y  ${horas}  horas` : ` y  ${horas}  hora`)
+            }
         }
-
     }
 
     useEffect(() => {
 
         const scrollContainer2 = document.querySelector('.scroll2');
 
-        scrollContainer2.addEventListener('wheel',(e) => {
+        scrollContainer2.addEventListener('wheel', (e) => {
             e.preventDefault();
             scrollContainer2.scrollLeft += e.deltaY;
         });
 
         const scrollContainer1 = document.querySelector('.scroll1');
 
-        scrollContainer1.addEventListener('wheel' ,(e) => {
+        scrollContainer1.addEventListener('wheel', (e) => {
             e.preventDefault();
             scrollContainer1.scrollLeft += e.deltaY;
         });
@@ -148,7 +148,7 @@ else{
 
             <div className="d-flex overflow-auto gap-3 p-3 scroll-horizontal scroll2 d-block d-lg-none">
 
-                {store.all_activities?.map((item,index) => <Link key={index} className="text-decoration-none valor-card2 mt-4" to={'/activities/' + item.id}><ActivityCard img={item.info_activity.media[0]} title={item.info_activity.name} origin={item.meeting_point} description={item.info_activity.desc.slice(0, 100)}></ActivityCard></Link>)}
+                {store.all_activities?.map((item, index) => <Link key={index} className="text-decoration-none valor-card2 mt-4" to={'/activities/' + item.id}><ActivityCard img={item.info_activity.media[0]} title={item.info_activity.name} origin={item.meeting_point} description={item.info_activity.desc.slice(0, 100)}></ActivityCard></Link>)}
 
             </div>
 
@@ -176,7 +176,7 @@ else{
 
             <div className="d-flex overflow-auto gap-3 p-3 scroll-horizontal scroll1 d-block d-lg-none">
 
-                {returnActive()?.map((item,index) => <Link key={index} className="text-decoration-none valor-card2 mt-4" to={'/activities/' + item.id}><ActivityCard img={item.info_activity.media[0]} title={item.info_activity.name} origin={item.meeting_point} description={item.info_activity.desc.slice(0, 40)} timeleft={returnCounter(item.start_date)}></ActivityCard></Link>)}
+                {returnActive()?.map((item, index) => <Link key={index} className="text-decoration-none valor-card2 mt-4" to={'/activities/' + item.id}><ActivityCard img={item.info_activity.media[0]} title={item.info_activity.name} origin={item.meeting_point} description={item.info_activity.desc.slice(0, 40)} timeleft={returnCounter(item.start_date)}></ActivityCard></Link>)}
 
             </div>
 

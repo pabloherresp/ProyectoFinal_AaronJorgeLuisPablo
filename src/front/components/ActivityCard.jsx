@@ -21,7 +21,7 @@ export const ActivityCard = (props) => {
 
     return (
         (props.activity != null ?
-            < div className="card cardFormat p-0 rounded d-flex" >
+            < div className="card cardFormat p-0 rounded d-flex MoveUpAnimation" >
                 <div className="imgCardFormat">
                     <img src={props.activity.info_activity.media[0]} className="rounded-top-1 imageCard"></img>
                 </div>
