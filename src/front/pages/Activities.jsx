@@ -44,7 +44,7 @@ else{
         }
 
     }
-
+}
     useEffect(() => {
 
         const scrollContainer2 = document.querySelector('.scroll2');
