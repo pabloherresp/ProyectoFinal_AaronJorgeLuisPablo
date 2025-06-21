@@ -627,3 +627,25 @@ h3 {
 body.modal-open {
   padding-right: 0 !important;
 }
+.btnCompra{
+  background-color: #006a71;
+  color: #F2EFE7;
+  width: 5em;
+  height: 3em;
+}
+.btnCompra:hover{
+  
+  background-color: #48A6A7;
+  color: white; 
+}
+.btnCompra:active{
+  
+  background-color: #48A6A7;
+  color: white; 
+}
+
+.btnCompra:visited{
+  
+  background-color: #48A6A7;
+  color: white; 
+}
