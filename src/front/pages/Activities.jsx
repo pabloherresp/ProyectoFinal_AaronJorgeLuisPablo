@@ -11,29 +11,38 @@ export const Activities = () => {
     const [counter1, setCounter1] = useState(0);
     const [counter4, setCounter4] = useState(0);
 
-    function returnCounter(fecha) {
+    function returnCounter(fecha){
 
 
-        var fechaEnMiliseg = Date.now();
+    var fechaEnMiliseg = Date.now() + 7200000;
 
-        var fechaActual = new Date(fechaEnMiliseg)
+    var fechaActual = new Date(fechaEnMiliseg)
 
-        var resultado = fechaActual - new Date(fecha)
 
-        var diferencia = resultado / (86400000)
 
-        var dias = Math.floor(diferencia)
+    var resultado = new Date(fecha) - fechaActual
 
-        var horas = Math.floor((diferencia - dias) * 24)
+    var diferencia = resultado / (86400000)
 
-        if (dias == 0) {
-            return (horas > 1 ? `Realizado hace ${horas} horas` : `Realizado hace ${horas}  hora`)
-        }
-        else {
-            return (dias > 1 ? `Realizado hace ${dias}  días` : `Realizado  ${dias}  día`) + (horas > 1 ? ` y  ${horas}  horas` : ` y  ${horas}  hora`)
-        }
+    var dias = Math.floor(diferencia)
 
+    var horas = Math.floor((diferencia - dias) * 24)
+
+    if(dias<0){
+
+        return "Actividad finalizada"
+
+        
     }
+else{
+    if(dias== 0){
+            return (horas>1 ? `Faltan ${horas} horas` : `Falta ${horas}  hora`)
+        }
+        else{
+            return (dias>1 ? `Faltan ${dias}  días` : `Falta  ${dias}  día`) + (horas>1 ? ` y  ${horas}  horas` : ` y  ${horas}  hora`)
+        }
+    }
+}
 
 
     const { store, dispatch } = useGlobalReducer()
