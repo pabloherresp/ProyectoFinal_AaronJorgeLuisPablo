@@ -10,7 +10,6 @@ export const UserInscriptions = () => {
 	const [inverted, setInverted] = useState(-1)
 	const [limit, setLimit] = useState(15)
 
-	const [reportForm, setReportform] = useState(null)
 	const [activityReport, setActivityReport] = useState(null)
 	const [activityReview, setActivityReview] = useState(null)
 

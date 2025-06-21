@@ -244,4 +244,28 @@ collection.createReport = async (message, prof_id, act_id = null) => {
     }
 }
 
+
+collection.createReview = async (info_activity_id, actRating, activityMessage, prof_id, profRating, professionalMessage) =>{
+    try {
+        const resp = await fetch(BACKEND_URL + "api/reviews", {
+            method: "POST",
+            headers: {
+                "Content-Type":"application/json",
+                "Authorization": get_token()
+            }, body: JSON.stringify({
+                info_activity_id: info_activity_id,
+                activity_rating: actRating,
+                activity_message: activityMessage,
+                professional_id: prof_id,
+                professional_rating:  profRating,
+                professional_message: professionalMessage
+            })
+        })
+        const data = resp.json()
+        return data
+    } catch (error) {
+        console.log(error)
+        return {error: "No se pudo realizar el reporte"}
+    }    
+}
 export default collection

@@ -31,6 +31,9 @@ body {
 .TextDark {
   color: #006a71;
 }
+.TextSecondary{
+  color: #48A6A7;
+}
 
 .BannerLogin {
   background-repeat: repeat-y;

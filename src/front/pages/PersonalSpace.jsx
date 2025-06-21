@@ -151,7 +151,7 @@ export const PersonalSpace = () => {
 
 					{activeTab === 'favoritos' && (
 						<div className="py-4">
-							<div className="row d-flex justify-content-around px-4 py-3">
+							<div className="row d-flex justify-content-center px-4 py-3">
 								{store.user.favourites.map((el, i) => {
 									return <div key={i} className="col-sm-12 col-md-6 col-lg-3">
 										<ActivityCard title={el.activity.name} description={el.activity.desc} img={el.activity.media}

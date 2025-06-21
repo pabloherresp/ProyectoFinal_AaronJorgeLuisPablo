@@ -675,12 +675,13 @@ def get_one_review(id):
 def create_review():
     user_id = int(get_jwt_identity())
     data = request.json
+    
     if not data or "info_activity_id" not in data or "professional_id" not in data or "professional_rating" not in data or "activity_rating" not in data or "professional_message" not in data or "activity_message" not in data:
         return jsonify({"error": "Missing fields to create review"}), 400
     
     review = db.session.execute(select(Reviews).where(and_(Reviews.info_activity_id == data["info_activity_id"], Reviews.user_id == user_id))).scalar_one_or_none()
     if review is not None:
-        return jsonify({"error": "This activity has already been reviewed"}), 400
+        return jsonify({"error": "This activity has already been reviewed"}), 409
 
     review = Reviews(user_id = user_id, info_activity_id = data["info_activity_id"], professional_id = data["professional_id"], professional_rating = data["professional_rating"], activity_rating = data["activity_rating"], professional_message = data["professional_message"], activity_message = data["activity_message"])
     db.session.add(review)
