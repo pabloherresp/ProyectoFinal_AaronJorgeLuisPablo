@@ -12,24 +12,35 @@ export const Activities = () => {
     const [counter1, setCounter1] = useState(0);
     const [counter4, setCounter4] = useState(0);
 
-    function returnCounter(fecha) {
-        var fechaEnMiliseg = Date.now();
+    function returnCounter(fecha){
 
-        var fechaActual = new Date(fechaEnMiliseg)
 
-        var resultado = fechaActual - new Date(fecha)
+    var fechaEnMiliseg = Date.now() + 7200000;
 
-        var diferencia = resultado / (86400000)
+    var fechaActual = new Date(fechaEnMiliseg)
 
-        var dias = Math.floor(diferencia)
 
-        var horas = Math.floor((diferencia - dias) * 24)
 
-        if (dias == 0) {
-            return (horas > 1 ? `Realizado hace ${horas} horas` : `Realizado hace ${horas}  hora`)
+    var resultado = new Date(fecha) - fechaActual
+
+    var diferencia = resultado / (86400000)
+
+    var dias = Math.floor(diferencia)
+
+    var horas = Math.floor((diferencia - dias) * 24)
+
+    if(dias<0){
+
+        return "Actividad finalizada"
+
+        
+    }
+else{
+    if(dias== 0){
+            return (horas>1 ? `Faltan ${horas} horas` : `Falta ${horas}  hora`)
         }
-        else {
-            return (dias > 1 ? `Realizado hace ${dias}  días` : `Realizado  ${dias}  día`) + (horas > 1 ? ` y  ${horas}  horas` : ` y  ${horas}  hora`)
+        else{
+            return (dias>1 ? `Faltan ${dias}  días` : `Falta  ${dias}  día`) + (horas>1 ? ` y  ${horas}  horas` : ` y  ${horas}  hora`)
         }
 
     }
