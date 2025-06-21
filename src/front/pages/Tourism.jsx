@@ -1,4 +1,4 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import useGlobalReducer from "../hooks/useGlobalReducer"
 import { ActivityCard } from "../components/ActivityCard"
@@ -9,36 +9,9 @@ export const Tourism = () => {
 
 
 
-const GOOGLE_MAPS_API = import.meta.env.VITE_GOOGLE_MAPS_API
 
     
-function mostValuatedActivity(){
 
-    let newArray = []
-    let counter = 0
-    
-    let mostRated
-
-    for(let i = 0;i<returnActive().length;i++){
-
-        for(let k =0;k<returnActive().length;k++){
-
-            if(returnActive()[i].info_activity.rating<returnActive()[k].info_activity.rating){
-                counter++
-            }
-
-        }
-            newArray.push(counter)
-            counter = 0
-        if(i>=returnActive().info_activity.rating.length){
-            mostRated.push(returnActive()[newArray.indexOf(Math.max(...newArray))])
-        }
-
-    }
-
-    return mostRated
-
-}
 
 
 
@@ -71,60 +44,153 @@ else{
 
 const {store, dispatch} = useGlobalReducer()
 
-
 useEffect(()=>{
 
-    collection.returnActivities().then(data=>dispatch({type: 'activities', payload: data}))
+
+collection.returnActivities().then(data=>dispatch({type: 'activities', payload: data}))
+    // collection.returnActivities().then(data=>{
+    //     returnAllSportActivities(data)
+    //     dispatch({type: 'activities', payload: data})})
 
 },[])
 
 
+useEffect(()=>{
+    setValuated(mostValuatedActivities())
 
-function returnActive(){
+    console.log(valuated)
+     
 
-    let newArray = []
+},[store.all_activities])
 
-    for(let i = 0; i<returnAllSportActivities().length;i++){
 
-        if(returnAllSportActivities()[i].is_finished==false){
+// function returnActive(){
+
+//     let newArray = []
+
+//     for(let i = 0; i<returnAllSportActivities().length;i++){
+
+//         if(returnAllSportActivities()[i].is_finished==false){
             
-            newArray.push(returnAllSportActivities()[i])
+//             newArray.push(returnAllSportActivities()[i])
 
-        }
-    }
+//         }
+//     }
     
-    return newArray
-}
+//     return newArray
+// }
+
+const [valuated,setValuated] = useState([])
+
+// function mostValuatedActivities(){
+    
+//     let newArray = []
+//     let arrayActivities = valuated
+//     console.log(arrayActivities)
+//     let arrayRating = [] 
+    
+//     for(let z = 0;z<3;z++){
+
+//         for(let i = 0;i<arrayActivities.length;i++){
+
+//             arrayRating.push(arrayActivities[i].info_activity.rating)
+            
+//         }
+//     const max = Math.max(...arrayRating);
+//     const indice = arrayRating.indexOf(max);
+//     newArray.push(arrayActivities[indice])
+//     arrayActivities.splice(indice,1)
+//     arrayRating = []
+//     }
+
+    
+    
+
+  
+
+//     return newArray
+
+// }
+
+//     const [valuated,setValuated] = useState([])
+
+// function returnAllSportActivities(array){
+
+//     let newArray = []
+
+//     for(let i = 0; i<array.length;i++){
+
+//         if(array[i].info_activity.type=="TOURISM" && array[i].is_finished==false){
+
+            
+//             newArray.push(array[i])
+
+//         }
+
+//     }
+//     setValuated(newArray)
+//     return newArray
+// }
 
 function returnAllSportActivities(){
 
-    let newArray = []
+    console.log(store?.all_activities)
+     let newArray = []
 
-    for(let i = 0; i<store.all_activities.length;i++){
+     for(let i = 0; i<store?.all_activities.length;i++){
 
-        if(store.all_activities[i].info_activity.type=="TOURISM"){
+         if(store?.all_activities[i]?.info_activity?.type=="TOURISM" && store?.all_activities[i]?.is_finished==false){
+
             
-            newArray.push(store.all_activities[i])
+             newArray.push(store?.all_activities[i])
 
-        }
-    }
+         }
+
+     }
+     return newArray
+ }
+
+ function mostValuatedActivities(){
     
-    return newArray
-}
+     let newArray = []
+     let arrayActivities = returnAllSportActivities()
+     console.log(arrayActivities)
+     let arrayRating = [] 
+    
+     for(let z = 0;z<3;z++){
+
+         for(let i = 0;i<arrayActivities.length;i++){
+
+             arrayRating.push(arrayActivities[i].info_activity.rating)
+            
+         }
+     const max = Math.max(...arrayRating);
+     const indice = arrayRating.indexOf(max);
+     newArray.push(arrayActivities[indice])
+     arrayActivities.splice(indice,1)
+     arrayRating = []
+     }
+
+    
+    
+
+  
+
+     return newArray
+
+ }
 
 return(
 
     <div className="pb-5 container bg-white my-5 rounded myActivityCard fontFamily">
-
-
         <h1 className="font1 p-5 text-center">Actividad más valorada</h1>
-                                
-        <Link className="text-decoration-none valor-card2 col-lg-4 col-md-6 col-sm-12 mt-4" to={'/activities/' + store.all_activities[0]?.id}> <ActivityCard img={store.all_activities[0]?.info_activity.media[0]} title={store.all_activities[0]?.info_activity.name} origin={store.all_activities[0]?.meeting_point} description={store.all_activities[0]?.info_activity.desc.slice(0, 100)}></ActivityCard></Link>
-
-        <h1 className="font1 p-5 mt-5 text-center">Actividades deportivas activas</h1>
+         <div className="row justify-content-around">
+           {valuated.map((activity,i) => <Link className="text-decor6tion-none valor-card2 col-lg-4 col-md-6 col-sm-12 mt-4" to={'/activities/' + activity.id}><ActivityCard className="mw-100" img={activity.info_activity.media[0]} title={activity.info_activity.name} origin={activity.meeting_point} description={activity.info_activity.desc.slice(0,40)}></ActivityCard></Link>)}
+        </div>  
+        <h1 className="font1 p-5 mt-5 text-center">Actividades turísticas activas</h1>
 
         <div className="row justify-content-around">
-           {returnActive().map((activity,i) => <Link className="text-decoration-none valor-card2 col-lg-4 col-md-6 col-sm-12 mt-4" to={'/activities/' + activity.id}><ActivityCard className="mw-100" img={activity.info_activity.media[0]} title={activity.info_activity.name} origin={activity.meeting_point} description={activity.info_activity.desc.slice(0,40)} timeleft={returnCounter(returnActive()[i]?.start_date)}></ActivityCard></Link>)}
+           {returnAllSportActivities().map((activity,i) => <Link className="text-decoration-none valor-card2 col-lg-4 col-md-6 col-sm-12 mt-4" to={'/activities/' + activity.id}><ActivityCard className="mw-100" img={activity.info_activity.media[0]} title={activity.info_activity.name} origin={activity.meeting_point} description={activity.info_activity.desc.slice(0,40)} timeleft={returnCounter(returnActive()[i]?.start_date)}></ActivityCard></Link>)}
         </div>
     </div>
 
