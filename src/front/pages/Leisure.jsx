@@ -97,7 +97,7 @@ return(
          <div className="row justify-content-around">
            {lastChance()?.map((activity,i) => <Link className="text-decoration-none valor-card2 col-lg-4 col-md-6 col-sm-12 mt-4" to={'/activities/' + activity.id}><ActivityCard className="mw-100" img={activity.info_activity.media[0]} title={activity.info_activity.name} origin={activity.meeting_point} description={activity.info_activity.desc.slice(0,40)} timeleft={returnCounter(activity.start_date)}></ActivityCard></Link>)}
         </div>  
-        <h1 className="font1 p-5 mt-5 text-center">Actividades turísticas activas</h1>
+        <h1 className="font1 p-5 mt-5 text-center">Actividades de ocio activas</h1>
 
         <div className="row justify-content-around">
            {returnAllLeisureActivities()?.map((activity,i) => <Link className="text-decoration-none valor-card2 col-lg-4 col-md-6 col-sm-12 mt-4" to={'/activities/' + activity.id}><ActivityCard className="mw-100" img={activity.info_activity.media[0]} title={activity.info_activity.name} origin={activity.meeting_point} description={activity.info_activity.desc.slice(0,40)} timeleft={returnCounter(returnAllLeisureActivities()[i]?.start_date)}></ActivityCard></Link>)}
