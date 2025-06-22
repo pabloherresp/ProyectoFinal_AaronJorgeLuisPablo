@@ -139,7 +139,9 @@ export const Activity = () => {
 
     }, [])
 
-    function handleSubmit(){
+    function handleSubmit(e){
+        e.preventDefault()
+        // if(cardNumber.length < 15)
 
     }
 
@@ -197,7 +199,7 @@ export const Activity = () => {
                                 <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div className="modal-body">
-                                <form onSubmit={() => handleSubmit()}>
+                                <form onSubmit={handleSubmit}>
                                     <div className="mb-3">
                                         <label className="col-form-label">Nº de cuenta:</label><br></br>
                                          <Cleave
@@ -205,7 +207,6 @@ export const Activity = () => {
                                             options={{creditCard:true}}
                                             value={cardNumber}
                                             placeholder="0000 0000 0000 0000"
-                                            minLength={15}
                                             required
                                             onChange={(e) => setCardNumber(e.target.value)}
                                             />
