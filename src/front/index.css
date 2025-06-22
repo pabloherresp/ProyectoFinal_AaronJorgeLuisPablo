@@ -705,3 +705,8 @@ body.modal-open {
   background-color: #48A6A7;
   color: white; 
 }
+.fixingErrorsForm{
+  color: rgb(104, 8, 8);
+  font-style: italic;
+  font-size: 0.85em;
+}

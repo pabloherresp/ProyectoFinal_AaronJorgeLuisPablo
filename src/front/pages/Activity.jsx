@@ -5,13 +5,20 @@ import collection from "../services/collection"
 import CommentBox from "../components/CommentBox"
 import Inputmask from 'inputmask';
 import Cleave from 'cleave.js/react';
+import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
+
 
 export const Activity = () => {
 
-    const [cardNumber,setCardNumber] = useState("")
-    const [dateExp,setDateExp] = useState("")
-    const [ccvData,setCcvData] = useState("")
-    const [cardHolder,setCardHolder] = useState("")
+    const stripe = useStripe();
+    const elements = useElements();
+    const [loading, setLoading] = useState(false);
+    const [paymentError, setPaymentError] = useState("");
+
+
+    const [cardHolder, setCardHolder] = useState("")
+    const [errorHolder,setErrorHolder] = useState("")
+
 
     const { store, dispatch } = useGlobalReducer()
 
@@ -109,18 +116,18 @@ export const Activity = () => {
 
     }
 
-    
+
     const favItem = async () => {
         const resp = await collection.createFav(chosen)
         if (resp.success) {
-            setTimeout(()=>dispatch({ type: "loadUser", payload: resp.user }), 200)
+            setTimeout(() => dispatch({ type: "loadUser", payload: resp.user }), 200)
         }
     }
 
     const delItem = async () => {
         const resp = await collection.deleteFav(chosen)
         if (resp.success) {
-            setTimeout(()=>dispatch({ type: "loadUser", payload: resp.user }), 200)
+            setTimeout(() => dispatch({ type: "loadUser", payload: resp.user }), 200)
         }
     }
 
@@ -139,13 +146,41 @@ export const Activity = () => {
 
     }, [])
 
-    function handleSubmit(e){
-        e.preventDefault()
-        // if(cardNumber.length < 15)
+    async function handleSubmit(e) {
+        e.preventDefault();
+        setPaymentError("");
+        setLoading(true);
 
+        const amount = Math.round(store.activity.price * 100);
+
+        const { clientSecret, error: backendError } = await fetch('/api/create-payment-intent', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ amount })
+        }).then(r => r.json());
+
+        if (backendError) {
+            setPaymentError(backendError);
+            setLoading(false);
+            return;
+        }
+
+        const card = elements.getElement(CardElement);
+        const result = await stripe.confirmCardPayment(clientSecret, {
+            payment_method: { card, billing_details: { name: cardHolder } }
+        });
+
+        if (result.error) {
+            setPaymentError(result.error.message);
+        } else if (result.paymentIntent.status === 'succeeded') {
+            alert('¡Pago exitoso!');
+            resetValues();
+        }
+
+        setLoading(false);
     }
 
-    function resetValues(){
+    function resetValues() {
         setCardNumber("")
         setDateExp("")
         setCcvData("")
@@ -172,7 +207,7 @@ export const Activity = () => {
                             if (store.user.needs_filling == true)
                                 navigate("/completeuserform")
                             else
-                            delItem()
+                                delItem()
                         })}>
                             <img src="/media/heart-full.svg" alt="" />
                         </button>
@@ -182,7 +217,7 @@ export const Activity = () => {
                             if (store.user.needs_filling == true)
                                 navigate("/completeuserform")
                             else
-                            favItem()
+                                favItem()
                         })}>
                             <img src="/media/heart-empty.svg" alt="" />
                         </button>
@@ -201,40 +236,24 @@ export const Activity = () => {
                             <div className="modal-body">
                                 <form onSubmit={handleSubmit}>
                                     <div className="mb-3">
-                                        <label className="col-form-label">Nº de cuenta:</label><br></br>
-                                         <Cleave
-                                            className="form-control"
-                                            options={{creditCard:true}}
-                                            value={cardNumber}
-                                            placeholder="0000 0000 0000 0000"
-                                            required
-                                            onChange={(e) => setCardNumber(e.target.value)}
-                                            />
+                                        <label className="col-form-label">Detalles de tarjeta:</label>
+                                        <div className="form-control">
+                                            <CardElement options={{
+                                                style: {
+                                                    base: {
+                                                        fontSize: '16px',
+                                                        color: '#424770',
+                                                        '::placeholder': { color: '#aab7c4' }
+                                                    },
+                                                    invalid: { color: '#9e2146' }
+                                                }
+                                            }} />
+                                        </div>
+                                        {paymentError && <p className="fixingErrorsForm">{paymentError}</p>}
                                     </div>
+
                                     <div className="mb-3">
-                                        <label className="col-form-label">Fecha de caducidad:</label><br></br>
-                                        <Cleave
-                                            className="form-control"
-                                            placeholder="MM/YY"
-                                            required
-                                            value={dateExp}
-                                            options={{ date: true, datePattern: ['m', 'y'] }}
-                                            onChange={(e) => setDateExp(e.target.value)}
-                                            />
-                                    </div>
-                                    <div className="mb-3">
-                                        <label className="col-form-label">CVV (Card Verification Value):</label><br></br>
-                                        <Cleave
-                                            className="form-control"
-                                            placeholder="000"
-                                            required
-                                            value={ccvData}
-                                            options={{ blocks: [3], numericOnly: true }}
-                                            onChange={(e) => setCcvData(e.target.value)}
-                                            />
-                                    </div>
-                                    <div className="mb-3">
-                                        <label className="col-form-label">Nombre del titular:</label><br></br>
+                                        <label className="col-form-label">Nombre del titular:</label>
                                         <input
                                             className="form-control"
                                             type="text"
@@ -243,15 +262,19 @@ export const Activity = () => {
                                             maxLength={35}
                                             placeholder="Ingresa tu nombre"
                                             onChange={(e) => setCardHolder(e.target.value.replace(/[^a-zA-Z\s]/g, ''))}
-                                            />
-                                    </div> 
-                            <div className="modal-footer">
-                                <button type="button" onClick={() => resetValues()} className="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
-                                <button type="submit" className="btn btn-success">Pagar</button>
-                            </div>
+                                        />
+                                        {errorHolder && <p className="fixingErrorsForm">{errorHolder}</p>}
+                                    </div>
+
+                                    <div className="modal-footer">
+                                        <button type="button" onClick={resetValues} className="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+                                        <button type="submit" className="btn btn-success" disabled={!stripe || loading}>
+                                            {loading ? 'Procesando...' : 'Pagar'}
+                                        </button>
+                                    </div>
                                 </form>
                             </div>
-                           
+
                         </div>
                     </div>
                 </div>
