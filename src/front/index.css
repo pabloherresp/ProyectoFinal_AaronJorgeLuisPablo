@@ -265,7 +265,7 @@ h3 {
 .titleFormat {
   font-weight: bold;
   font-size: 1em;
-  line-height: 0.7;
+  line-height: 1;
 }
 .textFormat {
   font-size: 0.85em;
@@ -334,7 +334,9 @@ h3 {
   max-height:40%;
 }
 .imageCard {
-  max-width: 100%;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 .myActivityCard {
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
@@ -636,4 +638,32 @@ body.modal-open {
   transform: translateY(-5px);
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
   border-color: #9ACBD0;
+}
+
+.FavButton{
+  border: 0;
+}
+
+.FavButton > img{
+  width: 30px;
+  height: 30px;
+  z-index: 2;
+  transition: width 0.3s ease, height 0.3s ease;
+  
+}
+
+.FavButton:hover > img{
+  width: 35px;
+  height: 35px;
+}
+
+.FavButton:active > img{
+  width: 27px;
+  height: 27px;
+  transform: rotate(-5deg);
+}
+
+.CarouselFiller{
+  min-width: 32px;
+  min-height: 32px;
 }

@@ -38,15 +38,15 @@ export const ModalReview = (props) => {
 						</div>
 						<div className="modal-body">
 							<p className='fw-bold'>Profesional: <span className='fw-semibold'>{props.activity?.info_activity.professional.user.name + " " + props.activity?.info_activity.professional.user.surname}</span></p>
-							
+
 							<Rating initialRating={profRating} className="TextSecondary fs-3" start={0} end={5}
 								emptySymbol="fa-regular fa-star" fullSymbol="fa-solid fa-star" fractions={2} onChange={setProfRating} />
-							
+
 							<div className="my-3">
 								<label htmlFor="professionalMessage" className="form-label fw-bold">Comentario sobre profesional:</label>
 								<textarea name="professionalMessage" className="form-control mt-2" style={{ height: '150px' }} id="professionalMessage" placeholder="" onChange={(e) => setProfessionalMessage(e.target.value)} value={professionalMessage} />
 							</div>
-							
+
 							<p className='fw-bold'>Actividad: <span className='fw-semibold'>{props.activity?.info_activity.name}</span></p>
 							<Rating initialRating={actRating} className="TextSecondary fs-3" start={0} end={5}
 								emptySymbol="fa-regular fa-star" fullSymbol="fa-solid fa-star" fractions={2} onChange={setActRating} />
@@ -54,7 +54,7 @@ export const ModalReview = (props) => {
 								<label htmlFor="activityMessage" className="form-label fw-bold">Comentario sobre actividad:</label>
 								<textarea name="activityMessage" className="form-control mt-2" style={{ height: '150px' }} id="activityMessage" placeholder="" onChange={(e) => setActivityMessage(e.target.value)} value={activityMessage} />
 							</div>
-							
+
 							<div className={"text-center fw-semibold PlaceholderP " + (result.success ? "text-success" : "text-danger")}>
 								{result.text}
 							</div>

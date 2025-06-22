@@ -268,4 +268,39 @@ collection.createReview = async (info_activity_id, actRating, activityMessage, p
         return {error: "No se pudo realizar el reporte"}
     }    
 }
+
+collection.createFav = async (id) => {
+    try {
+        const resp = await fetch(BACKEND_URL + "api/favs", {
+            method: "POST",
+            headers: {
+                "Content-Type":"application/json",
+                "Authorization": get_token()
+            }, body: JSON.stringify({info_activity_id: id})
+        })
+        const data = resp.json()
+        return data
+    } catch (error) {
+        console.log(error)
+        return {error: "No se ha podido crear el favorito"}
+    }
+}
+
+collection.deleteFav = async (id) => {
+    try {
+        const resp = await fetch(BACKEND_URL + "api/favs", {
+            method: "DELETE",
+            headers: {
+                "Content-Type":"application/json",
+                "Authorization": get_token()
+            }, body: JSON.stringify({info_activity_id: id})
+        })
+        const data = resp.json()
+        return data
+    } catch (error) {
+        console.log(error)
+        return {error: "No se ha podido crear el favorito"}
+    }
+}
+
 export default collection

@@ -24,12 +24,13 @@ export const Layout = () => {
         if (token) {
             login()
         }
+        collection.returnActivities().then(data => dispatch({ type: 'activities', payload: data }))
     }, [])
 
     useEffect(() => {
         if (store.user.needs_filling == true)
             navigate("/completeuserform")
-    }, [store.user])
+    },[store.user])
 
     return (
         <ScrollToTop>

@@ -340,39 +340,34 @@ def create_professional():
     return jsonify({"success": True, "user": prof.user.serialize()})
 
 #endpoints favoritos
-@api.route('/favs/<int:id>', methods=['POST'])
+@api.route('/favs/', methods=['POST'])
 @jwt_required()
-def add_fav(id):
-    user_id = get_jwt_identity()
-    if int(id) != int(user_id):
-        return jsonify({"error": "Forbidden access"}), 403
-    
-    data = request.json # data["info_activity_id"]
-    fav = Favourites(user_id=id, info_activity_id=data["info_activity_id"])
-    db.session.add(fav)
+def add_fav():
     try:
+        user_id = get_jwt_identity()
+        data = request.json
+        fav = Favourites(user_id=user_id, info_activity_id=data["info_activity_id"])
+        db.session.add(fav)
         db.session.commit()
     except Exception as e:
         print(e)
         return jsonify({"error":"Couldn't create fav"}), 500
-    return jsonify({"success": True})
+    return jsonify({"success": True, "user": fav.client.user.serialize()})
 
-@api.route('/favs/<int:id>', methods=['DELETE'])
+@api.route('/favs/', methods=['DELETE'])
 @jwt_required()
-def delete_fav(id):
-    user_id = get_jwt_identity()
-    if int(id) != int(user_id):
-        return jsonify({"error": "Forbidden access"}), 403
-    
-    data = request.json
-    stmt = select(Favourites).where(and_(Favourites.user_id==id,Favourites.info_activity_id==data["info_activity_id"]))
-    fav = db.session.execute(stmt).scalar_one_or_none()
-    db.session.delete(fav)
+def delete_fav():
     try:
+        user_id = get_jwt_identity()
+        data = request.json
+        stmt = select(Favourites).where(and_(Favourites.user_id==user_id,Favourites.info_activity_id==data["info_activity_id"]))
+        fav = db.session.execute(stmt).scalar_one_or_none()
+        user = fav.client.user
+        db.session.delete(fav)
         db.session.commit()
     except Exception as e:
         return jsonify({"error":"Couldn't delete fav"}), 500
-    return jsonify({"success": True})
+    return jsonify({"success": True, "user": user.serialize()})
 
 #Endpoints para Activities
 

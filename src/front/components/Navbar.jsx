@@ -68,9 +68,9 @@ export const Navbar = () => {
 						<div className="nav-item dropdown" ref={dropRef}>
 							<a className="nav-link dropdown-toggle text-white fw-semibold navbarLink" onClick={handleClickExcursiones} role="button" data-bs-toggle="dropdown" aria-expanded="false">Excursiones</a>
 							<ul className="dropdown-menu dropdown-menu-dark NavbarDropdown text-center text-lg-start">
-								<li><Link className="dropdown-item text-white" to="/sport">Deporte</Link></li>
-								<li><Link className="dropdown-item text-white" to="/leisure">Ocio</Link></li>
-								<li><Link className="dropdown-item text-white" to="/tourism">Turismo</Link></li>
+								<li onClick={()=>setDropdownOpen(false)}><Link className="dropdown-item text-white" to="/sport">Deporte</Link></li>
+								<li onClick={()=>setDropdownOpen(false)}><Link className="dropdown-item text-white" to="/leisure">Ocio</Link></li>
+								<li onClick={()=>setDropdownOpen(false)}><Link className="dropdown-item text-white" to="/tourism">Turismo</Link></li>
 							</ul>
 						</div>
 						<Link className="nav-item nav-link active text-white fs-6 fw-semibold navbarLink" to={"/"}>Equipo</Link>
@@ -96,8 +96,8 @@ export const Navbar = () => {
 										})}
 										{searchResults.professionals.map((item, i) => {
 											return (<li className="px-2" key={i}>
-												<Link className="text-decoration-none text-dark" to={"/professional/" + item.user_id}>
-													<i className="fa-regular fa-user me-2"></i> {item.name + " " + item.surname}
+												<Link className="text-decoration-none text-dark text-capitalize" to={"/professional/" + item.user_id}>
+													<i class="fa-solid fa-user-tie me-2"></i> {item.name + " " + item.surname}
 												</Link>
 											</li>)
 										})}

@@ -15,7 +15,7 @@ const ScrollToTop = ({ loc, children }) => {
             window.scrollTo(0, 0);
         }
         prevLocation.current = location;
-    }, [location]);
+    }, [location.pathname]);
 
     return children;
 };
