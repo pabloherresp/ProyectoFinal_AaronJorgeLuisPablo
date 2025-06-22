@@ -791,7 +791,9 @@ def password_update():
     return jsonify({'success': True}), 200
 
 #Post a la API de Stripe
+stripe.api_key = os.getenv("STRIPE_SECRET_KEY")
 @api.route('/payment', methods=['POST'])
+@jwt_required()
 def post_payment():
     try:
         data = request.get_json()

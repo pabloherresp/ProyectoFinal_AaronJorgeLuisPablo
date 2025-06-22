@@ -6,6 +6,7 @@ import CommentBox from "../components/CommentBox"
 import Inputmask from 'inputmask';
 import Cleave from 'cleave.js/react';
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
+import { Signup } from "./Signup"
 
 
 export const Activity = () => {
@@ -17,7 +18,7 @@ export const Activity = () => {
 
 
     const [cardHolder, setCardHolder] = useState("")
-    const [errorHolder,setErrorHolder] = useState("")
+    const [errorHolder, setErrorHolder] = useState("")
 
 
     const { store, dispatch } = useGlobalReducer()
@@ -153,9 +154,12 @@ export const Activity = () => {
 
         const amount = Math.round(store.activity.price * 100);
 
-        const { clientSecret, error: backendError } = await fetch('/api/payment', {
+        const { clientSecret, error: backendError } = await fetch(`${import.meta.env.VITE_BACKEND_URL}api/payment`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': "Bearer " + localStorage.getItem("token")
+            },
             body: JSON.stringify({ amount })
         }).then(r => r.json());
 
@@ -181,9 +185,6 @@ export const Activity = () => {
     }
 
     function resetValues() {
-        setCardNumber("")
-        setDateExp("")
-        setCcvData("")
         setCardHolder("")
     }
 
@@ -197,9 +198,15 @@ export const Activity = () => {
                 <div className="d-flex align-items-center pt-3">
                     <h1 className="font1 px-5">{store.activity?.info_activity?.name}</h1>
 
-                    <button type="button" className="btn FavButton align-self-center mx-3" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@getbootstrap">
-                        <img src="/media/shopping-cart.svg" alt="" />
-                    </button>
+                    {store.user.id != null ?
+                        <button type="button" className="btn FavButton align-self-center mx-3" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@getbootstrap">
+                            <img src="/media/shopping-cart.svg" alt="" />
+                        </button>
+                        :
+                        <button type="button" onClick={() => navigate("/signup")} className="btn FavButton align-self-center mx-3">
+                            <img src="/media/shopping-cart.svg" alt="" />
+                        </button>
+                    }
 
                     {store.user.id != null && (store.user.favourites?.map((item) => item.activity?.id).includes(store.activity?.info_activity?.id) ?
                         <button className="btn FavButton" onClick={((e) => {
@@ -296,9 +303,6 @@ export const Activity = () => {
 
                 <CommentBox />
 
-                <div className="d-flex justify-content-center m-5">
-                    <button type="button" className="btn btn-primary p-3" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@getbootstrap">Inscríbete ya</button>
-                </div>
             </div>
 
             <div className="container2Activity rounded-end">

@@ -23,6 +23,7 @@ sqlalchemy = "*"
 colorama = "*"
 rapidfuzz = "*"
 flask_mail = "*"
+stripe = "*"
 
 [requires]
 python_version = "3.13"
