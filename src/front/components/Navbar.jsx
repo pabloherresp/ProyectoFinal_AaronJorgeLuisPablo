@@ -15,7 +15,7 @@ export const Navbar = () => {
 	const dropRef = useRef(null)
 
 	const handleClickExcursiones = () => {
-		if(dropdownOpen){
+		if (dropdownOpen) {
 			navigate("/activities")
 			setDropdownOpen(false)
 		}
@@ -37,9 +37,9 @@ export const Navbar = () => {
 		}
 	}
 
-	 useEffect(() => {
+	useEffect(() => {
 		const handleClickOutside = (e) => {
-			if( dropRef.current && !dropRef.current.contains(event.target))
+			if (dropRef.current && !dropRef.current.contains(event.target))
 				setDropdownOpen(false)
 		}
 
@@ -68,9 +68,9 @@ export const Navbar = () => {
 						<div className="nav-item dropdown" ref={dropRef}>
 							<a className="nav-link dropdown-toggle text-white fw-semibold navbarLink" onClick={handleClickExcursiones} role="button" data-bs-toggle="dropdown" aria-expanded="false">Excursiones</a>
 							<ul className="dropdown-menu dropdown-menu-dark NavbarDropdown text-center text-lg-start">
-								<li onClick={()=>setDropdownOpen(false)}><Link className="dropdown-item text-white" to="/sport">Deporte</Link></li>
-								<li onClick={()=>setDropdownOpen(false)}><Link className="dropdown-item text-white" to="/leisure">Ocio</Link></li>
-								<li onClick={()=>setDropdownOpen(false)}><Link className="dropdown-item text-white" to="/tourism">Turismo</Link></li>
+								<li onClick={() => setDropdownOpen(false)}><Link className="dropdown-item text-white" to="/sport">Deporte</Link></li>
+								<li onClick={() => setDropdownOpen(false)}><Link className="dropdown-item text-white" to="/leisure">Ocio</Link></li>
+								<li onClick={() => setDropdownOpen(false)}><Link className="dropdown-item text-white" to="/tourism">Turismo</Link></li>
 							</ul>
 						</div>
 						<Link className="nav-item nav-link active text-white fs-6 fw-semibold navbarLink" to={"/"}>Equipo</Link>
@@ -81,10 +81,10 @@ export const Navbar = () => {
 						<input className="form-control dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false" type="search" placeholder="Buscar..." aria-label="Search" value={search} onChange={handleSearch} />
 						<ul className="dropdown-menu dropdown-menu-center NavbarSearchDropdown my-2 my-lg-0" data-bs-auto-close="outside">
 							{(searching ? <div className="text-center">
-											<div className="spinner-border mx-auto" role="status">
-											<span className="visually-hidden">Loading...</span>
-											</div>
-										</div> :
+								<div className="spinner-border mx-auto" role="status">
+									<span className="visually-hidden">Loading...</span>
+								</div>
+							</div> :
 								(searchResults.professionals.length > 0 || searchResults.activities.length > 0 ?
 									<>
 										{searchResults.activities.map((item, i) => {
@@ -119,7 +119,7 @@ export const Navbar = () => {
 							</div> :
 							<div className="dropdown w-100">
 								<div className="shadow nav-item rounded-pill d-flex NavbarUserPill" data-bs-toggle="dropdown" aria-expanded="false">
-									<img className="rounded-circle" src={"/avatar/" + (store.user.avatar_url ? store.user.avatar_url: "0.jpg")} alt="" />
+									<img className="rounded-circle" src={"/avatar/" + (store.user.avatar_url ? store.user.avatar_url : "0.jpg")} alt="" />
 									<span className="text-white text-capitalize fs-6 fw-semibold ms-2 me-3 align-self-center">{store.user.username}</span>
 
 								</div>
@@ -127,9 +127,7 @@ export const Navbar = () => {
 									<li><Link className="dropdown-item text-white d-flex justify-content-between" to="/personalspace/">
 										<div className="me-3"><i className="fa-solid fa-user fa-sm me-auto"></i></div> <span className="fw-semibold">Mi espacio personal</span>
 									</Link></li>
-										<li><Link className="dropdown-item text-white d-flex justify-content-between" to={"/professionalspace/"}>
-											<div><i className="fa-solid fa-shield-halved fa-sm"></i></div> <span className="fw-semibold">Seguridad</span>
-										</Link></li>
+
 									<li><Link className="dropdown-item text-white d-flex justify-content-between" onClick={() => {
 										dispatch({ type: "closeSession" })
 										setTimeout(() => navigate(0), 50)

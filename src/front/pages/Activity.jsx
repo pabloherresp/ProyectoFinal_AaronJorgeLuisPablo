@@ -109,6 +109,21 @@ export const Activity = () => {
 
     }
 
+    
+    const favItem = async () => {
+        const resp = await collection.createFav(chosen)
+        if (resp.success) {
+            setTimeout(()=>dispatch({ type: "loadUser", payload: resp.user }), 200)
+        }
+    }
+
+    const delItem = async () => {
+        const resp = await collection.deleteFav(chosen)
+        if (resp.success) {
+            setTimeout(()=>dispatch({ type: "loadUser", payload: resp.user }), 200)
+        }
+    }
+
     useEffect(() => {
 
         collection.returnActivity(chosen).then(data => dispatch({ type: 'activity', payload: data }))
@@ -149,7 +164,7 @@ export const Activity = () => {
                         <img src="/media/shopping-cart.svg" alt="" />
                     </button>
 
-                    {store.user.id != null && (store.user.favourites?.map((item) => item.activity.id).includes(store.activity.info_activity.id) ?
+                    {store.user.id != null && (store.user.favourites?.map((item) => item.activity?.id).includes(store.activity?.info_activity?.id) ?
                         <button className="btn FavButton" onClick={((e) => {
                             e.stopPropagation()
                             if (store.user.needs_filling == true)

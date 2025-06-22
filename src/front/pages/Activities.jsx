@@ -1,5 +1,5 @@
 import { useEffect } from "react"
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import useGlobalReducer from "../hooks/useGlobalReducer"
 import { ActivityCard } from "../components/ActivityCard"
 import collection from "../services/collection"
@@ -8,6 +8,7 @@ import React, { useState } from "react";
 
 export const Activities = () => {
     const { store, dispatch } = useGlobalReducer()
+    const navigate = useNavigate()
 
     const [counter1, setCounter1] = useState(0);
     const [counter4, setCounter4] = useState(0);
@@ -109,11 +110,11 @@ export const Activities = () => {
             <div className="d-flex justify-content-around gap-3">
                 <div className="CarouselFiller"></div>
                 <div className="row">
-                    <div className="col-lg-4 col-md-6 col-sm-12 mt-4"><ActivityCard img={"src/front/assets/img/Padel.webp"} title={"Actividades deportivas"} description={"Apúntate a diversas actividades deportivas para mantenerte sano y en forma"} /></div>
+                    <div className="col-lg-4 col-md-6 col-sm-12 mt-4" onClick={()=>navigate("/sport")}><ActivityCard img={"src/front/assets/img/Padel.webp"} title={"Actividades deportivas"} description={"Apúntate a diversas actividades deportivas para mantenerte sano y en forma"} /></div>
 
-                    <div className="col-lg-4 col-md-6 col-sm-12 mt-4"><ActivityCard img={"src/front/assets/img/Ruinas.jpeg"} title={"Actividades turísticas"} description={"Recorre el mundo descubriendo nuevas ubicaciones con un encanto exótico"} /></div>
+                    <div className="col-lg-4 col-md-6 col-sm-12 mt-4" onClick={()=>navigate("/tourism")}><ActivityCard img={"src/front/assets/img/Ruinas.jpeg"} title={"Actividades turísticas"} description={"Recorre el mundo descubriendo nuevas ubicaciones con un encanto exótico"} /></div>
 
-                    <div className="col-lg-4 col-md-6 col-sm-12 mt-4"><ActivityCard img={"src/front/assets/img/Poker.webp"} title={"Actividades recreativas"} description={"No te quedes sin sitio en nuestras actividades recreativas donde puedes pasar un buen rato"} /></div>
+                    <div className="col-lg-4 col-md-6 col-sm-12 mt-4" onClick={()=>navigate("/leisure")}><ActivityCard  img={"src/front/assets/img/Poker.webp"} title={"Actividades recreativas"} description={"No te quedes sin sitio en nuestras actividades recreativas donde puedes pasar un buen rato"} /></div>
                 </div>
                 <div className="CarouselFiller"></div>
             </div>

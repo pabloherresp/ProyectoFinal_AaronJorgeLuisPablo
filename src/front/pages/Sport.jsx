@@ -91,16 +91,16 @@ return(
     <div className="pb-5 container bg-white my-5 rounded myActivityCard fontFamily">
         <h1 className="font1 p-5 text-center">Actividad más valorada</h1>
          <div className="row justify-content-around">
-           {mostValuatedActivities()?.map((activity,i) => <Link className="text-decoration-none valor-card2 col-lg-4 col-md-6 col-sm-12 mt-4" to={'/activities/' + activity.id}><ActivityCard className="mw-100" img={activity.info_activity.media[0]} title={activity.info_activity.name} origin={activity.meeting_point} description={activity.info_activity.desc.slice(0,40)}></ActivityCard></Link>)}
+           {mostValuatedActivities()?.map((activity,i) => <Link key={i} className="text-decoration-none valor-card2 col-lg-4 col-md-6 col-sm-12 mt-4" to={'/activities/' + activity.id}><ActivityCard className="mw-100" img={activity.info_activity.media[0]} title={activity.info_activity.name} origin={activity.meeting_point} description={activity.info_activity.desc.slice(0,40)}></ActivityCard></Link>)}
         </div>  
         <h1 className="font1 p-5 text-center">Última oportunidad</h1>
          <div className="row justify-content-around">
-           {lastChance()?.map((activity,i) => <Link className="text-decoration-none valor-card2 col-lg-4 col-md-6 col-sm-12 mt-4" to={'/activities/' + activity.id}><ActivityCard className="mw-100" img={activity.info_activity.media[0]} title={activity.info_activity.name} origin={activity.meeting_point} description={activity.info_activity.desc.slice(0,40)} timeleft={returnCounter(activity.start_date)}></ActivityCard></Link>)}
+           {lastChance()?.map((activity,i) => <Link key={i} className="text-decoration-none valor-card2 col-lg-4 col-md-6 col-sm-12 mt-4" to={'/activities/' + activity.id}><ActivityCard className="mw-100" img={activity.info_activity.media[0]} title={activity.info_activity.name} origin={activity.meeting_point} description={activity.info_activity.desc.slice(0,40)} timeleft={returnCounter(activity.start_date)}></ActivityCard></Link>)}
         </div>  
         <h1 className="font1 p-5 mt-5 text-center">Actividades deportivas activas</h1>
 
         <div className="row justify-content-around">
-           {returnAllSportActivities()?.map((activity,i) => <Link className="text-decoration-none valor-card2 col-lg-4 col-md-6 col-sm-12 mt-4" to={'/activities/' + activity.id}><ActivityCard className="mw-100" img={activity.info_activity.media[0]} title={activity.info_activity.name} origin={activity.meeting_point} description={activity.info_activity.desc.slice(0,40)} timeleft={returnCounter(returnAllSportActivities()[i]?.start_date)}></ActivityCard></Link>)}
+           {returnAllSportActivities()?.map((activity,i) => <Link key={i} className="text-decoration-none valor-card2 col-lg-4 col-md-6 col-sm-12 mt-4" to={'/activities/' + activity.id}><ActivityCard className="mw-100" img={activity.info_activity.media[0]} title={activity.info_activity.name} origin={activity.meeting_point} description={activity.info_activity.desc.slice(0,40)} timeleft={returnCounter(returnAllSportActivities()[i]?.start_date)}></ActivityCard></Link>)}
         </div>
     </div>
 

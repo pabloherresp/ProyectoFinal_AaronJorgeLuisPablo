@@ -255,7 +255,7 @@ export const ProfessionalPanel = () => {
 												<textarea name="desc" className="form-control mt-2" style={{ height: '280px' }} id="bio" placeholder="" onChange={handleChange} value={formData.desc} />
 											</div>
 											<div id="descHelpBlock" className="col-12 form-text">
-												Una descripción sobre la actividad, toda la información necesaria para que los usuarios se interesen por la actividad.
+												Una descripción sobre la actividad, toda la información necesaria para que los usuarios se interesen por la ella.
 											</div>
 										</div>
 									</fieldset>
@@ -276,14 +276,14 @@ export const ProfessionalPanel = () => {
 									<div className="row my-3">
 										<div className="col-6">
 											<div className="form-floating input-group mx-auto">
-												<input type="text" inputMode="numeric" pattern="\d*" name="price" aria-describedby="basic-addon2" className="form-control" id="price" placeholder="" onChange={handleChange} value={formData.price} />
+												<input type="number" step="0.01" min="0" inputMode="decimal" name="price" aria-describedby="basic-addon2" className="form-control" id="price" placeholder="" onChange={handleChange} value={formData.price} />
 												<label className="fs-6" htmlFor="price">Precio</label>
 												<span className="input-group-text px-3 fw-semibold fs-6" id="basic-addon2">€</span>
 											</div>
 										</div>
 										<div className="col-6">
 											<div className="form-floating mx-auto">
-												<input type="number" min="0" name="slots" className="form-control" id="price" placeholder="" onChange={handleChange} value={formData.slots} />
+												<input type="number" min="0" name="slots" className="form-control" id="slots" placeholder="" onChange={handleChange} value={formData.slots} />
 												<label className="fs-6" htmlFor="slots">Plazas</label>
 											</div>
 										</div>
