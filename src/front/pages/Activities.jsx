@@ -177,8 +177,4 @@ export const Activities = () => {
         </div>
 
     )
-
-
-
-
 }
