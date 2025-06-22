@@ -39,7 +39,7 @@ export const ActivityCard = (props) => {
 
     return (
         (props.activity != null ?
-            < div className="card cardFormat p-0 rounded d-flex MoveUpAnimation" onClick={() => navigate("/activities/" + props.activity.id)}>
+            < div className="card cardFormat p-0 rounded d-flex MoveUpAnimation" onClick={() => {navigate("/activities/" + props.activity.id)}}>
                 <div className="imgCardFormat position-relative h-50">
                     {store.user.id != null && (store.user.favourites?.map((item) => item.activity.id).includes(props.activity.info_activity.id) ?
                         <button className="btn FavButton position-absolute top-0 end-0" onClick={((e) => {
