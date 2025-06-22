@@ -153,7 +153,7 @@ export const Activity = () => {
 
         const amount = Math.round(store.activity.price * 100);
 
-        const { clientSecret, error: backendError } = await fetch('/api/create-payment-intent', {
+        const { clientSecret, error: backendError } = await fetch('/api/payment', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ amount })
@@ -230,7 +230,7 @@ export const Activity = () => {
                     <div className="modal-dialog">
                         <div className="modal-content">
                             <div className="modal-header">
-                                <h1 className="modal-title fs-5" id="exampleModalLabel">Formulario de pago</h1><i className="fa-brands fa-cc-visa mx-3 display-6"></i>
+                                <h1 className="modal-title fs-5" id="exampleModalLabel">Formulario de pago</h1><i className="fa-brands fa-cc-stripe mx-3 display-6"></i>
                                 <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div className="modal-body">
