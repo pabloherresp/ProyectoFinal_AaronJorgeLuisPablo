@@ -10,7 +10,7 @@ export const ActivityCard = (props) => {
     const navigate = useNavigate()
 
     function formatDate(fecha) {
-        var fechaActual = new Date(Date.now())
+        var fechaActual = new Date(Date.now() + 7200000)
         var diff_dias = (new Date(fecha) - fechaActual) / 86400000
         var dias = Math.floor(diff_dias)
         var horas = Math.floor((diff_dias - dias) * 24)
@@ -44,13 +44,19 @@ export const ActivityCard = (props) => {
                     {store.user.id != null && (store.user.favourites?.map((item) => item.activity.id).includes(props.activity.info_activity.id) ?
                         <button className="btn FavButton position-absolute top-0 end-0" onClick={((e) => {
                             e.stopPropagation()
-                            delItem()
+                            if (store.user.needs_filling == true)
+                                navigate("/completeuserform")
+                            else
+                                delItem()
                         })}>
                             <img src="/media/heart-full.svg" alt="" />
                         </button>
                         :
                         <button className="btn FavButton position-absolute top-0 end-0" onClick={((e) => {
                             e.stopPropagation()
+                            if (store.user.needs_filling == true)
+                                navigate("/completeuserform")
+                            else
                             favItem()
                         })}>
                             <img src="/media/heart-empty.svg" alt="" />

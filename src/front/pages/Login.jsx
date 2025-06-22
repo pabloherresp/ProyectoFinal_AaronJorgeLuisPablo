@@ -52,6 +52,11 @@ export const Login = () => {
 		})
 	}
 
+	useEffect(()=>{
+		if (store.user.id != null)
+			navigate("/personalspace")
+	},[store.user])
+
 	return (
 		<div className="container bg-white rounded my-3">
 			<div className="row p-0">

@@ -377,7 +377,7 @@ def get_activities():
     activities = db.session.execute(stmt).scalars().all()
     if activities is None:
         return jsonify({"error": "Activities not found"}), 404
-    response_body = [activity.serialize() for activity in activities]
+    response_body = [activity.serialize(False) for activity in activities]
     return jsonify(response_body), 200
 
 @api.route('/activities/<int:id>', methods=['GET'])
@@ -386,7 +386,18 @@ def get_one_activity(id):
     activity= db.session.execute(stmt).scalar_one_or_none()
     if activity is None:
         return jsonify({"error": "Activity not found"}), 404
-    return jsonify(activity.serialize()), 200
+    return jsonify(activity.serialize(False)), 200
+
+@api.route('/myactivities', methods=['GET'])
+@jwt_required()
+def get_my_activities():
+    user_id = int(get_jwt_identity())
+    stmt = select(Activities).join(Info_activity).where(Info_activity.professional_id == user_id)
+    activities = db.session.execute(stmt).scalars().all()
+    if activities is None:
+        return jsonify({"error": "Activities not found"}), 404
+    response_body = [activity.serialize(True) for activity in activities]
+    return jsonify(response_body), 200
 
 @api.route('/activities', methods=['POST'])
 @jwt_required()
@@ -534,7 +545,7 @@ def get_inscriptions():
     ins = db.session.execute(stmt).scalars().all()
     if ins is None:
         return jsonify({"error":"Inscriptions not found"})
-    response_body = [i.serialize() for i in ins]
+    response_body = [i.serialize() for i in ins if i.is_active]
     return jsonify(response_body), 200
 
 @api.route('/inscriptions/<int:id>', methods=['GET'])

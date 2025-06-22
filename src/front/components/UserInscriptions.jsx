@@ -40,7 +40,8 @@ export const UserInscriptions = () => {
 	}
 
 	const formatDate = (date) => {
-		return date.toLocaleString("en-GB", { timeZone: "UTC" }).slice(0, -3).replace(",", "")
+		let date2 = new Date(new Date(date).getTime() + 7200000)
+		return date2.toLocaleString("en-GB", { timeZone: "UTC" }).slice(0, -3).replace(",", "")
 	}
 
 	const compareFunction = (a, b) => {
@@ -60,11 +61,10 @@ export const UserInscriptions = () => {
 
 	return (
 		<div className="py-4">
-			<h4 className="TextDark text-center fs-3 fw-semibold mb-4">Mis inscripciones</h4>
 			{inscriptions ? (
 				inscriptions.length > 0 ? (
-					<div className="table-responsive mx-1 mx-md-5">
-						<table className="table table-hover p-2 BgBackground">
+					<div className="mx-1 mx-md-5">
+						<table className="table table-hover table-responsive p-2 BgBackground">
 							<thead>
 								<tr className="BgSecondary">
 									<th scope="col" className="text-start ps-md-4 w-50 TextDark text-nowrap user-select-none" onClick={() => handleClickHead("name")}>
@@ -84,18 +84,17 @@ export const UserInscriptions = () => {
 								</tr>
 							</thead>
 							<tbody className="table-group-divider InscriptionsTable">
-								{inscriptions
-									.sort(compareFunction)
+								{inscriptions?.sort(compareFunction)
 									.filter((item, i) => i < limit)
 									.map((item, i) => (
 										<React.Fragment key={i}>
-											<tr>
-												<td className="ps-4 align-content-center d-none d-md-table-cell">
+											<tr >
+												<td className="ps-4 align-middle d-none d-md-table-cell">
 													<Link className="text-decoration-none fw-semibold" to={"/activities/" + item.activity.id}>
 														{item.activity.info_activity.name}
 													</Link>
 												</td>
-												<td className="align-content-center d-table-cell d-md-none" rowSpan={2}>
+												<td className="align-middle d-table-cell d-md-none" rowSpan={2}>
 													<Link className="text-decoration-none fw-semibold" to={"/activities/" + item.activity.id}>
 														{item.activity.info_activity.name}
 													</Link>
@@ -128,7 +127,7 @@ export const UserInscriptions = () => {
 													{/* <ModalReport id={"modalReport" + i.toString()} /> */}
 												</td>
 											</tr>
-											<tr className="d-md-none d-table-row">
+											<tr className="d-table-row d-md-none">
 												<td className="text-center fw-semibold align-middle PriceTD">
 													{item.activity.price.toFixed(2) + "€"}
 												</td>

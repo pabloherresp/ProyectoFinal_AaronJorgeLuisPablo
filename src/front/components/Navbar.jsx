@@ -97,7 +97,7 @@ export const Navbar = () => {
 										{searchResults.professionals.map((item, i) => {
 											return (<li className="px-2" key={i}>
 												<Link className="text-decoration-none text-dark text-capitalize" to={"/professional/" + item.user_id}>
-													<i class="fa-solid fa-user-tie me-2"></i> {item.name + " " + item.surname}
+													<i className="fa-solid fa-user-tie me-2"></i> {item.name + " " + item.surname}
 												</Link>
 											</li>)
 										})}
@@ -125,18 +125,16 @@ export const Navbar = () => {
 								</div>
 								<ul className="dropdown-menu dropdown-menu-dark dropdown-menu-end NavbarDropdown me-3 mt-3 shadow">
 									<li><Link className="dropdown-item text-white d-flex justify-content-between" to="/personalspace/">
-										<div className="me-3"><i className="fa-solid fa-user fa-sm me-auto"></i></div> <span>Mi espacio personal</span>
+										<div className="me-3"><i className="fa-solid fa-user fa-sm me-auto"></i></div> <span className="fw-semibold">Mi espacio personal</span>
 									</Link></li>
-									{store.user?.is_professional ?
-										<li><Link className="dropdown-item text-white d-flex justify-content-between" to={"/professionalspace/" + store.user.id}>
-											<div><i className="fa-solid fa-suitcase fa-sm"></i></div> <span>Mis actividades</span>
+										<li><Link className="dropdown-item text-white d-flex justify-content-between" to={"/professionalspace/"}>
+											<div><i className="fa-solid fa-shield-halved fa-sm"></i></div> <span className="fw-semibold">Seguridad</span>
 										</Link></li>
-										: <></>}
 									<li><Link className="dropdown-item text-white d-flex justify-content-between" onClick={() => {
 										dispatch({ type: "closeSession" })
 										setTimeout(() => navigate(0), 50)
 									}}>
-										<div><i className="fa-solid fa-power-off fa-sm"></i></div> <span className="ms-auto">Cerrar sesión</span>
+										<div><i className="fa-solid fa-power-off fa-sm"></i></div> <span className="fw-semibold">Cerrar sesión</span>
 									</Link></li>
 								</ul>
 							</div>

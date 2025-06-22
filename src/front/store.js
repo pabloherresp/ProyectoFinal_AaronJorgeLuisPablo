@@ -6,7 +6,7 @@ export const initialStore = () => {
       id: null,
       username: "",
       avatar_url: "",
-      is_professional: false,
+      is_professional: true,
     },
   };
 };

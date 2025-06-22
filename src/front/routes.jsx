@@ -22,6 +22,7 @@ import { DetailsProfessional } from "./pages/DetailsProfessional"
 import { Contacto } from "./pages/Contacto"
 import { VisionMision } from "./pages/VisionMision"
 import { ResetPassword } from "./pages/ResetPassword"
+import { TermsAndConditions } from "./pages/TermsAndConditions"
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -48,6 +49,7 @@ export const router = createBrowserRouter(
       <Route path="/sport" element={<Sport /> } />
       <Route path="/leisure" element={<Leisure /> } />
       <Route path="/tourism" element={<Tourism /> } />
+      <Route path="/termsandconditions" element={<TermsAndConditions /> } />
     </Route>
   ),
   {

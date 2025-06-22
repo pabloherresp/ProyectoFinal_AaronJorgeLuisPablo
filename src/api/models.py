@@ -141,7 +141,10 @@ class Activities(db.Model):
     info_activity: Mapped["Info_activity"] = relationship("Info_activity", back_populates="activities", uselist=False)
     inscriptions: Mapped[list["Inscriptions"]] = relationship("Inscriptions", back_populates="activity")
 
-    def serialize(self):
+    def serialize(self, can_see):
+        response_body = {}
+        if can_see:
+            response_body = {"inscriptions": [{"id": i.id, "user_id": i.user_id, "username": i.client.username, "name": i.client.name, "surname": i.client.surname, "telephone": i.client.telephone, "NID": i.client.NID} for i in self.inscriptions if i.is_active]}
         return {
             "id": self.id,
             "price": self.price,
@@ -153,7 +156,7 @@ class Activities(db.Model):
             "meeting_point": self.meeting_point,
             "is_active": self.is_active,
             "info_activity": self.info_activity.serialize(),
-            "inscriptions": [{"id": i.id, "user_id": i.user_id, "username": i.client.username, "name": i.client.name, "surname": i.client.surname} for i in self.inscriptions]
+            **response_body
         }
 
 class Info_activity(db.Model):
@@ -213,7 +216,7 @@ class Inscriptions(db.Model):
             "activity_id": self.activity_id,
             "inscription_date": self.inscription_date.isoformat(),
             "is_active": self.is_active,
-            "activity": self.activity.serialize() if self.activity else None,
+            "activity": self.activity.serialize(False) if self.activity else None,
             "user": self.client.user_id if self.client else None
         }
 

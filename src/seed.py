@@ -121,6 +121,10 @@ with app.app_context():
             meeting_point="Calle Gulliver, Valencia", is_active=True,
             start_date=datetime(2025, 5, 10, 10, 0), end_date=datetime(2025, 5, 10, 12, 0)
         ),
+        Activities(info_id=info_activities[0].id, price=15.0, slots=18, is_finished=False,
+            meeting_point="Calle Gulliver, Valencia 3", is_active=True,
+            start_date=datetime(2025, 5, 13, 10, 0), end_date=datetime(2025, 5, 13, 12, 0)
+        ),
         Activities(info_id=info_activities[1].id, price=18.0, slots=10, is_finished=True,
             meeting_point="Plaza Zocodover, Toledo", is_active=True,
             start_date=datetime(2025, 5, 11, 11, 0), end_date=datetime(2025, 5, 11, 13, 0)

@@ -19,12 +19,17 @@ export const Layout = () => {
             dispatch({ type: "loadUser", payload: resp })
     }
 
+    const loadActivities = async () => {
+        const resp = await collection.returnActivities()
+        dispatch({ type: 'activities', payload: resp })
+    }
+
     useEffect(() => {
         let token = localStorage.getItem("token")
         if (token) {
             login()
         }
-        collection.returnActivities().then(data => dispatch({ type: 'activities', payload: data }))
+        loadActivities()
     }, [])
 
     useEffect(() => {

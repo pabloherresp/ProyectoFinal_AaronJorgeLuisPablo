@@ -303,4 +303,48 @@ collection.deleteFav = async (id) => {
     }
 }
 
+collection.getMyActivities = async () => {
+    try{
+        const resp = await fetch(BACKEND_URL + "api/myactivities", {headers: {"Authorization": get_token()}});
+        const data = await resp.json();
+        return data
+    }catch(error){
+        console.log(error)
+    }
+}
+
+collection.createActivity = async (actData) => {
+    try {
+        const resp = await fetch(BACKEND_URL + "api/activities", {
+            method: "POST",
+            headers: {
+                "Content-Type":"application/json",
+                "Authorization": get_token()
+            }, body: JSON.stringify(actData)
+        })
+        const data = await resp.json()
+        return data
+    } catch (error) {
+        console.log(error)
+        return {error: "No se ha poddio crear la actividad"}
+    }
+}
+
+collection.createInfoActivity = async (actData) => {
+    try {
+        const resp = await fetch(BACKEND_URL + "api/info_activities", {
+            method: "POST",
+            headers: {
+                "Content-Type":"application/json",
+                "Authorization": get_token()
+            }, body: JSON.stringify(actData)
+        })
+        const data = await resp.json()
+        return data
+    } catch (error) {
+        console.log(error)
+        return {error: "No se ha poddio crear la actividad"}
+    }
+}
+
 export default collection
