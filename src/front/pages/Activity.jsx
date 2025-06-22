@@ -3,8 +3,15 @@ import { useNavigate, useParams } from "react-router-dom"
 import useGlobalReducer from "../hooks/useGlobalReducer"
 import collection from "../services/collection"
 import CommentBox from "../components/CommentBox"
+import Inputmask from 'inputmask';
+import Cleave from 'cleave.js/react';
 
 export const Activity = () => {
+
+    const [cardNumber,setCardNumber] = useState("")
+    const [dateExp,setDateExp] = useState("")
+    const [ccvData,setCcvData] = useState("")
+    const [cardHolder,setCardHolder] = useState("")
 
     const { store, dispatch } = useGlobalReducer()
 
@@ -132,6 +139,17 @@ export const Activity = () => {
 
     }, [])
 
+    function handleSubmit(){
+
+    }
+
+    function resetValues(){
+        setCardNumber("")
+        setDateExp("")
+        setCcvData("")
+        setCardHolder("")
+    }
+
 
 
 
@@ -175,25 +193,64 @@ export const Activity = () => {
                     <div className="modal-dialog">
                         <div className="modal-content">
                             <div className="modal-header">
-                                <h1 className="modal-title fs-5" id="exampleModalLabel">Formulario de pago</h1>
+                                <h1 className="modal-title fs-5" id="exampleModalLabel">Formulario de pago</h1><i className="fa-brands fa-cc-visa mx-3 display-6"></i>
                                 <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div className="modal-body">
-                                <form>
+                                <form onSubmit={() => handleSubmit()}>
                                     <div className="mb-3">
-                                        <label htmlFor="recipient-card" className="col-form-label">Nº de cuenta:</label>
-                                        <input type="text" className="form-control" id="recipient-card"></input>
+                                        <label className="col-form-label">Nº de cuenta:</label><br></br>
+                                         <Cleave
+                                            className="form-control"
+                                            options={{creditCard:true}}
+                                            value={cardNumber}
+                                            placeholder="0000 0000 0000 0000"
+                                            minLength={15}
+                                            required
+                                            onChange={(e) => setCardNumber(e.target.value)}
+                                            />
                                     </div>
                                     <div className="mb-3">
-                                        <label htmlFor="recipient-name" className="col-form-label">Nombre del titular:</label>
-                                        <input type="text" className="form-control" id="recipient-name"></input>
+                                        <label className="col-form-label">Fecha de caducidad:</label><br></br>
+                                        <Cleave
+                                            className="form-control"
+                                            placeholder="MM/YY"
+                                            required
+                                            value={dateExp}
+                                            options={{ date: true, datePattern: ['m', 'y'] }}
+                                            onChange={(e) => setDateExp(e.target.value)}
+                                            />
                                     </div>
+                                    <div className="mb-3">
+                                        <label className="col-form-label">CVV (Card Verification Value):</label><br></br>
+                                        <Cleave
+                                            className="form-control"
+                                            placeholder="000"
+                                            required
+                                            value={ccvData}
+                                            options={{ blocks: [3], numericOnly: true }}
+                                            onChange={(e) => setCcvData(e.target.value)}
+                                            />
+                                    </div>
+                                    <div className="mb-3">
+                                        <label className="col-form-label">Nombre del titular:</label><br></br>
+                                        <input
+                                            className="form-control"
+                                            type="text"
+                                            value={cardHolder}
+                                            required
+                                            maxLength={35}
+                                            placeholder="Ingresa tu nombre"
+                                            onChange={(e) => setCardHolder(e.target.value.replace(/[^a-zA-Z\s]/g, ''))}
+                                            />
+                                    </div> 
+                            <div className="modal-footer">
+                                <button type="button" onClick={() => resetValues()} className="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+                                <button type="submit" className="btn btn-success">Pagar</button>
+                            </div>
                                 </form>
                             </div>
-                            <div className="modal-footer">
-                                <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <button type="button" className="btn btn-primary">Send message</button>
-                            </div>
+                           
                         </div>
                     </div>
                 </div>
