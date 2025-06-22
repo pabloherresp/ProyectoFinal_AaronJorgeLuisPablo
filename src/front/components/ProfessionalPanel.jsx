@@ -133,7 +133,7 @@ export const ProfessionalPanel = () => {
 	return (
 		<div className="py-4">
 			<div className="table-responsive mx-1 mx-md-5">
-				<button className="btn Button text-nowrap w-auto mx-3 float-end mb-3" data-bs-toggle="modal" data-bs-target="#ActivityModal">Nueva actividad</button>
+				<button className="btn Button text-nowrap w-auto mx-3 float-end mb-3 px-5 fw-semibold" data-bs-toggle="modal" data-bs-target="#ActivityModal">Nueva actividad</button>
 				<table className="table table-hover p-2 BgBackground">
 					<thead>
 						<tr className="BgSecondary">

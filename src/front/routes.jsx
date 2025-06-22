@@ -46,6 +46,7 @@ export const router = createBrowserRouter(
       <Route path="/personalspace" element={<PersonalSpace />} />
       <Route path="/detailsprofessional/:id" element={<DetailsProfessional />} />
       <Route path="/resetpassword/" element={<ResetPassword />} />
+      <Route path="/newpassword" element={<ResetPassword new={true} /> } />
       <Route path="/sport" element={<Sport /> } />
       <Route path="/leisure" element={<Leisure /> } />
       <Route path="/tourism" element={<Tourism /> } />

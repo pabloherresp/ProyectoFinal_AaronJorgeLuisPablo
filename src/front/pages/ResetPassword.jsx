@@ -1,27 +1,41 @@
-import { useEffect, useState } from "react"
-import { Link, useNavigate, useSearchParams } from "react-router-dom"
+import { useState } from "react"
+import { useNavigate, useSearchParams } from "react-router-dom"
 import useGlobalReducer from "../hooks/useGlobalReducer"
 import collection from "../services/collection"
 
-export const ResetPassword = () => {
+export const ResetPassword = (props) => {
 	const [searchParams] = useSearchParams()
-	const [formData, setFormdata] = useState({password: "", passwordConfirm: ""})
-	const [passResult, setPassResult] = useState({success: false, message: ""})
+	const [formData, setFormdata] = useState({ password: "", passwordConfirm: "" })
+	const [passResult, setPassResult] = useState({ success: false, message: "" })
 	const navigate = useNavigate()
+	const {store,dispatch} = useGlobalReducer()
 
 	const handleReset = async (e) => {
 		e.preventDefault()
-		if(formData.password != formData.passwordConfirm)
-			setPassResult({success: false, message: "Las contraseñas no coinciden"})
-		else{
-			const resp = await collection.changePassword(searchParams.get("token"), formData.password)
-
-			if (!resp.success)
-				setPassResult({success: false, message: "Error al cambiar la contraseña"})
+		if (formData.password != formData.passwordConfirm)
+			setPassResult({ success: false, message: "Las contraseñas no coinciden" })
+		else {
+			if (props.new) {
+				const resp = await collection.changePassword(localStorage.getItem("token"), formData.password)
+				if (!resp.success)
+					setPassResult({ success: false, message: "Error al cambiar la contraseña" })
+				else {
+					setPassResult({ success: true, message: "Contraseña actualizada con éxito." })
+					dispatch({type: "closeSession"})
+					setTimeout(() => navigate("/login"), 2000)
+				}
+			}
 			else {
-				setPassResult({success: true, message: "Contraseña actualizada con éxito."})
-				setTimeout(() => navigate("/login"), 2000)
-		}
+				const resp = await collection.changePassword(searchParams.get("token"), formData.password)
+				if (!resp.success)
+					setPassResult({ success: false, message: "Error al cambiar la contraseña" })
+				else {
+					setPassResult({ success: true, message: "Contraseña actualizada con éxito." })
+					setTimeout(() => navigate("/login"), 2000)
+
+				}
+
+			}
 
 		}
 	}
@@ -42,7 +56,8 @@ export const ResetPassword = () => {
 							<img className="img-fluid" src="src\front\assets\img\Logo_Nomadik.png" alt="" />
 						</div>
 						<div className="col-12 col-md-8 align-self-center">
-							<h3 className="display-5 fw-bold text-center my-2 TextDark">Restablecimiento de contraseña</h3>
+							{props.new ? <h3 className="display-5 fw-bold text-center my-2 TextDark">Cambio de contraseña</h3>
+							 : <h3 className="display-5 fw-bold text-center my-2 TextDark">Restablecimiento de contraseña</h3>}
 						</div>
 					</div>
 					<form className="m-3" onSubmit={handleReset}>
@@ -51,15 +66,15 @@ export const ResetPassword = () => {
 						</div>
 						<div className="form-label my-3 w-75 mx-auto">
 							<label className="fs-6 mb-2 fw-semibold" htmlFor="password">Contraseña</label>
-							<input type="password" name="password" className="form-control" id="password" placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;" autoComplete="current-password" onChange={handleChange} value={formData.password} />						
+							<input type="password" name="password" className="form-control" id="password" placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;" autoComplete="current-password" onChange={handleChange} value={formData.password} />
 						</div>
 						<div className="form-label my-3 w-75 mx-auto">
 							<label className="fs-6 mb-2 fw-semibold" htmlFor="passwordConfirm">Cconfirmar contraseña</label>
-							<input type="password" name="passwordConfirm" className="form-control" id="passwordConfirm" placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;" autoComplete="current-password" onChange={handleChange} value={formData.confirmPassword} />						
+							<input type="password" name="passwordConfirm" className="form-control" id="passwordConfirm" placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;" autoComplete="current-password" onChange={handleChange} value={formData.confirmPassword} />
 						</div>
 						<div className="row">
 							<input type="submit" value="Iniciar sesión" className="btn btn-primary my-2 w-auto mx-auto fw-bold" />
-							<p className={"text-center fw-semibold " + (passResult.success ? "text-success" : "text-danger" )}>{passResult.message}</p>
+							<p className={"text-center fw-semibold " + (passResult.success ? "text-success" : "text-danger")}>{passResult.message}</p>
 						</div>
 					</form>
 				</div>
