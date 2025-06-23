@@ -1,6 +1,8 @@
 import React from 'react';
+import useGlobalReducer from '../hooks/useGlobalReducer';
 
 export const CommentBox = (props) => {
+  const {store, dispatch} = useGlobalReducer();
   return (
     <div className="comentario-card mt-3">
       <div className="contenido">
@@ -22,3 +24,5 @@ export const CommentBox = (props) => {
     </div>
   );
 }
+
+export default CommentBox

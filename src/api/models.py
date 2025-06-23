@@ -83,7 +83,7 @@ class Clients(db.Model):
                 "birthdate": self.birthdate.isoformat() if self.birthdate else None,
                 "gender": self.gender.value,
                 "inscriptions": [i.id for i in self.inscriptions],
-                "favourites": [fav.info_activity_id for fav in self.favourites],
+                "favourites": [fav.serialize() for fav in self.favourites],
                 "reviews": [rev.id for rev in self.reviews] if self.reviews else None
             }
 
@@ -141,7 +141,10 @@ class Activities(db.Model):
     info_activity: Mapped["Info_activity"] = relationship("Info_activity", back_populates="activities", uselist=False)
     inscriptions: Mapped[list["Inscriptions"]] = relationship("Inscriptions", back_populates="activity")
 
-    def serialize(self):
+    def serialize(self, can_see):
+        response_body = {}
+        if can_see:
+            response_body = {"inscriptions": [{"id": i.id, "user_id": i.user_id, "username": i.client.username, "name": i.client.name, "surname": i.client.surname, "telephone": i.client.telephone, "NID": i.client.NID} for i in self.inscriptions if i.is_active]}
         return {
             "id": self.id,
             "price": self.price,
@@ -153,7 +156,7 @@ class Activities(db.Model):
             "meeting_point": self.meeting_point,
             "is_active": self.is_active,
             "info_activity": self.info_activity.serialize(),
-            "inscriptions": [{"id": i.id, "user_id": i.user_id, "username": i.client.username, "name": i.client.name, "surname": i.client.surname} for i in self.inscriptions]
+            **response_body
         }
 
 class Info_activity(db.Model):
@@ -213,7 +216,7 @@ class Inscriptions(db.Model):
             "activity_id": self.activity_id,
             "inscription_date": self.inscription_date.isoformat(),
             "is_active": self.is_active,
-            "activity": self.activity.serialize() if self.activity else None,
+            "activity": self.activity.serialize(False) if self.activity else None,
             "user": self.client.user_id if self.client else None
         }
 
@@ -221,15 +224,12 @@ class Favourites(db.Model):
     __tablename__ = "favourites"
     user_id: Mapped[int] = mapped_column(ForeignKey("clients.user_id"), primary_key=True)
     info_activity_id: Mapped[int] = mapped_column(ForeignKey("info_activities.id"), primary_key=True)
-
     client: Mapped["Clients"] = relationship(back_populates="favourites")
     activity: Mapped["Info_activity"] = relationship(back_populates="favourited_by")
 
     def serialize(self):
         return{
-            "user_id": self.user_id,
-            "info_activity_id": self.info_activity_id,
-            "user": self.client.serialize(),
+            "user": {"id": self.user_id, "username": self.client.username},
             "activity": self.activity.serialize()
         }
 
@@ -300,7 +300,7 @@ class Reports(db.Model):
         return {
             "id": self.id,
             "message": self.message,
-            "user": {"id": self.client.user_id, "username": self.client.username} if self.user else None,
+            "user": {"id": self.client.user_id, "username": self.client.username} if self.client else None,
             "professional": {"id": self.professional.user_id, "username": self.professional.user.client.username} if self.professional else None,
             "info_activity": {"id": self.info_activity.id, "name": self.info_activity.name} if self.info_activity else None,
             "is_checked": self.is_checked,

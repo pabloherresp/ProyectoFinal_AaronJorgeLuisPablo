@@ -13,33 +13,39 @@ export const Layout = () => {
 
     const login = async () => {
         const resp = await collection.loginToken()
-        if(!resp.success)
-            dispatch({type: "closeSession"})
+        if (!resp.success)
+            dispatch({ type: "closeSession" })
         else
-            dispatch({type: "loadUser", payload: resp})
+            dispatch({ type: "loadUser", payload: resp })
     }
 
-    useEffect(()=>{
+    const loadActivities = async () => {
+        const resp = await collection.returnActivities()
+        dispatch({ type: 'activities', payload: resp })
+    }
+
+    useEffect(() => {
         let token = localStorage.getItem("token")
-        if(token){
+        if (token) {
             login()
         }
-    },[])
+        loadActivities()
+    }, [])
 
-    useEffect(()=>{
-        if(store.user.needs_filling == true)
+    useEffect(() => {
+        if (store.user.needs_filling == true)
             navigate("/completeuserform")
     },[store.user])
 
     return (
-        <div className="Page">
-            <ScrollToTop>
+        <ScrollToTop>
+            <div className="Page">
                 <Navbar />
-                <main className="PageContent">
+                <main className="PageContent d-flex justify-content-center align-items-center">
                     <Outlet />
                 </main>
                 <Footer />
-            </ScrollToTop>
-        </div>
+            </div>
+        </ScrollToTop>
     )
 }

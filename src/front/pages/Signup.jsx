@@ -1,11 +1,14 @@
 import { useEffect, useRef, useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import collection from "../services/collection"
+import useGlobalReducer from "../hooks/useGlobalReducer"
 
 export const Signup = () => {
 	const [formData, setFormdata] = useState({ username: "", email: "", confirmEmail: "", password: "", confirmPassword: "" })
 	const [messages, setMessages] = useState({ username: "", usernameClass: "", usernameStatus: false, email: "", emailClass: "", password: "", passwordClass: "" })
 	const [tooltipTimeout, setTooltipTimeout] = useState(null)
+
+	const {store,dispatch} = useGlobalReducer()
 
 	const checkRef = useRef(null)
 	const tooltipRef = useRef(null)
@@ -70,6 +73,11 @@ export const Signup = () => {
 		});
 	}, [])
 
+	useEffect(() => {
+		if (store.user.id != null)
+			navigate("/personalspace")
+	}, [store.user])
+
 	return (
 		<div className="container bg-white rounded my-3">
 			<div className="row p-0">
@@ -87,20 +95,20 @@ export const Signup = () => {
 						</div>
 					</div>
 					<div className="mx-auto align-self-center w-75 d-none d-md-block">
-						<p className="m-4 fw-semibold mt-3">Únete a nuestra comunidad y descubre un mundo de actividades, experiencias únicas y personas con tus mismas ganas de disfrutar.</p>				
+						<p className="m-4 fw-semibold mt-3">Únete a nuestra comunidad y descubre un mundo de actividades, experiencias únicas y personas con tus mismas ganas de disfrutar.</p>
 					</div>
 					<form className="m-3" onSubmit={handleSignup}>
 						<div className="row w-75 mx-auto">
 							<div className="col-12 col-lg-6">
 								<div className="my-2 mx-auto">
 									<label className="fs-6 fw-semibold mb-2" htmlFor="email">Email</label>
-									<input required type="email" name="email" className="form-control" id="email" placeholder="" autoComplete="username" onChange={handleChange} value={formData.email} />
+									<input required type="email" name="email" className="form-control" id="email" placeholder="name@gmail.com" autoComplete="username" onChange={handleChange} value={formData.email} />
 								</div>
 							</div>
 							<div className="col-12 col-lg-6">
 								<div className="my-2 mx-auto">
 									<label className="fs-6 fw-semibold mb-2" htmlFor="confirmEmail">Confirmar email</label>
-									<input required type="email" name="confirmEmail" className="form-control" id="confirmEmail" placeholder="" onChange={handleChange} value={formData.confirmEmail} />
+									<input required type="email" name="confirmEmail" className="form-control" id="confirmEmail" placeholder="name@gmail.com" onChange={handleChange} value={formData.confirmEmail} />
 								</div>
 							</div>
 							<div id="emailHelpBlock" className="col-12 form-text text-danger">
@@ -109,13 +117,13 @@ export const Signup = () => {
 							<div className="col-12 col-lg-6">
 								<div className="my-2 mx-auto">
 									<label className="fs-6 fw-semibold mb-2" htmlFor="password">Contraseña</label>
-									<input required type="password" name="password" className="form-control" id="password" placeholder="" autoComplete="new-password" onChange={handleChange} value={formData.password} />
+									<input required type="password" name="password" className="form-control" id="password" placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;" autoComplete="new-password" onChange={handleChange} value={formData.password} />
 								</div>
 							</div>
 							<div className="col-12 col-lg-6">
 								<div className="my-2 mx-auto">
 									<label className="fs-6 fw-semibold mb-2" htmlFor="confirmPassword">Confirmar contraseña</label>
-									<input required type="password" name="confirmPassword" className={"form-control " + messages.emailClass} id="confirmPassword" placeholder="" autoComplete="new-password" onChange={handleChange} value={formData.confirmPassword} />
+									<input required type="password" name="confirmPassword" className={"form-control " + messages.emailClass} id="confirmPassword" placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;" autoComplete="new-password" onChange={handleChange} value={formData.confirmPassword} />
 								</div>
 							</div>
 							<div id="passwordHelpBlock" className="col-12 form-text text-danger">
@@ -125,7 +133,7 @@ export const Signup = () => {
 							<div className="form-check my-3 mx-auto w-auto">
 								<input ref={checkRef} className="form-check-input" type="checkbox" value="" id="checkChecked" data-bs-title="This top tooltip is themed via CSS variables." />
 								<label className="form-check-label fw-semibold" htmlFor="checkChecked">
-									Acepta los <Link className="text-decoration-none" to="/signup">los Términos de Servicio</Link>
+									Acepta los <Link className="text-decoration-none" target="_blank" to="/termsandconditions">Términos de Servicio</Link>
 								</label>
 							</div>
 

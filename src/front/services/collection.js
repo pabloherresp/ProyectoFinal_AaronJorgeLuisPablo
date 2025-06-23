@@ -18,10 +18,20 @@ collection.returnActivities = async () => {
 
 collection.returnActivity = async (id) => {
     try{
-        const resp = await fetch(BACKEND_URL + "api/activities/" + id);
-        const data = await resp.json();
+        const resp = await fetch(BACKEND_URL + "api/activities/" + id)
+        const data = await resp.json()
         return data
     }catch(error){
+        console.log(error)
+    }
+}
+
+collection.getReviews = async () => {
+    try {
+        const resp = await fetch(BACKEND_URL + "api/reviews/")
+        const data = await resp.json()
+        return data
+    } catch (error) {
         console.log(error)
     }
 }
@@ -70,6 +80,43 @@ collection.loginUser = async (userdata) => {
     }catch(error) {
 		console.log(error)
 		return {success: false, response: error.message}
+    }
+}
+
+collection.resetPassword = async (email) => {
+    try {
+        const resp = await fetch(BACKEND_URL + "api/reset_password", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({"email": email})
+        })
+        if(!resp.ok)
+            return {success: false, message: "No se ha encontrado un usuario con este email"}
+        else
+            return {success: true}
+    } catch (error) {
+        console.log(error)
+        return {success: false, message: "Error desconocido"}
+    }
+}
+
+collection.changePassword = async (token, password) => {
+    try {
+        const resp = await fetch(BACKEND_URL + "api/password", {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + token
+            },
+            body: JSON.stringify({"password": password})
+        })
+        if(!resp.ok)
+            return {success: false, message: "Error al cambiar contraseña"}
+        else
+            return {success: true}
+    } catch (error) {
+        console.log(error)
+        return {success: false, message: "Error desconocido"}
     }
 }
 
@@ -207,5 +254,143 @@ collection.search = async (text) => {
         return {error: error}
     }
 }
+
+collection.createReport = async (message, prof_id, act_id = null) => {
+    try {
+        const resp = await fetch(BACKEND_URL + "api/reports", {
+            method: "POST",
+            headers: {
+                "Content-Type":"application/json",
+                "Authorization": get_token()
+            }, body: JSON.stringify({message: message, activity_target_id: act_id, professional_target_id: prof_id})
+        })
+        const data = resp.json()
+        return data
+    } catch (error) {
+        console.log(error)
+        return {error: "No se pudo realizar el reporte"}
+    }
+}
+
+
+collection.createReview = async (info_activity_id, actRating, activityMessage, prof_id, profRating, professionalMessage) =>{
+    try {
+        const resp = await fetch(BACKEND_URL + "api/reviews", {
+            method: "POST",
+            headers: {
+                "Content-Type":"application/json",
+                "Authorization": get_token()
+            }, body: JSON.stringify({
+                info_activity_id: info_activity_id,
+                activity_rating: actRating,
+                activity_message: activityMessage,
+                professional_id: prof_id,
+                professional_rating:  profRating,
+                professional_message: professionalMessage
+            })
+        })
+        const data = resp.json()
+        return data
+    } catch (error) {
+        console.log(error)
+        return {error: "No se pudo realizar el reporte"}
+    }    
+}
+
+collection.createFav = async (id) => {
+    try {
+        const resp = await fetch(BACKEND_URL + "api/favs", {
+            method: "POST",
+            headers: {
+                "Content-Type":"application/json",
+                "Authorization": get_token()
+            }, body: JSON.stringify({info_activity_id: id})
+        })
+        const data = resp.json()
+        return data
+    } catch (error) {
+        console.log(error)
+        return {error: "No se ha podido crear el favorito"}
+    }
+}
+
+collection.deleteFav = async (id) => {
+    try {
+        const resp = await fetch(BACKEND_URL + "api/favs", {
+            method: "DELETE",
+            headers: {
+                "Content-Type":"application/json",
+                "Authorization": get_token()
+            }, body: JSON.stringify({info_activity_id: id})
+        })
+        const data = resp.json()
+        return data
+    } catch (error) {
+        console.log(error)
+        return {error: "No se ha podido crear el favorito"}
+    }
+}
+
+collection.getMyActivities = async () => {
+    try{
+        const resp = await fetch(BACKEND_URL + "api/myactivities", {headers: {"Authorization": get_token()}});
+        const data = await resp.json();
+        return data
+    }catch(error){
+        console.log(error)
+    }
+}
+
+collection.createActivity = async (actData) => {
+    try {
+        const resp = await fetch(BACKEND_URL + "api/activities", {
+            method: "POST",
+            headers: {
+                "Content-Type":"application/json",
+                "Authorization": get_token()
+            }, body: JSON.stringify(actData)
+        })
+        const data = await resp.json()
+        return data
+    } catch (error) {
+        console.log(error)
+        return {error: "No se ha poddio crear la actividad"}
+    }
+}
+
+collection.createInfoActivity = async (actData) => {
+    try {
+        const resp = await fetch(BACKEND_URL + "api/info_activities", {
+            method: "POST",
+            headers: {
+                "Content-Type":"application/json",
+                "Authorization": get_token()
+            }, body: JSON.stringify(actData)
+        })
+        const data = await resp.json()
+        return data
+    } catch (error) {
+        console.log(error)
+        return {error: "No se ha poddio crear la actividad"}
+    }
+}
+
+collection.returnAllReports = async () => {
+ 
+    try{
+        const resp = await fetch(BACKEND_URL + "api/reports",{
+            headers:{
+                "Authorization": get_token()
+            }
+        });
+        const data = await resp.json();
+        return data
+    }catch(error){
+        console.log(error)
+    }
+
+
+}
+
 
 export default collection

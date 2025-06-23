@@ -28,7 +28,7 @@ php_errorlog
 !README.md
 
 # ignore avatar files
-# *.jpg
+/public/avatar/*.jpg
 
 # ignore OS generated files
 ehthumbs.db

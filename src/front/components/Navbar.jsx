@@ -15,7 +15,7 @@ export const Navbar = () => {
 	const dropRef = useRef(null)
 
 	const handleClickExcursiones = () => {
-		if(dropdownOpen){
+		if (dropdownOpen) {
 			navigate("/activities")
 			setDropdownOpen(false)
 		}
@@ -37,9 +37,9 @@ export const Navbar = () => {
 		}
 	}
 
-	 useEffect(() => {
+	useEffect(() => {
 		const handleClickOutside = (e) => {
-			if( dropRef.current && !dropRef.current.contains(event.target))
+			if (dropRef.current && !dropRef.current.contains(event.target))
 				setDropdownOpen(false)
 		}
 
@@ -64,38 +64,40 @@ export const Navbar = () => {
 
 				<div className="collapse navbar-collapse text-center text-lg-start w-100" id="navbarSupportedContent">
 					<div className="navbar-nav mb-0 gap-3 w-auto d-flex justify-content-center justify-content-lg-start">
-						<Link className="nav-item nav-link active text-white fs-6 fw-semibold" to={"/"}>Home</Link>
+						<Link className="nav-item nav-link active text-white fs-6 fw-semibold navbarLink" to={"/"}>Inicio</Link>
 						<div className="nav-item dropdown" ref={dropRef}>
-							<a className="nav-link dropdown-toggle text-white fw-semibold" onClick={handleClickExcursiones} role="button" data-bs-toggle="dropdown" aria-expanded="false">Excursiones</a>
+							<a className="nav-link dropdown-toggle text-white fw-semibold navbarLink" onClick={handleClickExcursiones} role="button" data-bs-toggle="dropdown" aria-expanded="false">Excursiones</a>
 							<ul className="dropdown-menu dropdown-menu-dark NavbarDropdown text-center text-lg-start">
-								<li><a className="dropdown-item text-white" href="#">Deporte</a></li>
-								<li><a className="dropdown-item text-white" href="#">Ocio</a></li>
-								<li><a className="dropdown-item text-white" href="#">Turismo</a></li>
+								<li onClick={() => setDropdownOpen(false)}><Link className="dropdown-item text-white" to="/sport">Deporte</Link></li>
+								<li onClick={() => setDropdownOpen(false)}><Link className="dropdown-item text-white" to="/leisure">Ocio</Link></li>
+								<li onClick={() => setDropdownOpen(false)}><Link className="dropdown-item text-white" to="/tourism">Turismo</Link></li>
 							</ul>
 						</div>
-						<Link className="nav-item nav-link active text-white fs-6 fw-semibold" to={"/"}>Equipo</Link>
-						<Link className="nav-item nav-link active text-white fs-6 fw-semibold" to={"/"}>Contacto</Link>
+						<Link className="nav-item nav-link active text-white fs-6 fw-semibold navbarLink" to={"/"}>Equipo</Link>
+						<Link className="nav-item nav-link active text-white fs-6 fw-semibold navbarLink me-2" to={"/contacto"}>Contacto</Link>
 					</div>
 
 					<form className="mx-auto busquedaBarra input-group">
 						<input className="form-control dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false" type="search" placeholder="Buscar..." aria-label="Search" value={search} onChange={handleSearch} />
-						<ul className="dropdown-menu dropdown-menu-center NavbarSearchDropdown busquedaBarra my-2 my-lg-0" data-bs-auto-close="outside">
-							{(searching ? <div className="spinner-border" role="status">
-								<span className="visually-hidden">Loading...</span>
+						<ul className="dropdown-menu dropdown-menu-center NavbarSearchDropdown my-2 my-lg-0" data-bs-auto-close="outside">
+							{(searching ? <div className="text-center">
+								<div className="spinner-border mx-auto" role="status">
+									<span className="visually-hidden">Loading...</span>
+								</div>
 							</div> :
 								(searchResults.professionals.length > 0 || searchResults.activities.length > 0 ?
 									<>
-										{searchResults.professionals.map((item, i) => {
-											return (<li className="px-2" key={i}>
-												<Link className="text-decoration-none text-dark" to={"/professional/" + item.user_id}>
-													<i className="fa-regular fa-user me-2"></i> {item.name + " " + item.surname}
-												</Link>
-											</li>)
-										})}
 										{searchResults.activities.map((item, i) => {
 											return (<li className="px-2" key={i}>
 												<Link className="text-decoration-none text-dark" to={"/activity/" + item.id}>
 													<i className="fa-regular fa-file-lines me-2"></i> {item.name + " (" + item.location + ")"}
+												</Link>
+											</li>)
+										})}
+										{searchResults.professionals.map((item, i) => {
+											return (<li className="px-2" key={i}>
+												<Link className="text-decoration-none text-dark text-capitalize" to={"/professional/" + item.user_id}>
+													<i className="fa-solid fa-user-tie me-2"></i> {item.name + " " + item.surname}
 												</Link>
 											</li>)
 										})}
@@ -109,32 +111,28 @@ export const Navbar = () => {
 						{!store.user.id ?
 							<div className="d-flex gap-3 w-100">
 								<div className="nav-item w-50">
-									<button className="btn navbarButton w-100 ms-md-2" onClick={() => { navigate("/login") }}>Login</button>
+									<button className="btn navbarButton fw-semibold w-100 ms-md-2" onClick={() => { navigate("/login") }}>Login</button>
 								</div>
 								<div className="nav-item w-50">
-									<button className="btn navbarButton text-nowrap w-100" onClick={() => { navigate("/signup") }}>Sign up</button>
+									<button className="btn navbarButton fw-semibold text-nowrap w-100" onClick={() => { navigate("/signup") }}>Sign up</button>
 								</div>
 							</div> :
 							<div className="dropdown w-100">
 								<div className="shadow nav-item rounded-pill d-flex NavbarUserPill" data-bs-toggle="dropdown" aria-expanded="false">
-									<img className="rounded-circle" src={"/avatar/" + (store.user.avatar_url ? store.user.avatar_url: "0.jpg")} alt="" />
+									<img className="rounded-circle" src={"/avatar/" + (store.user.avatar_url ? store.user.avatar_url : "0.jpg")} alt="" />
 									<span className="text-white text-capitalize fs-6 fw-semibold ms-2 me-3 align-self-center">{store.user.username}</span>
 
 								</div>
 								<ul className="dropdown-menu dropdown-menu-dark dropdown-menu-end NavbarDropdown me-3 mt-3 shadow">
 									<li><Link className="dropdown-item text-white d-flex justify-content-between" to="/personalspace/">
-										<div className="me-3"><i className="fa-solid fa-user fa-sm me-auto"></i></div> <span>Mi espacio personal</span>
+										<div className="me-3"><i className="fa-solid fa-user fa-sm me-auto"></i></div> <span className="fw-semibold">Mi espacio personal</span>
 									</Link></li>
-									{store.user?.is_professional ?
-										<li><Link className="dropdown-item text-white d-flex justify-content-between" to={"/professionalspace/" + store.user.id}>
-											<div><i className="fa-solid fa-suitcase fa-sm"></i></div> <span>Mis actividades</span>
-										</Link></li>
-										: <></>}
+
 									<li><Link className="dropdown-item text-white d-flex justify-content-between" onClick={() => {
 										dispatch({ type: "closeSession" })
 										setTimeout(() => navigate(0), 50)
 									}}>
-										<div><i className="fa-solid fa-power-off fa-sm"></i></div> <span className="ms-auto">Cerrar sesión</span>
+										<div><i className="fa-solid fa-power-off fa-sm"></i></div> <span className="fw-semibold">Cerrar sesión</span>
 									</Link></li>
 								</ul>
 							</div>
