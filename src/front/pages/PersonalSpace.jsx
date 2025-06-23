@@ -180,7 +180,7 @@ export const PersonalSpace = () => {
 									<div className="row d-flex justify-content-evenly px-4 py-3">
 										{store.user.reviews?.map((el, i) => {
 											return <div key={i} className="col-sm-12 col-md-6 col-lg-4 my-3">
-												<CommentBox />
+												<CommentBox target="activity" review={el}/>
 											</div>
 										})}
 									</div>

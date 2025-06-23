@@ -84,7 +84,7 @@ class Clients(db.Model):
                 "gender": self.gender.value,
                 "inscriptions": [{"id": i.id, "activity_id": i.activity_id} for i in self.inscriptions if i.is_active],
                 "favourites": [fav.serialize() for fav in self.favourites],
-                "reviews": [rev.id for rev in self.reviews] if self.reviews else None
+                "reviews": [rev.serialize() for rev in self.reviews] if self.reviews else None
             }
 
 class Professionals(db.Model):

@@ -94,12 +94,12 @@ export const Home = () => {
 						<p className="text-white fs-2 font1 col-12 col-md-6 text-center text-md-start">¡No pierdas el tiempo!<br />Crea ya tu cuenta de forma gratuita y empieza a ser parte de esto<br />Haz click aquí</p>
 					</div>}
 
-					<h1 className="font1 pt-5 text-center">Algunos usuarios satisfechos</h1>
+					<h1 className="font1 pt-5 text-center">Algunos reseñas satisfechas</h1>
 					{reviews.length > 0 ?
 						<div className="row row-cols-md-3 mx-2 pb-5">
 							{reviews.filter((item) => item.activity_rating != null && item.activity_message != "").sort((a, b) => a.activity_rating - b.activity_rating).filter((item, index) => index < 6).map((item, index, arr) =>
 								<div key={index} className={"col-12 col-md-6 col-lg-4 my-2" + (index == (arr.length - 1) && index % 2 != 0 ? " d-block d-md-none d-lg-block" : "")}>
-									<Link className="text-decoration-none valor-card2" to={'/activities/' + item.id}><CommentBox review={item} /></Link>
+									<CommentBox target="activity" review={item} />
 								</div>)}
 						</div>
 						: <div className="text-center">

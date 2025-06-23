@@ -302,7 +302,7 @@ export const Activity = () => {
 
                 <h3 className="px-5 pt-5">Comentarios</h3>
 
-                <CommentBox />
+                {store.activity?.reviews.map((item)=><CommentBox />)}
 
             </div>
 
