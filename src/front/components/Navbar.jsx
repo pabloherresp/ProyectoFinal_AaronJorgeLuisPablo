@@ -127,7 +127,9 @@ export const Navbar = () => {
 									<li><Link className="dropdown-item text-white d-flex justify-content-between" to="/personalspace/">
 										<div className="me-3"><i className="fa-solid fa-user fa-sm me-auto"></i></div> <span className="fw-semibold">Mi espacio personal</span>
 									</Link></li>
-
+									{store.user?.is_admin && <li><Link className="dropdown-item text-white d-flex justify-content-between" to="/admin/">
+										<div className="me-3"><i className="fa-solid fa-user fa-sm me-auto"></i></div> <span className="fw-semibold">Administración</span>
+									</Link></li>}
 									<li><Link className="dropdown-item text-white d-flex justify-content-between" onClick={() => {
 										dispatch({ type: "closeSession" })
 										setTimeout(() => navigate(0), 50)

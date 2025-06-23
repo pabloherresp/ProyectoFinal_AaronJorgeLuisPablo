@@ -375,7 +375,6 @@ collection.createInfoActivity = async (actData) => {
 }
 
 collection.returnAllReports = async () => {
- 
     try{
         const resp = await fetch(BACKEND_URL + "api/reports",{
             headers:{
@@ -383,12 +382,13 @@ collection.returnAllReports = async () => {
             }
         });
         const data = await resp.json();
-        return data
+        if(resp.status == 403)
+            return ({error: 403})
+        else
+            return data
     }catch(error){
         console.log(error)
     }
-
-
 }
 
 collection.returnAllUsers = async () => {

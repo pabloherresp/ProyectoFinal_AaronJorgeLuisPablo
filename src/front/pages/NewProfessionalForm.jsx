@@ -17,7 +17,7 @@ export const NewProfessionalForm = () => {
 			console.log("Hubo un error")
 		else
 			dispatch({type: "loadUser", payload: resp.user})
-			setTimeout(()=>navigate("/professionals/" + store.user.id),2000)
+			setTimeout(()=>navigate("/detailsprofessional/" + store.user.id),2000)
 	}
 
 	const handleChange = async (e) => {

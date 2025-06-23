@@ -125,6 +125,8 @@ def login():
     if not check_password_hash(user.password, data["password"]):
         return jsonify({"error":"Email/Password don't match"}), 401
     
+    admin = db.session.execute(select(Administrators).where(Administrators.user_id == user.id)).scalar_one_or_none()
+
     token = create_access_token(identity=str(user.id),expires_delta=False)
     userData = user.serialize()
     if user.client is not None:
@@ -135,7 +137,7 @@ def login():
         response_body = {
             "needs_filling": True
         }
-    return jsonify({**userData, **response_body, "id": user.id, "success": True, "token": token}), 200
+    return jsonify({**userData, **response_body, "id": user.id, "success": True, "token": token, "is_admin": admin is not None}), 200
 
 @api.route('/users/<int:id>', methods=['DELETE'])
 @jwt_required()
