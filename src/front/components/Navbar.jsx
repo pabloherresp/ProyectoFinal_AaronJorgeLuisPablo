@@ -52,7 +52,7 @@ export const Navbar = () => {
 	useEffect(() => { searchText(search) }, [search])
 
 	return (
-		<nav className="navbar navbar-expand-lg navbar-light navbg p-0">
+		<nav className="navbar navbar-expand-lg navbar-light navbg p-0 sticky-top BgSecondary">
 			<div className="container-fluid text-white">
 				<a className="navbar-brand" href="#">
 					<img className="img-fluid logo" src="/src/front/assets/img/Logo_Nomadik.png" alt="Logo" />
@@ -81,7 +81,7 @@ export const Navbar = () => {
 						<input className="form-control dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false" type="search" placeholder="Buscar..." aria-label="Search" value={search} onChange={handleSearch} />
 						<ul className="dropdown-menu dropdown-menu-center NavbarSearchDropdown my-2 my-lg-0" data-bs-auto-close="outside">
 							{(searching ? <div className="text-center">
-								<div className="spinner-border mx-auto" role="status">
+								<div className="spinner-border mx-auto LoadingSpinner" role="status">
 									<span className="visually-hidden">Loading...</span>
 								</div>
 							</div> :
@@ -89,7 +89,7 @@ export const Navbar = () => {
 									<>
 										{searchResults.activities.map((item, i) => {
 											return (<li className="px-2" key={i}>
-												<Link className="text-decoration-none text-dark" to={"/activity/" + item.id}>
+												<Link className="text-decoration-none text-dark" to={"/activities/" + item.id}>
 													<i className="fa-regular fa-file-lines me-2"></i> {item.name + " (" + item.location + ")"}
 												</Link>
 											</li>)

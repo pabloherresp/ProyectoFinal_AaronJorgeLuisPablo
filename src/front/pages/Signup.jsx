@@ -90,7 +90,7 @@ export const Signup = () => {
 						<div className="col-12 col-md-8 align-self-center">
 							<h3 className="display-2 fw-bold text-center my-2 TextDark">Sign Up</h3>
 							<div className="col-12 align-self-center">
-								<p className="text-center fw-semibold mt-3">¿Ya tiene una cuenta? Haga click <Link className="text-decoration-none" to="/login">aquí</Link></p>
+								<p className="text-center fw-semibold mt-3">¿Ya tiene una cuenta? Haga click <Link className="text-decoration-none TextDark" to="/login">aquí</Link></p>
 							</div>
 						</div>
 					</div>
@@ -133,12 +133,12 @@ export const Signup = () => {
 							<div className="form-check my-3 mx-auto w-auto">
 								<input ref={checkRef} className="form-check-input" type="checkbox" value="" id="checkChecked" data-bs-title="This top tooltip is themed via CSS variables." />
 								<label className="form-check-label fw-semibold" htmlFor="checkChecked">
-									Acepta los <Link className="text-decoration-none" target="_blank" to="/termsandconditions">Términos de Servicio</Link>
+									Acepta los <Link className="text-decoration-none TextDark" target="_blank" to="/termsandconditions">Términos de Servicio</Link>
 								</label>
 							</div>
 
 							<div className="row">
-								<input type="submit" value="Crear usuario" className="btn btn-primary my-2 w-auto mx-auto fw-bold" />
+								<input type="submit" value="Registrarse" className="btn Button my-2 w-auto mx-auto fw-bold" />
 								<p className={"text-center fw-semibold " + (!formData.error ? "text-success" : "text-danger")}>{formData.response}</p>
 							</div>
 						</div>

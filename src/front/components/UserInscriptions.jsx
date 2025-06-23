@@ -3,20 +3,25 @@ import { Link, useNavigate } from "react-router-dom"
 import collection from "../services/collection"
 import { ModalReport } from "../components/ModalReport"
 import { ModalReview } from "./ModalReview"
+import useGlobalReducer from "../hooks/useGlobalReducer"
 
 export const UserInscriptions = () => {
 	const [inscriptions, setInscriptions] = useState(null)
 	const [order, setOrder] = useState("start")
 	const [inverted, setInverted] = useState(-1)
 	const [limit, setLimit] = useState(15)
+	const [deleted, setDeleted] = useState(null)
 
 	const [activityReport, setActivityReport] = useState(null)
 	const [activityReview, setActivityReview] = useState(null)
+	const [delMesssage, setDelMessage] = useState("")
 
+	const modalDelButton = useRef(null)
+
+	const { store, dispatch } = useGlobalReducer()
 
 	const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
 	const tooltipList = [...tooltipTriggerList].map(el => new bootstrap.Tooltip(el))
-
 
 	const loadInscriptions = async () => {
 		const resp = await collection.getInscriptionsForUser()
@@ -24,6 +29,14 @@ export const UserInscriptions = () => {
 			setInscriptions([])
 		else
 			setInscriptions([...resp])
+	}
+
+	const login = async () => {
+		const resp = await collection.loginToken()
+		if (!resp.success)
+			dispatch({ type: "closeSession" })
+		else
+			dispatch({ type: "loadUser", payload: resp })
 	}
 
 	const handleClickHead = (text) => {
@@ -53,6 +66,17 @@ export const UserInscriptions = () => {
 			return inverted * a.activity.end_date.localeCompare(b.activity.end_date)
 		else if (order == "price")
 			return inverted * (a.activity.price - b.activity.price)
+	}
+
+	const handleDelete = async () => {
+		const resp = await collection.deleteInscription(deleted)
+		if (resp.error)
+			setDelMessage(resp.error)
+		else {
+			loadInscriptions()
+			login()
+			modalDelButton.current.click()
+		}
 	}
 
 	useEffect(() => {
@@ -90,7 +114,7 @@ export const UserInscriptions = () => {
 										<React.Fragment key={i}>
 											<tr >
 												<td className="ps-4 align-middle d-none d-md-table-cell">
-													<Link className="text-decoration-none fw-semibold" to={"/activities/" + item.activity.id}>
+													<Link className="text-decoration-none fw-semibold TextDark" to={"/activities/" + item.activity.id}>
 														{item.activity.info_activity.name}
 													</Link>
 												</td>
@@ -112,19 +136,27 @@ export const UserInscriptions = () => {
 													{item.activity.price.toFixed(2) + "€"}
 												</td>
 												<td className="text-center fw-semibold align-middle d-none d-md-flex flex-column">
-													{formatDate(new Date(item.activity.end_date)) < formatDate(new Date()) ? (
-														<Link className="text-decoration-none" data-bs-toggle="modal" data-bs-target="#reviewModal" onClick={()=>setActivityReview(item.activity)}>
-															Reseñar
-														</Link>
-													) : (
-														<a className="text-decoration-none text-secondary" data-bs-toggle="tooltip" data-bs-title="Esta actividad aún no ha terminado">
+													{store.user.reviews.includes(item.activity.info_activity.id) ?
+														<a className="text-decoration-none text-secondary" data-bs-toggle="tooltip" data-bs-title="Esta actividad ya ha sido reseñada">
 															Reseñar
 														</a>
-													)}
-													<Link className="text-decoration-none text-danger" data-bs-toggle="modal" data-bs-target="#reportModal" onClick={()=>setActivityReport(item.activity)}>
+														: formatDate(new Date(item.activity.end_date)) < formatDate(new Date()) ? (
+															<>
+																<Link className="text-decoration-none" data-bs-toggle="modal" data-bs-target="#reviewModal" onClick={() => setActivityReview(item.activity)}>
+																	Reseñar
+																</Link>
+															</>
+														)
+															: (
+																// botón borrar inscripción
+																<Link className="text-decoration-none text-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" onClick={() => setDeleted(item.id)}>
+																	Eliminar
+																</Link>
+															)
+													}
+													<Link className="text-decoration-none text-danger-emphasis" data-bs-toggle="modal" data-bs-target="#reportModal" onClick={() => setActivityReport(item.activity)}>
 														Reportar
 													</Link>
-													{/* <ModalReport id={"modalReport" + i.toString()} /> */}
 												</td>
 											</tr>
 											<tr className="d-table-row d-md-none">
@@ -132,17 +164,25 @@ export const UserInscriptions = () => {
 													{item.activity.price.toFixed(2) + "€"}
 												</td>
 												<td className="text-center fw-semibold align-middle InscriptionsTableEndDate">
-													{formatDate(new Date(item.activity.end_date)) < formatDate(new Date()) ? (<>
-														<Link className="text-decoration-none me-2" data-bs-toggle="modal" data-bs-target="#reviewModal" onClick={()=>setActivityReview(item.activity)}>
-															Reseñar
-														</Link>
-													</>
-													) : (
-														<a className="text-decoration-none text-secondary me-2" data-bs-toggle="tooltip" data-bs-title="Esta actividad aún no ha terminado">
+													{store.user.reviews.includes(item.activity.info_activity.id) ?
+														<a className="text-decoration-none text-secondary me-2" data-bs-toggle="tooltip" data-bs-title="Esta actividad ya ha sido reseñada">
 															Reseñar
 														</a>
-													)}
-													<Link className="text-decoration-none text-danger" data-bs-toggle="modal" data-bs-target="#reportModal" onClick={()=>setActivityReport(item.activity)}>
+														: formatDate(new Date(item.activity.end_date)) < formatDate(new Date()) ? (
+															<>
+																<button className="btn Button text-decoration-none me-2" data-bs-toggle="modal" data-bs-target="#reviewModal" onClick={() => setActivityReview(item.activity)}>
+																	Reseñar
+																</button>
+															</>
+														)
+															: (
+																// botón borrar inscripción
+																<Link className="text-decoration-none me-2 text-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" onClick={() => setDeleted(item.id)}>
+																	Eliminar
+																</Link>
+															)
+													}
+													<Link className="text-decoration-none text-danger-emphasis" data-bs-toggle="modal" data-bs-target="#reportModal" onClick={() => setActivityReport(item.activity)}>
 														Reportar
 													</Link>
 												</td>
@@ -171,9 +211,25 @@ export const UserInscriptions = () => {
 					</div>
 				</div>
 			)}
-		<ModalReport activity={activityReport} target="activity" />
-		<ModalReview activity={activityReview} />
-
+			<ModalReport activity={activityReport} target="activity" />
+			<ModalReview activity={activityReview} />
+			<div className="modal fade" id="deleteModal" tabIndex="-1" aria-labelledby="deleteModal" aria-hidden="true">
+				<div className="modal-dialog modal-dialog-centered">
+					<div className="modal-content">
+						<div className="modal-header BgPrimary shadow" data-bs-theme="dark">
+							<h1 className="modal-title fs-5 text-white fw-semibold" id="exampleModalLabel">¿Desea dejar de participar en esta actividad?</h1>
+							<button type="button" ref={modalDelButton} className="btn-close " data-bs-dismiss="modal" aria-label="Close"></button>
+						</div>
+						<div className="modal-body">
+							Usted dejará de participar en esta actividad y se realizará un reembolso en su cuenta.
+						</div>
+						<div className="modal-footer">
+							<p className="text-danger me-auto">{delMesssage}</p>
+							<button type="button" className="btn btn-danger" onClick={handleDelete}>Confirmar</button>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 	)
 }

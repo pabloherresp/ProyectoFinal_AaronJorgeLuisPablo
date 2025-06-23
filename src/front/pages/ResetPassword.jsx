@@ -66,14 +66,14 @@ export const ResetPassword = (props) => {
 						</div>
 						<div className="form-label my-3 w-75 mx-auto">
 							<label className="fs-6 mb-2 fw-semibold" htmlFor="password">Contraseña</label>
-							<input type="password" name="password" className="form-control" id="password" placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;" autoComplete="current-password" onChange={handleChange} value={formData.password} />
+							<input type="password" name="password" required className="form-control" id="password" placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;" autoComplete="current-password" onChange={handleChange} value={formData.password} />
 						</div>
 						<div className="form-label my-3 w-75 mx-auto">
 							<label className="fs-6 mb-2 fw-semibold" htmlFor="passwordConfirm">Cconfirmar contraseña</label>
-							<input type="password" name="passwordConfirm" className="form-control" id="passwordConfirm" placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;" autoComplete="current-password" onChange={handleChange} value={formData.confirmPassword} />
+							<input type="password" name="passwordConfirm" required className="form-control" id="passwordConfirm" placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;" autoComplete="current-password" onChange={handleChange} value={formData.confirmPassword} />
 						</div>
 						<div className="row">
-							<input type="submit" value="Iniciar sesión" className="btn btn-primary my-2 w-auto mx-auto fw-bold" />
+							<input type="submit" value="Iniciar sesión"className="btn btn-primary my-2 w-auto mx-auto fw-bold" />
 							<p className={"text-center fw-semibold " + (passResult.success ? "text-success" : "text-danger")}>{passResult.message}</p>
 						</div>
 					</form>

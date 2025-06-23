@@ -82,7 +82,7 @@ class Clients(db.Model):
                 "country": self.country,
                 "birthdate": self.birthdate.isoformat() if self.birthdate else None,
                 "gender": self.gender.value,
-                "inscriptions": [i.id for i in self.inscriptions],
+                "inscriptions": [{"id": i.id, "activity_id": i.activity_id} for i in self.inscriptions if i.is_active],
                 "favourites": [fav.serialize() for fav in self.favourites],
                 "reviews": [rev.id for rev in self.reviews] if self.reviews else None
             }
@@ -141,7 +141,7 @@ class Activities(db.Model):
     info_activity: Mapped["Info_activity"] = relationship("Info_activity", back_populates="activities", uselist=False)
     inscriptions: Mapped[list["Inscriptions"]] = relationship("Inscriptions", back_populates="activity")
 
-    def serialize(self, can_see):
+    def serialize(self, can_see=False):
         response_body = {}
         if can_see:
             response_body = {"inscriptions": [{"id": i.id, "user_id": i.user_id, "username": i.client.username, "name": i.client.name, "surname": i.client.surname, "telephone": i.client.telephone, "NID": i.client.NID} for i in self.inscriptions if i.is_active]}
@@ -206,6 +206,7 @@ class Inscriptions(db.Model):
     user_id: Mapped[int] = mapped_column(ForeignKey("clients.user_id"))
     inscription_date: Mapped[datetime] = mapped_column(DateTime(), default=datetime.now(timezone.utc), nullable=False)
     is_active: Mapped[Boolean] = mapped_column(Boolean, default=True, nullable=False)
+    payment_intent: Mapped[String] = mapped_column(String, nullable=True)
 
     activity: Mapped["Activities"] = relationship("Activities",back_populates="inscriptions",uselist=False)
     client: Mapped["Clients"] = relationship("Clients",back_populates="inscriptions",uselist=False)

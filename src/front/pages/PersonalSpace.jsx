@@ -35,12 +35,12 @@ export const PersonalSpace = () => {
 							<div className="col-12 col-md-9 align-items-center align-items-md-start my-3 row">
 								<div className="col-12 text-center mb-4">
 									<h4 className="text-white fw-bold display-6 text-capitalize name-gradient font1 m-0">
-										{store.user?.name + " " + store.user?.surname + " - Usuario profesional"}
+										{store.user?.name + " " + store.user?.surname + (store.user?.is_professional ? " - Usuario profesional" : "")}
 									</h4>
 								</div>
 								<div className="col-12 col-md-11 ms-auto row">
 									<div className="col-12 col-md-6">
-										<h4 className="text-white fs-5 fw-semibold font1 text-capitalize text-center text-md-start">
+										<h4 className="text-white fs-5 fw-semibold font1 text-center text-md-start">
 											<i className="fa-solid fa-user fa-sm me-2"></i>@{store.user?.username}
 										</h4>
 
@@ -51,7 +51,7 @@ export const PersonalSpace = () => {
 										)}
 
 										{store.user.birthdate && (
-											<p className="text-light fw-semibold text-capitalize text-center text-md-start">
+											<p className="text-light fw-semibold text-center text-md-start">
 												<i className="fa-solid fa-cake-candles me-2"></i>{" "}
 												{new Date(store.user?.birthdate).toLocaleDateString("es-ES", {
 													year: "numeric",
@@ -92,15 +92,14 @@ export const PersonalSpace = () => {
 											{store.user?.address}
 										</p>
 
-										<p className="text-light font1 text-capitalize text-center text-md-start">
+										<p className="text-light font1 text-center text-md-start">
 											<i className="fa-solid fa-people-group me-2"></i>
-											Miembro desde <br />
-											{new Date(store.user?.creation_date).toLocaleDateString("es-ES", {
-												weekday: "long",
-												year: "numeric",
-												month: "long",
-												day: "numeric",
-											})}
+											{"Miembro desde " +
+												new Date(store.user?.creation_date).toLocaleDateString("es-ES", {
+													year: "numeric",
+													month: "long",
+													day: "numeric",
+												})}
 										</p>
 										<div className="d-flex justify-content-center justify-content-md-start">
 											<button
@@ -120,7 +119,7 @@ export const PersonalSpace = () => {
 					<ul className="nav nav-underline d-flex justify-content-evenly mt-4 mx-2">
 						{store.user.is_professional && <li className="nav-item">
 							<button
-								className={`nav-link ${activeTab === 'professionalPanel' ? 'active' : ''}`}
+								className={`nav-link TextDark ${activeTab === 'professionalPanel' ? 'active' : ''}`}
 								onClick={() => setActiveTab('professionalPanel')}
 							>
 								<i className="fa-solid fa-suitcase me-2"></i>Área profesional
@@ -128,7 +127,7 @@ export const PersonalSpace = () => {
 						</li>}
 						<li className="nav-item">
 							<button
-								className={`nav-link ${activeTab === 'inscripciones' ? 'active' : ''}`}
+								className={`nav-link TextDark ${activeTab === 'inscripciones' ? 'active' : ''}`}
 								onClick={() => setActiveTab('inscripciones')}
 							>
 								<i className="fa-solid fa-book me-2"></i>Inscripciones
@@ -136,24 +135,24 @@ export const PersonalSpace = () => {
 						</li>
 						<li className="nav-item">
 							<button
-								className={`nav-link ${activeTab === 'favoritos' ? 'active' : ''}`}
+								className={`nav-link TextDark ${activeTab === 'favoritos' ? 'active' : ''}`}
 								onClick={() => setActiveTab('favoritos')}
 							>
-								<i className="fa-solid fa-star me-2 text-warning"></i>Favoritos
+								<i className="fa-solid fa-star me-2"></i>Favoritos
 							</button>
 						</li>
 						<li className="nav-item">
 							<button
-								className={`nav-link ${activeTab === 'reseñas' ? 'active' : ''}`}
+								className={`nav-link TextDark ${activeTab === 'reseñas' ? 'active' : ''}`}
 								onClick={() => setActiveTab('reseñas')}
 							>
 								<i className="fa-solid fa-comments me-2"></i>Reseñas
 							</button>
 						</li>
 					</ul>
-					<div className="tab-content">
-						{activeTab === "professionalPanel" && store.user.is_professional == true && 
-							<ProfessionalPanel/>
+					<div className="tab-content PersonalTabContent">
+						{activeTab === "professionalPanel" && store.user.is_professional == true &&
+							<ProfessionalPanel />
 						}
 						{activeTab === 'inscripciones' && (
 							<UserInscriptions />
@@ -161,35 +160,44 @@ export const PersonalSpace = () => {
 
 						{activeTab === 'favoritos' && (
 							<div className="py-4">
-								<div className="row d-flex justify-content-evenly px-4 py-3">
-									{store.user.favourites?.map((el, i) => {
-										return <div key={i} className="col-sm-12 col-md-6 col-lg-4 my-3">
-											<ActivityCard activity={store.all_activities?.sort((a, b) => a.id - b.id).find((item) => item.info_activity.id == el.activity.id)} />
-										</div>
-									})}
-								</div>
+								{store.user.favourites && store.user.favourites.length > 0 ?
+									<div className="row d-flex  justify-content-evenly px-4 py-3">
+										{store.user.favourites?.map((el, i) => {
+											return <div key={i} className="col-sm-12 col-md-6 col-lg-4 my-3">
+												<ActivityCard activity={store.all_activities?.sort((a, b) => a.id - b.id).find((item) => item.info_activity.id == el.activity.id)} />
+											</div>
+										})}
+									</div>
+									:
+									<p className="text-center">No tienes favoritos</p>
+								}
 							</div>
 						)}
 
-						{activeTab === 'reseñas' && (
+						{activeTab === 'reseñas' &&
 							<div className="py-4">
-								<div className="row d-flex justify-content-evenly px-4 py-3">
-									{store.user.reviews?.map((el, i)=>{
-										return <div key={i} className="col-sm-12 col-md-6 col-lg-4 my-3">
-											<CommentBox/>
-										</div>
-									})}
-								</div>
-							</div>
-						)}
-					</div>
+								{store.user.reviews && store.user.reviews.length > 0 ?
+									<div className="row d-flex justify-content-evenly px-4 py-3">
+										{store.user.reviews?.map((el, i) => {
+											return <div key={i} className="col-sm-12 col-md-6 col-lg-4 my-3">
+												<CommentBox />
+											</div>
+										})}
+									</div>
+									: (
+										<p className="text-center">No has realizado ninguna reseña</p>
+									)}
+
+							</div >
+						}
+					</div >
 
 					<div>
 
 						{store.user.is_professional ? "" : <div className="rounded-bottom overflow-hidden"><NewProfessionalBox /></div>}
 					</div>
-				</div>
-			</div>
-		</div>
+				</div >
+			</div >
+		</div >
 	);
 }; 

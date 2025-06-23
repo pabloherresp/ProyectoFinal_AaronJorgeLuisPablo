@@ -363,9 +363,8 @@ collection.createInfoActivity = async (actData) => {
         const resp = await fetch(BACKEND_URL + "api/info_activities", {
             method: "POST",
             headers: {
-                "Content-Type":"application/json",
                 "Authorization": get_token()
-            }, body: JSON.stringify(actData)
+            }, body: actData
         })
         const data = await resp.json()
         return data
@@ -392,5 +391,20 @@ collection.returnAllReports = async () => {
 
 }
 
+collection.deleteInscription = async (id) => {
+    try {
+        const resp = await fetch(BACKEND_URL + "api/inscriptions/" + id, {
+            method: "DELETE",
+            headers:{
+                "Authorization": get_token()
+            }
+        })
+        const data = await resp.json()
+        return data
+    } catch (error) {
+        console.log(error)
+        return {error: "No se ha podido borrar la inscripción", response: error}
+    }
+}
 
 export default collection

@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import collection from '../services/collection'
 import Rating from 'react-rating'
+import StarRating from './StarRating'
 
 export const ModalReview = (props) => {
 	const [profRating, setProfRating] = useState(null)
@@ -9,6 +10,12 @@ export const ModalReview = (props) => {
 	const [activityMessage, setActivityMessage] = useState("")
 	const [result, setResult] = useState({ success: false, text: "" })
 	const modalRevButton = useRef(null)
+
+	useEffect(()=>{
+		setProfRating(null)
+		setActRating(null)
+		setResult({ success: false, text: "" })
+	},[])
 
 	const handleSubmit = async (e) => {
 		e.preventDefault()
@@ -27,6 +34,16 @@ export const ModalReview = (props) => {
 			}, 1500)
 		}
 	}
+
+	useEffect(()=>{
+		setActRating(null)
+		setProfRating(null)
+		setActivityMessage("")
+		setProfessionalMessage("")
+		setResult({ success: false, text: "" })
+	},[props.activity])
+
+
 	return (
 		<div className="modal fade" id="reviewModal" tabIndex="-1" aria-labelledby="reviewModal" aria-hidden="true">
 			<div className="modal-dialog modal-dialog-centered">
@@ -39,17 +56,16 @@ export const ModalReview = (props) => {
 						<div className="modal-body">
 							<p className='fw-bold'>Profesional: <span className='fw-semibold'>{props.activity?.info_activity.professional.user.name + " " + props.activity?.info_activity.professional.user.surname}</span></p>
 
-							<Rating initialRating={profRating} className="TextSecondary fs-3" start={0} end={5}
-								emptySymbol="fa-regular fa-star" fullSymbol="fa-solid fa-star" fractions={2} onChange={setProfRating} />
-
+							{/* <Rating initialRating={profRating} className="TextSecondary fs-3" start={0} end={5}
+								emptySymbol="fa-regular fa-star" fullSymbol="fa-solid fa-star" fractions={2} onChange={setProfRating} /> */}
+							<StarRating rating={profRating} onChange={setProfRating} />
 							<div className="my-3">
 								<label htmlFor="professionalMessage" className="form-label fw-bold">Comentario sobre profesional:</label>
 								<textarea name="professionalMessage" className="form-control mt-2" style={{ height: '150px' }} id="professionalMessage" placeholder="" onChange={(e) => setProfessionalMessage(e.target.value)} value={professionalMessage} />
 							</div>
 
 							<p className='fw-bold'>Actividad: <span className='fw-semibold'>{props.activity?.info_activity.name}</span></p>
-							<Rating initialRating={actRating} className="TextSecondary fs-3" start={0} end={5}
-								emptySymbol="fa-regular fa-star" fullSymbol="fa-solid fa-star" fractions={2} onChange={setActRating} />
+							<StarRating rating={actRating} onChange={setActRating} />
 							<div className="my-3">
 								<label htmlFor="activityMessage" className="form-label fw-bold">Comentario sobre actividad:</label>
 								<textarea name="activityMessage" className="form-control mt-2" style={{ height: '150px' }} id="activityMessage" placeholder="" onChange={(e) => setActivityMessage(e.target.value)} value={activityMessage} />

@@ -40,7 +40,9 @@ mail.init_app(app)
 
 # Image folder configuration
 UPLOAD_FOLDER = 'public/avatar/'
+UPLOAD_MEDIA_FOLDER = 'public/media/'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+os.makedirs(UPLOAD_MEDIA_FOLDER, exist_ok=True)
 
 # database condiguration
 db_url = os.getenv("DATABASE_URL")

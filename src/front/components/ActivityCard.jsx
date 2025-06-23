@@ -62,7 +62,9 @@ export const ActivityCard = (props) => {
                             <img src="/media/heart-empty.svg" alt="" />
                         </button>
                     )}
-                    <img src={props.activity.info_activity.media[0]} className="rounded-top-1 imageCard"></img>
+                    <img src={(props.activity?.info_activity.media.length > 0 ?
+                        (props.activity?.info_activity.media[0].includes("http") ? props.activity.info_activity.media[0] : "/events/" + props.activity?.info_activity.media[0])
+                        : "/events/0.jpg")} className="rounded-top-1 imageCard"></img>
                 </div>
                 <div className="p-3 textCardFormat h-50">
                     <h6 className="fw-bold">{props.activity.info_activity.name}</h6>
