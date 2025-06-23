@@ -196,7 +196,7 @@ export const Activity = () => {
     return (
         <div className="p-0 container bg-white my-5 rounded myActivityCard d-flex fontFamily">
 
-            <div className="container1Activity">
+            <div className="container1Activity pb-5">
                 <div className="d-flex align-items-center pt-3">
                     <h1 className="font1 px-5 mt-3">{store.activity?.info_activity?.name}</h1>
 
@@ -301,8 +301,13 @@ export const Activity = () => {
                 </div>
 
                 <h3 className="px-5 pt-5">Comentarios</h3>
-
-                {store.activity?.reviews.map((item)=><CommentBox />)}
+                <div className="mx-3 row">
+                    {store.activity?.info_activity?.reviews?.map((item, index) => {
+                        return <div key={index} className={"col-12 col-md-6 col-lg-4 my-2 "}>
+                            <CommentBox target="activity" review={item} />
+                        </div>
+                    })}
+                </div>
 
             </div>
 
@@ -372,7 +377,7 @@ export const Activity = () => {
 
                 <div className="mt-5 px-3 mb-5">
                     <p className="text-white fw-semibold">Reseñas del profesional:</p>
-                    <CommentBox />
+                    {/* <CommentBox review/> */}
 
                 </div>
 

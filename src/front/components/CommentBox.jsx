@@ -1,16 +1,22 @@
 import React from 'react';
 import useGlobalReducer from '../hooks/useGlobalReducer';
 import StarRating from './StarRating'
+import { Link } from 'react-router-dom';
 
 export const CommentBox = (props) => {
-  const {store, dispatch} = useGlobalReducer();
-  return ( props.review ? 
+  const { store, dispatch } = useGlobalReducer();
+  return (props.review ?
     <div className="comentario-card mt-3 shadow h-100">
       <div className="contenido">
         <div className="estrellas">
-          <StarRating rating={props.review.activity_rating || 0} variable={false}/>
+          <StarRating rating={props.review.activity_rating || 0} variable={false} />
         </div>
-        <h6 className='fw-semibold'>{props.review.info_activity.name}</h6>
+        <Link className="d-flex text-decoration-none TextDark fw-semibold">
+          <h5 className='fw-semibold'>{props.review.info_activity.name}</h5>
+        </Link>
+        <Link className="d-flex text-decoration-none TextDark fw-semibold" to={"/detailsprofessional/" + props.review.professional.id}>
+          <i className="fa-solid fa-user-tie me-2"></i> <h6 className='fw-semibold text-capitalize'>{props.review.professional.username}</h6>
+        </Link>
         <p>
           {props.review.activity_message}
         </p>
@@ -23,7 +29,7 @@ export const CommentBox = (props) => {
         </div>
       </div>
     </div>
-      :
+    :
     <div className="comentario-card mt-3">
       <div className="contenido">
         <div className="estrellas">
@@ -37,7 +43,7 @@ export const CommentBox = (props) => {
           <img src={"/avatar/" + props.img} alt="avatar" className="avatar" />
           <div>
             <div className="nombre m-2">{props.Reviewer_Name}</div>
-            <div className="fecha m-2">{props.Date.replace(" ","")}</div>
+            <div className="fecha m-2">{props.Date.replace(" ", "")}</div>
           </div>
         </div>
       </div>

@@ -12,12 +12,15 @@ const StarRating = ({ rating, onChange = null, precision = 0.5, variable = true,
 	};
 
 	const handleClick = (index, event) => {
-		const { left, width } = event.currentTarget.getBoundingClientRect();
-		const x = event.clientX - left;
-		const clickedValue = x < width / 2 ? index + 0.5 : index + 1;
+		if(onChange != null){
 
-		onChange(previous == 0.5 ? 0 : clickedValue);
-		setPrevious(previous == 0.5 ? 0 : clickedValue)
+			const { left, width } = event.currentTarget.getBoundingClientRect();
+			const x = event.clientX - left;
+			const clickedValue = x < width / 2 ? index + 0.5 : index + 1;
+			
+			onChange(previous == 0.5 ? 0 : clickedValue);
+			setPrevious(previous == 0.5 ? 0 : clickedValue)
+		}
 	};
 
 	const handleMouseMove = (index, event) => {
