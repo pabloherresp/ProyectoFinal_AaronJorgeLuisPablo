@@ -1,38 +1,54 @@
-export const initialStore=()=>{
-  return{
-    message: null,
-    todos: [
-      {
-        id: 1,
-        title: "Make the bed",
-        background: null,
-      },
-      {
-        id: 2,
-        title: "Do my homework",
-        background: null,
-      }
-    ]
-  }
-}
+export const initialStore = () => {
+  return {
+    all_reports:[],
+    all_users:[],
+    all_activities: [],
+    activity: {},
+    user: {
+      id: null,
+      username: "",
+      avatar_url: "",
+      is_professional: true,
+    },
+  };
+};
 
 export default function storeReducer(store, action = {}) {
-  switch(action.type){
-    case 'set_hello':
+  switch (action.type) {
+	
+    case "activities":
       return {
         ...store,
-        message: action.payload
+        all_activities: action.payload,
       };
-      
-    case 'add_task':
-
-      const { id,  color } = action.payload
-
+    case "activity":
       return {
         ...store,
-        todos: store.todos.map((todo) => (todo.id === id ? { ...todo, background: color } : todo))
+        activity: action.payload,
+      };
+    case "loadUser":
+      return {
+        ...store,
+        user: action.payload,
+      };
+    case "closeSession":
+      localStorage.clear();
+      return {
+        ...store,
+        user: { id: null, username: "", avatar_url: "" },
+        closed: true,
+      };
+      case "reports":
+      return {
+        ...store,
+        all_reports: action.payload,
+      };
+      case "users":
+      return {
+        ...store,
+        all_users: action.payload,
       };
     default:
-      throw Error('Unknown action.');
-  }    
+      throw Error("Unknown action.");
+  }
 }

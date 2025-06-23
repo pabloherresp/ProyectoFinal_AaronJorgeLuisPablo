@@ -1,3 +1,12 @@
+# Información para el equipo
+- Lo primnero si no has abierto el repositorio hasta ahora: `$ pipenv install` y `$ npm install`.
+- Copiar la variables de entorno y configurarlas según necesidad: `$ cp .env.example .env`.
+    - Recuerda añadir otra variable JWT_SECRET_KEY con cualquier contraseña que quieras en tu .env.
+- Ejecuta `$ pipenv run migrate` y `$ pipenv run upgrade` para configurar los modelos.
+- Ejecuta `$ pipenv run seed` para rellenar la base de datos.
+- Ejecuta `$ pipenv run start` para iniciar el backend 
+- La rama main no se toca, haced `$ git fetch` y `$ git pull dev`
+
 # WebApp boilerplate with React JS and Flask API
 
 Build web applications using React.js for the front end and python/flask for your backend API.

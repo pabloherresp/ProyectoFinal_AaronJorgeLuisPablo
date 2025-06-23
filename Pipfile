@@ -21,11 +21,15 @@ flask-jwt-extended = "==4.6.0"
 wtforms = "==3.1.2"
 sqlalchemy = "*"
 colorama = "*"
+rapidfuzz = "*"
+flask_mail = "*"
+stripe = "*"
 
 [requires]
 python_version = "3.13"
 
 [scripts]
+where="where python"
 start="flask run -p 3001 -h 0.0.0.0"
 init="flask db init"
 migrate="flask db migrate"
@@ -37,3 +41,4 @@ reset_db="bash ./docs/assets/reset_migrations.bash"
 reset="flask db stamp head"
 deploy="echo 'Please follow this 3 steps to deploy: https://github.com/4GeeksAcademy/flask-rest-hello/blob/master/README.md#deploy-your-website-to-heroku' "
 seed="python ./src/seed.py"
+reset="rmdir /s /q migrations && pipenv run init && dropdb -h localhost -U gitpod example && createdb -h localhost -U gitpod example && psql -h localhost example -U gitpod -c 'CREATE EXTENSION unaccent;' && pipenv run migrate && pipenv run upgrade"

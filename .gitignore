@@ -29,6 +29,9 @@ php_errorlog
 # track readme.md in the root (i.e. do NOT ignore it)
 !README.md
 
+# ignore avatar files
+/public/avatar/*.jpg
+
 # ignore OS generated files
 ehthumbs.db
 Thumbs.db
@@ -42,6 +45,7 @@ Thumbs.db
 *.log
 *.sql
 *.sqlite
+*.db
 
 # ignore compiled files
 *.com

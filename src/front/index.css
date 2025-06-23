@@ -1,0 +1,876 @@
+body {
+  background-image: url("/src/front/assets/img/bg2.png");
+  background-size: 10%;
+  background-repeat: repeat;
+}
+
+body::before{
+  background-color: #f2efe780;
+  content: "";
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.BgPrimary {
+  background-color: #006a71;
+}
+.BgSecondary {
+  background-color: #48a6a7;
+}
+.BgTerciary {
+  background-color: #9acbd0;
+}
+.BgBackground {
+  background-color: #f2efe7;
+}
+
+.TextDark {
+  color: #006a71;
+}
+.TextSecondary{
+  color: #48A6A7;
+}
+
+.BannerLogin {
+  background-repeat: repeat-y;
+  background-position-y: top;
+  background-size: 100% auto;
+}
+
+.BannerLoginLeft {
+  background-image: url("/src/front/assets/img/login-1.png");
+}
+
+.BannerLoginRight {
+  background-image: url("/src/front/assets/img/login-2.png");
+}
+
+.NavbarUserPill{
+	height: 40px;
+	background-color: #48A6A7;
+  cursor: pointer;
+}
+
+.NavbarUserPill img {
+  height: 40px;
+  width: 40px;
+  overflow: hidden;
+}
+
+.NavbarDropdown {
+  background-color: #48a6a7;
+}
+.NavbarDropdown li:hover {
+  background-color: #006a71;
+}
+
+.NavbarSearchDropdown {
+  max-height: 300px;
+  width: 100%;
+  scrollbar-width: thin;
+  overflow: auto;
+}
+
+h3 {
+  color: #006a71;
+}
+
+.btn-Sigup {
+  background-color: #48a6a7;
+  color: white;
+  border: none;
+}
+
+.btn-Sigup:hover {
+  background-color: #3d8e8e;
+}
+
+.navbg{
+  background-image: linear-gradient(#439d9e, rgba(0, 0, 0, 0.671)), url("/src/front/assets/img/navbarForest.png");
+  background-repeat: repeat-x;
+  background-size: contain;
+}
+
+.footer {
+  background-color: #48a6a7;
+}
+
+.logo {
+  max-width: 3.5rem;
+  margin-left: 2rem;
+}
+
+.navbarButton {
+  color: white;
+  width: 80px;
+  justify-content: center;
+}
+
+.Button{
+  background-color: #48a6a7;
+  color: white;
+  width: 80px;
+  justify-content: center;
+}
+
+.navbarButton:hover,
+.NavbarUserPill:hover , .Button:hover, .navbarLink:hover{
+  background-color: #48a5a793;
+  color: white;
+}
+
+.navbarLink{
+  font-weight: 400;
+  color: #fff;
+  text-align: center;
+  vertical-align: middle;
+  user-select: none;
+  border: 1px solid transparent;
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: color 0.15s ease-in-out,
+              background-color 0.15s ease-in-out,
+              border-color 0.15s ease-in-out,
+              box-shadow 0.15s ease-in-out;
+}
+
+/* .btn-success.myBtn:hover{
+  background-color: #9ACBD0 !important;
+  border-color: #0d8d90 !important;
+} */
+
+.iconoInsta {
+  color: rgb(219, 20, 219);
+}
+.iconoInsta :hover {
+  color: rgb(101, 0, 88);
+}
+.iconoYoutube {
+  color: red;
+}
+.iconoYoutube :hover {
+  color: rgb(97, 1, 1);
+}
+.iconoLinkdin {
+  color: blue;
+}
+.iconoLinkdin :hover {
+  color: rgb(0, 0, 120);
+}
+.iconoFace {
+  color: rgb(0, 72, 255);
+}
+.iconoFace :hover {
+  color: rgb(0, 39, 148);
+}
+
+.logo-img {
+  max-width: 400px;
+  max-height: 400px;
+  display: block;
+}
+
+.justified-text {
+  text-align: justify;
+}
+
+.separador {
+  border-color: #0d8d90;
+}
+
+.valor-card {
+  border: 1px solid;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.valor-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  border-color: #0d8d90 !important;
+}
+
+.valor-card2 {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.valor-card2:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  border-color: #0d8d90 !important;
+}
+
+.fotoCreador {
+  object-fit: cover;
+  height: 150px;
+  border-radius: 50%;
+  margin: 10px auto;
+  width: 150px;
+}
+
+.manifiesto-section {
+  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+    url("/src/front/assets/img/fondo-montaña.jpg") no-repeat center center;
+  background-size: cover;
+  border-radius: 1rem;
+}
+
+@media (min-width: 992px) {
+  .busquedaBarra {
+    width: 40%;
+    max-width: 600px;
+  }
+}
+.bodyBody {
+  background-color: white;
+  width: 60%;
+}
+.font1 {
+  color: #006a71;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: bold;
+  letter-spacing: -0.025em;
+}
+.font2{
+  color: white;
+  font-family: Arial, Helvetica, sans-serif;
+  border: 1px white solid;
+}
+.font3{
+  color: white;
+  font-family: Arial, Helvetica, sans-serif;
+  border: 1px white solid;
+  padding: 9px 9px 10px 9px;
+}
+.fixLandscape {
+  width: 100%;
+  height: 35em;
+  object-fit: cover;
+}
+.cardFormat{
+  cursor: pointer;
+  height: 100%;
+  min-width: 15em;
+  box-shadow: 0px 2px rgb(161, 161, 161);
+  background-color: white;
+}
+/* .cardFormat{
+  width: 20em;
+  height: 22em;
+  box-shadow: 0px 2px rgb(161, 161, 161);
+  background-color: white;
+} */
+.fixBorder{
+  object-fit: cover;
+}
+.titleFormat {
+  font-weight: bold;
+  font-size: 1em;
+  line-height: 1;
+}
+.textFormat {
+  font-size: 0.85em;
+  color: grey;
+  display: -webkit-box;
+  line-clamp: 2;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.activityTextFormat {
+  font-size: 1.1em;
+  font-family: Arial, Helvetica, sans-serif;
+  text-align: justify;
+}
+
+.fontFamily {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.fixSizeDateActivity {
+  font-size: 0.75em;
+}
+
+.fixSizeTitleActivity {
+  font-size: 1.55em;
+}
+
+.container1Activity {
+  width: 60%;
+}
+
+.container2Activity {
+  width: 50%;
+  background-color: #006a71;
+}
+
+@media (min-width: 992px){
+  .container2Activity{
+    width: 40% !important;
+    max-width: 600px;
+  }
+}
+
+.buttonStyle {
+  width: 2em;
+  height: 2em;
+  vertical-align: middle;
+  align-self: anchor-center;
+  background-color: #f2efe7;
+  border-color: #006a71;
+  color: #006a71;
+}
+.buttonStyle:hover {
+  border-color: #48a6a7 !important;
+  color: #48a6a7 !important;
+}
+.buttonStyle:active {
+  transform: translateY(0.15em);
+  box-shadow: 0px 0.05em #48a6a7;
+  border-color: #48a6a7 !important;
+  color: #48a6a7 !important;
+}
+.imgCardFormat{
+  max-width:100%;
+  max-height:60%;
+  overflow: hidden;
+}
+.textCardFormat{
+  max-width:100%;
+  max-height:40%;
+}
+.imageCard {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.myActivityCard {
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.seccion-titulo {
+  position: relative;
+  display: inline-block;
+  transition: color 0.3s ease;
+  cursor: pointer;
+  overflow: hidden;
+  padding-bottom: 5px;
+}
+
+.seccion-titulo:hover {
+  color: #48a6a7;
+  transform: scale(1.05);
+}
+
+.seccion-titulo::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  width: 0;
+  background-color: #48a6a7;
+  transition: width 0.4s ease;
+}
+
+.seccion-titulo:hover::after {
+  width: 100%;
+}
+
+.DarkButton {
+  background-color: #006a71;
+}
+.DarkButton:hover {
+  background-color: #9acbd0;
+}
+
+.LoadingSpinner {
+  line-height: 1em;
+  width: 7rem;
+  height: 7rem;
+  color: #006a71;
+}
+
+@property --NewBannerAngle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 243deg;
+}
+@property --NewSignupY {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 150%;
+}
+
+.NewProfessionalBanner , .NewSignUpBanner{
+  overflow: hidden;
+  margin-top: 50px;
+  cursor: pointer;
+  transition: --NewBannerAngle 0.9s 0.3s;
+  background-size: var(--NewSignupY);
+}
+.NewProfessionalBanner{background-image: linear-gradient(var(--NewBannerAngle),rgba(82, 173, 189, 0.4),rgb(38, 56, 65)),
+  url("/media/professionalBoxBackground.jpg");
+  background-position: center;
+}
+.NewSignUpBanner{background-image: linear-gradient(var(--NewBannerAngle),rgba(16, 53, 12, 0.4),rgb(34, 52, 75)),
+  url("/media/signUpBoxBackground.jpg");
+  background-position: 50% 20%;
+  transition: --NewSignupY 0.9s 0.3s, --NewBannerAngle 0.9s 0.3s;
+}
+
+.NewProfessionalBanner:hover, .NewSignUpBanner:hover {
+  --NewBannerAngle: 130deg;
+}
+.NewSignUpBanner:hover{
+  --NewSignupY: 100%;
+}
+
+.NewProfessionalBanner > p {
+  padding: 200px 40px 40px 40px;
+}
+.NewSignUpBanner > p {
+  padding: 100px 20px 20px 20px;
+}
+
+.AvatarFormImage {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+}
+
+.NoDeformImg {
+  aspect-ratio: 1/1;
+  object-fit: cover;
+}
+
+.reviewCard {
+  max-width: 35%;
+}
+
+.name-gradient {
+  background: linear-gradient(90deg, #e0f7fa, #b2ebf2, #80deea);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0px 1px 1px rgba(255, 255, 255, 0.5);
+}
+.proActivityPhoto{
+  width: 20%;
+}
+.proActivityName{
+  width: 80%;
+}
+.imgProfessionalAct{
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.containerMap{
+  width: 90%;
+  height: 20em;
+  justify-self: center;
+  text-align: center;
+}
+.theMap{ 
+  width: 100%;
+  height: 100%;
+  justify-self: center;
+}
+
+.container1 {
+  font-family: Arial, sans-serif;
+  background-color: white;
+  max-width: 900px;
+  margin: auto;
+}
+
+.imagen{
+   width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.profile{
+  background-color:#48A6A7;
+  width: auto;
+  padding: 20px;
+
+}
+
+.biography{
+  padding: 20px;
+}
+
+.activities{
+  padding: 20px;
+}
+
+.activity {
+  background-color:#e0f3f7 ; 
+  padding: 15px;
+  border-radius: 10px;
+}
+
+.stars {
+  color: gold;
+}
+
+.btn1 {
+  background-color: #ff4c4c;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.comment {
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+}
+
+.avatar{
+   width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.comentario-card {
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  padding: 16px;
+  background-color: white;
+  margin: auto;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.estrellas {
+  font-size: 18px;
+  color: #fbbf24; 
+  margin-bottom: 8px;
+}
+
+.autor-info {
+  display: flex;
+  align-items: center;
+  margin-top: 16px;
+}
+
+.nombre {
+  font-weight: bold;
+}
+
+.fecha {
+  font-size: 0.9em;
+  color: #888;
+}
+
+.more{
+  display: flex;
+  justify-content: center;
+}
+.more-hover {
+      color: blue;             
+}
+  
+.report{
+  width: 150px;
+}
+
+.HomeCar{
+  background-color: #006a71;
+}
+
+.HomeCarSlide{
+  width: 100%;
+  height: 500px;
+  background-size: cover;
+  background-position: center;
+}
+
+.HomeCarSlide:nth-child(1){
+  background-image: radial-gradient(rgba(0, 0, 0, 0.2),rgba(0, 0, 0, 0.8)), url("/media/tourist-bus.jpg");
+}
+.HomeCarSlide:nth-child(2){
+  background-image: radial-gradient(rgba(0, 0, 0, 0.2),rgba(0, 0, 0, 0.8)), url("/media/coast-walk.jpg");
+}
+.HomeCarSlide:nth-child(3){
+  background-image: radial-gradient(rgba(0, 0, 0, 0.2),rgba(0, 0, 0, 0.8)), url("/media/surf-wave.jpg");
+}
+
+.img-contactanos{
+  width: 100%;
+  object-fit: cover;
+}
+
+.no-resize{
+  resize: none;
+  width: 100%;
+  height: 200px;
+}
+
+
+.details {
+  font-family: Arial, sans-serif;
+  background-color: white;
+  max-width: 900px;
+  margin: auto;
+}
+
+.imagen{
+   width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.profile{
+  background-color:#48A6A7;
+  width: auto;
+  padding: 20px;
+
+}
+
+.biography{
+  padding: 20px;
+}
+
+.activities{
+  padding: 20px;
+}
+
+.activity {
+  background-color:#e0f3f7 ; 
+  padding: 15px;
+  border-radius: 10px;
+}
+
+.stars {
+  color: gold;
+}
+
+.comment {
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+}
+
+.avatar{
+   width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.comentario-card {
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  padding: 16px;
+  background-color: white;
+  margin: auto;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.estrellas {
+  font-size: 18px;
+  color: #fbbf24; 
+  margin-bottom: 8px;
+}
+
+h4 {
+  margin: 0 0 8px;
+}
+
+.autor-info {
+  display: flex;
+  align-items: center;
+  margin-top: 16px;
+}
+
+.nombre {
+  font-weight: bold;
+}
+
+.fecha {
+  font-size: 0.9em;
+  color: #888;
+}
+
+.more{
+  display: flex;
+  justify-content: center;
+}
+.more-hover {
+      color: blue;             
+}
+  
+.report{
+  width: 150px;
+}
+
+.bg-contacto{
+  background-color: #F2EFE7 ;
+}
+
+.PlaceholderP{
+  height: 2em;
+}
+
+.PriceTD{
+  min-width: 85px
+}
+
+.InscriptionsTable{
+  border-color: #006A71;
+}
+
+.InscriptionsTableEndDate{
+  font-size: 1em;
+}
+
+body.modal-open {
+  padding-right: 0 !important;
+}
+
+.MoveUpAnimation {
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.MoveUpAnimation:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  border-color: #9ACBD0;
+}
+
+.FavButton{
+  border: 0;
+}
+
+.FavButton > i {
+  stroke: black;
+  stroke-width: 10;
+}
+
+.FavButton > img{
+  width: 30px;
+  height: 30px;
+  z-index: 2;
+  transition: width 0.3s ease, height 0.3s ease;
+  
+}
+
+.FavButton:hover > img{
+  width: 35px;
+  height: 35px;
+}
+
+.FavButton:active > img{
+  width: 27px;
+  height: 27px;
+  transform: rotate(-5deg);
+}
+
+.CarouselFiller{
+  min-width: 32px;
+  min-height: 32px;
+}
+.btnCompra{
+  background-color: #006a71;
+  color: #F2EFE7;
+  width: 5em;
+  height: 3em;
+}
+.btnCompra:hover{
+  
+  background-color: #48A6A7;
+  color: white; 
+}
+.btnCompra:active{
+  
+  background-color: #48A6A7;
+  color: white; 
+}
+
+.btnCompra:visited{
+  
+  background-color: #48A6A7;
+  color: white; 
+}
+
+
+.ActFormGallery{
+  height: 100px;
+}
+
+.MediaActivity{
+  height: 400px;
+  width: 600px;
+  object-fit: contain;
+}
+
+.PersonalTabContent{
+  min-height: 200px;
+}
+
+.delStyle{
+  list-style: none
+}
+.adminStyle{
+  background-color: #9ACBD0;
+  color: #006A71;
+}
+.RatingStar{
+  cursor: "pointer";
+  font-size: "1.5rem";
+}
+
+.BuyButton{
+  border: 1px solid #006A71;
+  color:#006A71;
+  background-color: #F2EFE7;
+  transition: all 0.3s ease-in-out;
+}
+.BuyButton:disabled{
+  background-color: #ffffff;
+  color:#006A71;
+}
+
+.BuyButton:hover{
+  color:#0d8d90;
+  background-color: #F2EFE7;
+  
+  transform: scale(1.1);
+}
+
+.RatingTooltip {
+  --bs-tooltip-bg: var(--bd-violet-bg);
+  --bs-tooltip-color: var(--bs-white);
+}
+
+.LíneaInscription{
+  text-decoration: line-through;
+  text-decoration-color: rgb(128, 128, 128);
+}
+.LineaInscription:hover{
+  transform: scale(1.1);
+}
+
+.alignUserTitle{
+  align-content: center;
+}
+.resizeBox{
+  width: 100%;
+  place-self: center
+}

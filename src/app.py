@@ -11,18 +11,38 @@ from api.routes import api
 from api.admin import setup_admin
 from api.commands import setup_commands
 from flask_jwt_extended import JWTManager
-
-# from models import Person
+from flask_cors import CORS
+from datetime import timedelta
+from flask_mail import Mail, Message
+from api.mail.mail_config import mail
 
 ENV = "development" if os.getenv("FLASK_DEBUG") == "1" else "production"
 static_file_dir = os.path.join(os.path.dirname(
     os.path.realpath(__file__)), '../public/')
 app = Flask(__name__)
 app.url_map.strict_slashes = False
+#CORS(app, origins=["https://127.0.0.1:3000"])
 
 # Setup the Flask-JWT-Extended extension
 app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY")
+app.config["JWT_REFRESH_TOKEN_EXPIRES"] = timedelta(days=30)
 jwt = JWTManager(app)
+
+# Email configuration
+app.config['MAIL_SERVER']= 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 465
+app.config['MAIL_USERNAME'] = os.getenv("EMAIL_USERNAME")
+app.config['MAIL_PASSWORD'] = os.getenv("EMAIL_PASSWORD")
+app.config['MAIL_USE_SSL'] = True
+app.config['MAIL_DEFAULT_SENDER'] = ('Pepe', 'pepe@pepe.pe')
+app.config['MAIL_DEFAULT_SENDER'] = ("Soporte Nomadik", "nomadik.help@gmail.com")
+mail.init_app(app)
+
+# Image folder configuration
+UPLOAD_FOLDER = 'public/avatar/'
+UPLOAD_MEDIA_FOLDER = 'public/media/'
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+os.makedirs(UPLOAD_MEDIA_FOLDER, exist_ok=True)
 
 # database condiguration
 db_url = os.getenv("DATABASE_URL")
@@ -45,15 +65,11 @@ setup_commands(app)
 app.register_blueprint(api, url_prefix='/api')
 
 # Handle/serialize errors like a JSON object
-
-
 @app.errorhandler(APIException)
 def handle_invalid_usage(error):
     return jsonify(error.to_dict()), error.status_code
 
 # generate sitemap with all your endpoints
-
-
 @app.route('/')
 def sitemap():
     if ENV == "development":
