@@ -26,6 +26,7 @@ export const ModalReport = (props) => {
 		}
 	}
 
+
 	return (
 		<div className="modal fade" id="reportModal" tabIndex="-1" aria-labelledby="reportModal" aria-hidden="true">
 			<div className="modal-dialog modal-dialog-centered">
@@ -37,9 +38,9 @@ export const ModalReport = (props) => {
 						</div>
 						<div className="modal-body">
 							{props.target == "activity" && <>
-								<p className='fw-bold'>Actividad: <span className='fw-semibold'>{props.activity?.info_activity.name}</span></p>
+								<p className='fw-bold'>Actividad: <span className='fw-semibold'>{props.activity?.info_activity?.name}</span></p>
 							</>}
-							<p className='fw-bold'>Profesional: <span className='fw-semibold'>{props.activity?.info_activity.professional.user.name + " " + props.activity?.info_activity.professional.user.surname}</span></p>
+							<p className='fw-bold'>Profesional: <span className='fw-semibold'>{props.activity?.info_activity?.professional?.user.name + " " + props.activity?.info_activity?.professional?.user?.surname}</span></p>
 							<div className="mb-3">
 								<label htmlFor="message" className="form-label fw-bold">Mensaje:</label>
 								<textarea required name="message" className="form-control mt-2" style={{ height: '180px' }} id="message" placeholder="" onChange={(e) => setMessage(e.target.value)} value={message} />

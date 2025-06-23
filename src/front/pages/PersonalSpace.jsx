@@ -161,15 +161,15 @@ export const PersonalSpace = () => {
 						{activeTab === 'favoritos' && (
 							<div className="py-4">
 								{store.user.favourites && store.user.favourites.length > 0 ?
-								<div className="row d-flex  justify-content-evenly px-4 py-3">
-									{store.user.favourites?.map((el, i) => {
-										return <div key={i} className="col-sm-12 col-md-6 col-lg-4 my-3">
-											<ActivityCard activity={store.all_activities?.sort((a, b) => a.id - b.id).find((item) => item.info_activity.id == el.activity.id)} />
-										</div>
-									})}
-								</div>
-								:
-								<p className="text-center">No tienes favoritos</p>
+									<div className="row d-flex  justify-content-evenly px-4 py-3">
+										{store.user.favourites?.map((el, i) => {
+											return <div key={i} className="col-sm-12 col-md-6 col-lg-4 my-3">
+												<ActivityCard activity={store.all_activities?.sort((a, b) => a.id - b.id).find((item) => item.info_activity.id == el.activity.id)} />
+											</div>
+										})}
+									</div>
+									:
+									<p className="text-center">No tienes favoritos</p>
 								}
 							</div>
 						)}
@@ -177,21 +177,27 @@ export const PersonalSpace = () => {
 						{activeTab === 'reseñas' &&
 							<div className="py-4">
 								{store.user.reviews && store.user.reviews.length > 0 ?
-
-									<CommentBox />
+									<div className="row d-flex justify-content-evenly px-4 py-3">
+										{store.user.reviews?.map((el, i) => {
+											return <div key={i} className="col-sm-12 col-md-6 col-lg-4 my-3">
+												<CommentBox />
+											</div>
+										})}
+									</div>
 									: (
 										<p className="text-center">No has realizado ninguna reseña</p>
 									)}
-							</div>
+
+							</div >
 						}
-					</div>
+					</div >
 
 					<div>
 
 						{store.user.is_professional ? "" : <div className="rounded-bottom overflow-hidden"><NewProfessionalBox /></div>}
 					</div>
-				</div>
-			</div>
-		</div>
+				</div >
+			</div >
+		</div >
 	);
 }; 

@@ -3,8 +3,24 @@ import { useNavigate, useParams } from "react-router-dom"
 import useGlobalReducer from "../hooks/useGlobalReducer"
 import collection from "../services/collection"
 import CommentBox from "../components/CommentBox"
+import Inputmask from 'inputmask';
+import Cleave from 'cleave.js/react';
+import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
+import { Signup } from "./Signup"
+import { ModalReport } from "../components/ModalReport"
+
 
 export const Activity = () => {
+
+    const stripe = useStripe();
+    const elements = useElements();
+    const [loading, setLoading] = useState(false);
+    const [paymentError, setPaymentError] = useState("");
+
+
+    const [cardHolder, setCardHolder] = useState("")
+    const [errorHolder, setErrorHolder] = useState("")
+
 
     const { store, dispatch } = useGlobalReducer()
 
@@ -103,18 +119,18 @@ export const Activity = () => {
 
     }
 
-    
+
     const favItem = async () => {
         const resp = await collection.createFav(chosen)
         if (resp.success) {
-            setTimeout(()=>dispatch({ type: "loadUser", payload: resp.user }), 200)
+            setTimeout(() => dispatch({ type: "loadUser", payload: resp.user }), 200)
         }
     }
 
     const delItem = async () => {
         const resp = await collection.deleteFav(chosen)
         if (resp.success) {
-            setTimeout(()=>dispatch({ type: "loadUser", payload: resp.user }), 200)
+            setTimeout(() => dispatch({ type: "loadUser", payload: resp.user }), 200)
         }
     }
 
@@ -134,6 +150,47 @@ export const Activity = () => {
         });
     }, [])
 
+    async function handleSubmit(e) {
+        e.preventDefault();
+        setPaymentError("");
+        setLoading(true);
+
+        const amount = Math.round(store.activity.price * 100);
+
+        const { clientSecret, error: backendError } = await fetch(`${import.meta.env.VITE_BACKEND_URL}api/payment`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': "Bearer " + localStorage.getItem("token")
+            },
+            body: JSON.stringify({ amount })
+        }).then(r => r.json());
+
+        if (backendError) {
+            setPaymentError(backendError);
+            setLoading(false);
+            return;
+        }
+
+        const card = elements.getElement(CardElement);
+        const result = await stripe.confirmCardPayment(clientSecret, {
+            payment_method: { card, billing_details: { name: cardHolder } }
+        });
+
+        if (result.error) {
+            setPaymentError(result.error.message);
+        } else if (result.paymentIntent.status === 'succeeded') {
+            alert('¡Pago exitoso!');
+            resetValues();
+        }
+
+        setLoading(false);
+    }
+
+    function resetValues() {
+        setCardHolder("")
+    }
+
 
 
 
@@ -144,9 +201,15 @@ export const Activity = () => {
                 <div className="d-flex align-items-center pt-3">
                     <h1 className="font1 px-5">{store.activity?.info_activity?.name}</h1>
 
-                    <button type="button" className="btn FavButton align-self-center mx-3" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@getbootstrap">
-                        <img src="/media/shopping-cart.svg" alt="" />
-                    </button>
+                    {store.user.id != null ?
+                        <button type="button" className="btn FavButton align-self-center mx-3" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@getbootstrap">
+                            <img src="/media/shopping-cart.svg" alt="" />
+                        </button>
+                        :
+                        <button type="button" onClick={() => navigate("/signup")} className="btn FavButton align-self-center mx-3">
+                            <img src="/media/shopping-cart.svg" alt="" />
+                        </button>
+                    }
 
                     {store.user.id != null && (store.user.favourites?.map((item) => item.activity?.id).includes(store.activity?.info_activity?.id) ?
                         <button className="btn FavButton" onClick={((e) => {
@@ -154,7 +217,7 @@ export const Activity = () => {
                             if (store.user.needs_filling == true)
                                 navigate("/completeuserform")
                             else
-                            delItem()
+                                delItem()
                         })}>
                             <img src="/media/heart-full.svg" alt="" />
                         </button>
@@ -164,38 +227,70 @@ export const Activity = () => {
                             if (store.user.needs_filling == true)
                                 navigate("/completeuserform")
                             else
-                            favItem()
+                                favItem()
                         })}>
                             <img src="/media/heart-empty.svg" alt="" />
                         </button>
                     )}
+
+                    {store.user.id != null &&
+                        <button type="button" className="btn FavButton align-self-center mx-3" data-bs-toggle="modal" data-bs-target="#reportModal">
+                            <img src="/media/report.svg" alt="" />
+                        </button> 
+                    }
                 </div>
                 <p className="activityTextFormat p-5">{store.activity?.info_activity?.desc}</p>
-
+                <ModalReport target={"activity"} activity={store.activity}/>
 
                 <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div className="modal-dialog">
                         <div className="modal-content">
                             <div className="modal-header">
-                                <h1 className="modal-title fs-5" id="exampleModalLabel">Formulario de pago</h1>
+                                <h1 className="modal-title fs-5" id="exampleModalLabel">Formulario de pago</h1><i className="fa-brands fa-cc-stripe mx-3 display-6"></i>
                                 <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div className="modal-body">
-                                <form>
+                                <form onSubmit={handleSubmit}>
                                     <div className="mb-3">
-                                        <label htmlFor="recipient-card" className="col-form-label">Nº de cuenta:</label>
-                                        <input type="text" className="form-control" id="recipient-card"></input>
+                                        <label className="col-form-label">Detalles de tarjeta:</label>
+                                        <div className="form-control">
+                                            <CardElement options={{
+                                                style: {
+                                                    base: {
+                                                        fontSize: '16px',
+                                                        color: '#424770',
+                                                        '::placeholder': { color: '#aab7c4' }
+                                                    },
+                                                    invalid: { color: '#9e2146' }
+                                                }
+                                            }} />
+                                        </div>
+                                        {paymentError && <p className="fixingErrorsForm">{paymentError}</p>}
                                     </div>
+
                                     <div className="mb-3">
-                                        <label htmlFor="recipient-name" className="col-form-label">Nombre del titular:</label>
-                                        <input type="text" className="form-control" id="recipient-name"></input>
+                                        <label className="col-form-label">Nombre del titular:</label>
+                                        <input
+                                            className="form-control"
+                                            type="text"
+                                            value={cardHolder}
+                                            required
+                                            maxLength={35}
+                                            placeholder="Ingresa tu nombre"
+                                            onChange={(e) => setCardHolder(e.target.value.replace(/[^a-zA-Z\s]/g, ''))}
+                                        />
+                                        {errorHolder && <p className="fixingErrorsForm">{errorHolder}</p>}
+                                    </div>
+
+                                    <div className="modal-footer">
+                                        <button type="button" onClick={resetValues} className="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+                                        <button type="submit" className="btn btn-success" disabled={!stripe || loading}>
+                                            {loading ? 'Procesando...' : 'Pagar'}
+                                        </button>
                                     </div>
                                 </form>
                             </div>
-                            <div className="modal-footer">
-                                <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <button type="button" className="btn btn-primary">Send message</button>
-                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -217,9 +312,6 @@ export const Activity = () => {
 
                 <CommentBox />
 
-                <div className="d-flex justify-content-center m-5">
-                    <button type="button" className="btn btn-primary p-3" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@getbootstrap">Inscríbete ya</button>
-                </div>
             </div>
 
             <div className="container2Activity rounded-end">

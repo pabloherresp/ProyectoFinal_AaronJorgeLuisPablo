@@ -697,6 +697,7 @@ body.modal-open {
   color: white; 
 }
 
+
 .ActFormGallery{
   height: 100px;
 }
@@ -709,4 +710,17 @@ body.modal-open {
 
 .PersonalTabContent{
   min-height: 200px;
+}
+
+.fixingErrorsForm{
+  color: rgb(104, 8, 8);
+  font-style: italic;
+  font-size: 0.85em;
+}
+.delStyle{
+  list-style: none
+}
+.adminStyle{
+  background-color: #9ACBD0;
+  color: #006A71;
 }

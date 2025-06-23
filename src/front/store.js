@@ -1,5 +1,6 @@
 export const initialStore = () => {
   return {
+    all_reports:[],
     all_activities: [],
     activity: {},
     user: {
@@ -35,6 +36,11 @@ export default function storeReducer(store, action = {}) {
         ...store,
         user: { id: null, username: "", avatar_url: "" },
         closed: true,
+      };
+      case "reports":
+      return {
+        ...store,
+        all_reports: action.payload,
       };
     default:
       throw Error("Unknown action.");

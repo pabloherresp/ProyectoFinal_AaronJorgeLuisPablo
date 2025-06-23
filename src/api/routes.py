@@ -11,8 +11,13 @@ from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identi
 from datetime import datetime
 from rapidfuzz import process, fuzz
 from flask_mail import Message
+<<<<<<< HEAD
 from api.mail.mailer import send_email, contact_email
 import uuid
+=======
+from api.mail.mailer import send_email
+import stripe
+>>>>>>> cd685d50c5e887ab3c7a984de9d52156f38698d4
 
 
 api = Blueprint('api', __name__)
@@ -819,6 +824,29 @@ def password_update():
         db.session.rollback()
         return jsonify({'success': False, "error": "Error al cambiar la contraseña"}), 500
     return jsonify({'success': True}), 200
+
+#Post a la API de Stripe
+stripe.api_key = os.getenv("STRIPE_SECRET_KEY")
+@api.route('/payment', methods=['POST'])
+@jwt_required()
+def post_payment():
+    try:
+        data = request.get_json()
+        amount = data.get('amount')
+
+        if not amount:
+            return jsonify({"error": "Se requiere una cantidad mínima"}), 400
+
+        intent = stripe.PaymentIntent.create(
+            amount=amount,
+            currency='eur',
+            automatic_payment_methods={'enabled': True}
+        )
+
+        return jsonify({'clientSecret': intent.client_secret})
+    
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 @api.route("/contacto", methods=['POST'])
 def email_contacto():

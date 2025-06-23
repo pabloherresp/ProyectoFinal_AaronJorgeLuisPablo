@@ -7,6 +7,7 @@ import {
 } from "react-router-dom"
 import { Layout } from "./pages/Layout"
 import { Home } from "./pages/Home"
+import { Administration } from "./pages/Administration"
 import { Activities } from "./pages/Activities"
 import { Activity } from "./pages/Activity"
 import { Sport } from "./pages/Sport"
@@ -51,6 +52,7 @@ export const router = createBrowserRouter(
       <Route path="/leisure" element={<Leisure /> } />
       <Route path="/tourism" element={<Tourism /> } />
       <Route path="/termsandconditions" element={<TermsAndConditions /> } />
+      <Route path="/admin" element={<Administration />} />
     </Route>
   ),
   {
