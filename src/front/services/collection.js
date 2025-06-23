@@ -363,5 +363,20 @@ collection.returnAllReports = async () => {
 
 }
 
+collection.deleteInscription = async (id) => {
+    try {
+        const resp = await fetch(BACKEND_URL + "api/inscriptions/" + id, {
+            method: "DELETE",
+            headers:{
+                "Authorization": get_token()
+            }
+        })
+        const data = await resp.json()
+        return data
+    } catch (error) {
+        console.log(error)
+        return {error: "No se ha podido borrar la inscripción", response: error}
+    }
+}
 
 export default collection

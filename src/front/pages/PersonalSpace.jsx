@@ -119,7 +119,7 @@ export const PersonalSpace = () => {
 					<ul className="nav nav-underline d-flex justify-content-evenly mt-4 mx-2">
 						{store.user.is_professional && <li className="nav-item">
 							<button
-								className={`nav-link ${activeTab === 'professionalPanel' ? 'active' : ''}`}
+								className={`nav-link TextDark ${activeTab === 'professionalPanel' ? 'active' : ''}`}
 								onClick={() => setActiveTab('professionalPanel')}
 							>
 								<i className="fa-solid fa-suitcase me-2"></i>Área profesional
@@ -127,7 +127,7 @@ export const PersonalSpace = () => {
 						</li>}
 						<li className="nav-item">
 							<button
-								className={`nav-link ${activeTab === 'inscripciones' ? 'active' : ''}`}
+								className={`nav-link TextDark ${activeTab === 'inscripciones' ? 'active' : ''}`}
 								onClick={() => setActiveTab('inscripciones')}
 							>
 								<i className="fa-solid fa-book me-2"></i>Inscripciones
@@ -135,15 +135,15 @@ export const PersonalSpace = () => {
 						</li>
 						<li className="nav-item">
 							<button
-								className={`nav-link ${activeTab === 'favoritos' ? 'active' : ''}`}
+								className={`nav-link TextDark ${activeTab === 'favoritos' ? 'active' : ''}`}
 								onClick={() => setActiveTab('favoritos')}
 							>
-								<i className="fa-solid fa-star me-2 text-warning"></i>Favoritos
+								<i className="fa-solid fa-star me-2"></i>Favoritos
 							</button>
 						</li>
 						<li className="nav-item">
 							<button
-								className={`nav-link ${activeTab === 'reseñas' ? 'active' : ''}`}
+								className={`nav-link TextDark ${activeTab === 'reseñas' ? 'active' : ''}`}
 								onClick={() => setActiveTab('reseñas')}
 							>
 								<i className="fa-solid fa-comments me-2"></i>Reseñas

@@ -11,16 +11,13 @@ from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identi
 from datetime import datetime
 from rapidfuzz import process, fuzz
 from flask_mail import Message
-<<<<<<< HEAD
 from api.mail.mailer import send_email, contact_email
 import uuid
-=======
-from api.mail.mailer import send_email
 import stripe
->>>>>>> cd685d50c5e887ab3c7a984de9d52156f38698d4
-
 
 api = Blueprint('api', __name__)
+
+stripe.api_key = os.getenv("STRIPE_SECRET_KEY")
 
 CORS(api)
 
@@ -599,7 +596,7 @@ def get_inscription_for_one_user(id):
 def create_inscription():
     user_id = int(get_jwt_identity())
     data = request.json
-    if not data or not "activity_id" in data:
+    if not data or not "activity_id" in data or not "payment_intent" in data:
         return jsonify({"error": "Missing fields for creating inscription"}), 403
     
     stmt = select(Activities).where(Activities.id == data["activity_id"])
@@ -628,10 +625,22 @@ def delete_inscription(id):
     user_id = int(get_jwt_identity())
     stmt = select(Inscriptions).where(and_(Inscriptions.id == id, Inscriptions.user_id == user_id))
     inscription = db.session.execute(stmt).scalar_one_or_none()
-
+    
     if not inscription:
         return jsonify({"error": "Inscription not found"}), 404
-    inscription.is_active = not inscription.is_active
+    elif not inscription.is_active:
+        return jsonify({"error": "Esta inscripción ya había sido borrada"}), 409
+    if inscription.payment_intent:
+        try:    
+            stripe.Refund.create(
+                payment_intent=inscription.payment_intent,
+                amount=int(inscription.activity.price*100)
+            )
+        except Exception as e:
+            print(e)
+            return jsonify({"error": "No se pudo realizar el reembolso", "response": str(e)}), 409
+
+    inscription.is_active = False
     try:
         db.session.commit()
     except Exception as e:
@@ -814,7 +823,7 @@ def check_mail():
 def password_update():
     try:
         data = request.json
-        id = get_jwt_identity()
+        id = int(get_jwt_identity())
         user = db.session.execute(select(Users).where(Users.id == id)).scalar_one_or_none()
         user.password = generate_password_hash(data['password'])
         
@@ -826,15 +835,23 @@ def password_update():
     return jsonify({'success': True}), 200
 
 #Post a la API de Stripe
-stripe.api_key = os.getenv("STRIPE_SECRET_KEY")
 @api.route('/payment', methods=['POST'])
 @jwt_required()
 def post_payment():
     try:
-        data = request.get_json()
-        amount = data.get('amount')
+        user_id = int(get_jwt_identity())
+        data = request.json
+        if not data or "amount" not in data or "activity_id" not in data:
+            return jsonify({"error": "Missing fields"}), 400
+        
+        ins = db.session.execute(select(Inscriptions).where(and_(Inscriptions.user_id == user_id, Inscriptions.activity_id == data["activity_id"], Inscriptions.is_active == True))).scalar_one_or_none()
+        if ins is not None:
+            return jsonify({"error": "Usted ya está inscrito a esta actividad"}), 409
 
-        if not amount:
+
+        amount = data['amount']
+
+        if amount < 0:
             return jsonify({"error": "Se requiere una cantidad mínima"}), 400
 
         intent = stripe.PaymentIntent.create(
@@ -842,6 +859,9 @@ def post_payment():
             currency='eur',
             automatic_payment_methods={'enabled': True}
         )
+        inscription = Inscriptions(user_id = user_id, activity_id = data["activity_id"], payment_intent = intent.id)
+        db.session.add(inscription)
+        db.session.commit()
 
         return jsonify({'clientSecret': intent.client_secret})
     

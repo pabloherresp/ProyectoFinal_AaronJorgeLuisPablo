@@ -6,7 +6,6 @@ import CommentBox from "../components/CommentBox"
 import Inputmask from 'inputmask';
 import Cleave from 'cleave.js/react';
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
-import { Signup } from "./Signup"
 import { ModalReport } from "../components/ModalReport"
 
 
@@ -16,6 +15,7 @@ export const Activity = () => {
     const elements = useElements();
     const [loading, setLoading] = useState(false);
     const [paymentError, setPaymentError] = useState("");
+    const [paymentResponse, setPaymentResponse] = useState({ message: "", error: true })
 
 
     const [cardHolder, setCardHolder] = useState("")
@@ -163,11 +163,11 @@ export const Activity = () => {
                 'Content-Type': 'application/json',
                 'Authorization': "Bearer " + localStorage.getItem("token")
             },
-            body: JSON.stringify({ amount })
+            body: JSON.stringify({ amount: amount, activity_id: store.activity.id })
         }).then(r => r.json());
 
         if (backendError) {
-            setPaymentError(backendError);
+            setPaymentResponse({ message: backendError, error: true });
             setLoading(false);
             return;
         }
@@ -178,10 +178,11 @@ export const Activity = () => {
         });
 
         if (result.error) {
-            setPaymentError(result.error.message);
+            setPaymentResponse({ message: result.error.message, error: true });
         } else if (result.paymentIntent.status === 'succeeded') {
-            alert('¡Pago exitoso!');
-            resetValues();
+            setPaymentResponse({ message: "Pago realizado con éxito", error: false })
+            resetValues()
+            setTimeout(() => navigate(0), 2000)
         }
 
         setLoading(false);
@@ -201,15 +202,6 @@ export const Activity = () => {
                 <div className="d-flex align-items-center pt-3">
                     <h1 className="font1 px-5">{store.activity?.info_activity?.name}</h1>
 
-                    {store.user.id != null ?
-                        <button type="button" className="btn FavButton align-self-center mx-3" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@getbootstrap">
-                            <img src="/media/shopping-cart.svg" alt="" />
-                        </button>
-                        :
-                        <button type="button" onClick={() => navigate("/signup")} className="btn FavButton align-self-center mx-3">
-                            <img src="/media/shopping-cart.svg" alt="" />
-                        </button>
-                    }
 
                     {store.user.id != null && (store.user.favourites?.map((item) => item.activity?.id).includes(store.activity?.info_activity?.id) ?
                         <button className="btn FavButton" onClick={((e) => {
@@ -236,11 +228,11 @@ export const Activity = () => {
                     {store.user.id != null &&
                         <button type="button" className="btn FavButton align-self-center mx-3" data-bs-toggle="modal" data-bs-target="#reportModal">
                             <img src="/media/report.svg" alt="" />
-                        </button> 
+                        </button>
                     }
                 </div>
                 <p className="activityTextFormat p-5">{store.activity?.info_activity?.desc}</p>
-                <ModalReport target={"activity"} activity={store.activity}/>
+                <ModalReport target={"activity"} activity={store.activity} />
 
                 <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div className="modal-dialog">
@@ -265,7 +257,6 @@ export const Activity = () => {
                                                 }
                                             }} />
                                         </div>
-                                        {paymentError && <p className="fixingErrorsForm">{paymentError}</p>}
                                     </div>
 
                                     <div className="mb-3">
@@ -281,6 +272,7 @@ export const Activity = () => {
                                         />
                                         {errorHolder && <p className="fixingErrorsForm">{errorHolder}</p>}
                                     </div>
+                                    {<p className={"text-center " + (paymentResponse.error ? "text-danger" : "text-success")}>{paymentResponse.message}</p>}
 
                                     <div className="modal-footer">
                                         <button type="button" onClick={resetValues} className="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
@@ -299,13 +291,13 @@ export const Activity = () => {
                     <div className="d-flex justify-content-around gap-3">
                         <button className="buttonStyle rounded-circle mx-3" onClick={(e) => handleClickLess1(counter1)}><i className="fa-solid fa-arrow-left"></i></button>
                         <div className="d-flex justify-content-center">
-                            <img className="px-5 pb-5 MediaActivity" src={activity?.info_activity?.media[counter1].includes("http") ? "/events/0.jpg" : "/events/"+activity?.info_activity?.media[counter1]}></img>
+                            <img className="px-5 pb-5 MediaActivity" src={activity?.info_activity?.media[counter1].includes("http") ? "/events/0.jpg" : "/events/" + activity?.info_activity?.media[counter1]}></img>
                         </div>
                         <button className="buttonStyle rounded-circle mx-3" onClick={(e) => handleClickMore1(counter1)}><i className="fa-solid fa-arrow-right"></i></button>
                     </div>
                 </div>
                 <div className="d-flex overflow-auto gap-3 p-3 scroll-horizontal scroll3 d-block d-lg-none">
-                    {activity?.info_activity?.media.map((item, i) => <img className="MediaActivity" key={i} src={item.includes("http") ? "/events/0.jpg" : "/events/"+item}></img>)}
+                    {activity?.info_activity?.media.map((item, i) => <img className="MediaActivity" key={i} src={item.includes("http") ? "/events/0.jpg" : "/events/" + item}></img>)}
                 </div>
 
                 <h3 className="px-5 pt-5">Comentarios</h3>
@@ -315,10 +307,24 @@ export const Activity = () => {
             </div>
 
             <div className="container2Activity rounded-end">
-                <p className="mt-5"><span className="font2 mx-3 p-1 rounded">Actividad {returnType()}</span></p>
+                <div className="d-flex align-items-center mt-3 mx-3">
+
+                    <p className="my-auto"><span className="font3 fw-semibold rounded">Actividad {returnType()}</span></p>
+                        {!store.user?.inscriptions?.map((item) => item.activity_id).includes(store.activity.id) ?
+                            (store.user.id != null ?
+                                <button type="button" className="ms-auto btn BuyButton align-self-center fw-semibold d-flex" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@getbootstrap">
+                                    Inscribirse <img src="/media/shopping-cart.svg" width="22px" height="22px" alt="" />
+                                </button>
+                                :
+                                <button type="button" onClick={() => navigate("/signup")} className="ms-auto btn FavButton align-self-center">
+                                    <img src="/media/shopping-cart.svg" width="22px" height="22px" alt="" />
+                                </button>)
+                            : ""
+                        }
+                </div>
                 <div className="d-flex mx-3">
-                    <p className="mt-3"><span className="font2 p-1 rounded">Publicado </span></p>
-                    <p className="mt-3"><span className="font2 mx-3 p-1 rounded">{parseFullDate(store?.activity?.creation_date)}</span></p>
+                    <p className="mt-3 font2 p-1 rounded">Publicado</p>
+                    <p className="mt-3 font2 ms-auto p-1 rounded">{parseFullDate(store?.activity?.creation_date)}</p>
                 </div>
                 <div className="mt-3 mx-3 p-1 d-flex">
                     <div className="proActivityPhoto">
@@ -358,9 +364,15 @@ export const Activity = () => {
                         src={"https://www.google.com/maps/embed/v1/place?key=" + GOOGLE_MAPS_API + "&q=" + store?.activity?.meeting_point}
                         allowFullScreen>
                     </iframe>
+
                 </div>
                 <p className="font2 mx-3 p-1 mt-3 rounded text-center">{store?.activity?.meeting_point}</p>
-                <CommentBox />
+
+                <div className="mt-5 px-3 mb-5">
+                    <p className="text-white fw-semibold">Reseñas del profesional:</p>
+                    <CommentBox />
+
+                </div>
 
             </div>
 
