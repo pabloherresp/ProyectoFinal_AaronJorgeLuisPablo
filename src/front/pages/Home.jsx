@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react"
 import { NewProfessionalBox } from "../components/NewProfessionalBox.jsx"
 import collection from "../services/collection"
 import { ActivityCard } from "../components/ActivityCard.jsx"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { CommentBox } from "../components/CommentBox.jsx"
 import useGlobalReducer from "../hooks/useGlobalReducer.jsx"
 
@@ -10,6 +10,7 @@ export const Home = () => {
 	const { store, dispatch } = useGlobalReducer()
 	const [activities, setActivities] = useState([])
 	const [reviews, setReviews] = useState([])
+	const navigate = useNavigate()
 
 	const loadActivities = async () => {
 		const resp = await collection.returnActivities()

@@ -39,9 +39,9 @@ export const Layout = () => {
 
     return (
         <ScrollToTop>
-            <div className="Page">
+            <div className="d-flex flex-column min-vh-100">
                 <Navbar />
-                <main className="PageContent d-flex justify-content-center align-items-center">
+                <main className="d-flex flex-column flex-grow-1 justify-content-center align-items-center">
                     <Outlet />
                 </main>
                 <Footer />

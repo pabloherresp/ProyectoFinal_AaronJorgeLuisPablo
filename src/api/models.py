@@ -141,7 +141,7 @@ class Activities(db.Model):
     info_activity: Mapped["Info_activity"] = relationship("Info_activity", back_populates="activities", uselist=False)
     inscriptions: Mapped[list["Inscriptions"]] = relationship("Inscriptions", back_populates="activity")
 
-    def serialize(self, can_see):
+    def serialize(self, can_see=False):
         response_body = {}
         if can_see:
             response_body = {"inscriptions": [{"id": i.id, "user_id": i.user_id, "username": i.client.username, "name": i.client.name, "surname": i.client.surname, "telephone": i.client.telephone, "NID": i.client.NID} for i in self.inscriptions if i.is_active]}

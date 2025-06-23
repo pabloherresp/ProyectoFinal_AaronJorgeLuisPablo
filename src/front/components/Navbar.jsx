@@ -52,7 +52,7 @@ export const Navbar = () => {
 	useEffect(() => { searchText(search) }, [search])
 
 	return (
-		<nav className="navbar navbar-expand-lg navbar-light navbg p-0">
+		<nav className="navbar navbar-expand-lg navbar-light navbg p-0 sticky-top BgSecondary">
 			<div className="container-fluid text-white">
 				<a className="navbar-brand" href="#">
 					<img className="img-fluid logo" src="/src/front/assets/img/Logo_Nomadik.png" alt="Logo" />

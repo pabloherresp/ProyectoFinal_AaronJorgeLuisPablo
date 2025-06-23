@@ -14,6 +14,7 @@ export const Activity = () => {
     const chosen = params.id;
 
     const [counter1, setCounter1] = useState(0)
+    const [activity, setActivity] = useState(null)
 
 
     const GOOGLE_MAPS_API = import.meta.env.VITE_GOOGLE_MAPS_API
@@ -117,19 +118,20 @@ export const Activity = () => {
         }
     }
 
+    const loadActivity = async () => {
+        const resp = await collection.returnActivity(chosen)
+        setActivity(resp)
+        dispatch({ type: 'activity', payload: resp })
+    }
+
     useEffect(() => {
-
-        collection.returnActivity(chosen).then(data => dispatch({ type: 'activity', payload: data }))
-
+        loadActivity()
         const scrollContainer3 = document.querySelector('.scroll3');
 
         scrollContainer3.addEventListener('wheel', (e) => {
             e.preventDefault();
             scrollContainer3.scrollLeft += e.deltaY;
         });
-
-
-
     }, [])
 
 
@@ -202,13 +204,13 @@ export const Activity = () => {
                     <div className="d-flex justify-content-around gap-3">
                         <button className="buttonStyle rounded-circle mx-3" onClick={(e) => handleClickLess1(counter1)}><i className="fa-solid fa-arrow-left"></i></button>
                         <div className="d-flex justify-content-center">
-                            <img className="px-5 pb-5" src={store.activity?.info_activity?.media[counter1]}></img>
+                            <img className="px-5 pb-5 MediaActivity" src={activity?.info_activity?.media[counter1].includes("http") ? "/events/0.jpg" : "/events/"+activity?.info_activity?.media[counter1]}></img>
                         </div>
                         <button className="buttonStyle rounded-circle mx-3" onClick={(e) => handleClickMore1(counter1)}><i className="fa-solid fa-arrow-right"></i></button>
                     </div>
                 </div>
                 <div className="d-flex overflow-auto gap-3 p-3 scroll-horizontal scroll3 d-block d-lg-none">
-                    {store.activity?.info_activity?.media.map((item, i) => <img key={i} src={item}></img>)}
+                    {activity?.info_activity?.media.map((item, i) => <img className="MediaActivity" key={i} src={item.includes("http") ? "/events/0.jpg" : "/events/"+item}></img>)}
                 </div>
 
                 <h3 className="px-5 pt-5">Comentarios</h3>

@@ -43,12 +43,12 @@ export const CompleteUserForm = (props) => {
 					request_body.append(clave, valor)
 				});
 				const resp = await collection.editUser(request_body)
-				console.log(resp)
 				if (!resp.success)
 					setFormdata({ ...formData, error: true, response: resp.response })
 				else {
 					setFormdata({ ...formData, error: false, response: "Datos actualizados con éxito" })
 					dispatch({ type: "loadUser", payload: resp.user })
+					setTimeout(() => navigate(0), 2000)
 				}
 			}
 		}
@@ -126,7 +126,7 @@ export const CompleteUserForm = (props) => {
 						</>
 							: <div>
 								<h3 className="text-center display-5 font1">Datos de usuario</h3>
-								<p className="m-4 fw-semibold mt-3">Si lo que desea es cambiar su contarseña. Haga click <Link to="/newpassword">aquí</Link></p>
+								<p className="m-4 fw-semibold mt-3">Si lo que desea es cambiar su contraseña. Haga click <Link className="TextDark text-decoration-none" to="/newpassword">aquí</Link></p>
 								</div>
 						}
 					</div>

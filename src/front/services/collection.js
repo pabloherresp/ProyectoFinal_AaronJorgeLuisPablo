@@ -335,9 +335,8 @@ collection.createInfoActivity = async (actData) => {
         const resp = await fetch(BACKEND_URL + "api/info_activities", {
             method: "POST",
             headers: {
-                "Content-Type":"application/json",
                 "Authorization": get_token()
-            }, body: JSON.stringify(actData)
+            }, body: actData
         })
         const data = await resp.json()
         return data

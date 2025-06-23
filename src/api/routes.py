@@ -1,17 +1,18 @@
 import os
 from functools import wraps
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, enumClts, enumProf, enumInfo, Users, Professionals, Administrators, Favourites, Info_activity, Activities, Inscriptions, Reports, Reviews, Clients
+from api.models import db, enumClts, enumProf, enumInfo, Users, Professionals, Administrators, Favourites, Info_activity, Activities, Inscriptions, Reports, Reviews, Clients, Media
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
-from sqlalchemy import select, delete, and_, or_
+from sqlalchemy import select, delete, and_, or_, func
 from sqlalchemy.exc import IntegrityError, DataError
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 from datetime import datetime
 from rapidfuzz import process, fuzz
 from flask_mail import Message
-from api.mail.mailer import send_email
+from api.mail.mailer import send_email, contact_email
+import uuid
 
 
 api = Blueprint('api', __name__)
@@ -45,7 +46,7 @@ def get_users():
 def check_possible():
     data = request.json
     name = data["name"]
-    stmt = select(Clients).where(Clients.username == name)
+    stmt = select(Clients).where(func.lower(Clients.username) == name.lower())
     user = db.session.execute(stmt).scalar_one_or_none()
     
     if user is not None:
@@ -280,14 +281,12 @@ def edit_client():
             client.avatar_url = avatar.filename
         
         fecha_iso = request.form.get('birthdate')
-        print(fecha_iso)
         if fecha_iso is not None:
             fecha_dt = datetime.fromisoformat(fecha_iso.replace("Z", "+00:00"))
             client.birthdate = fecha_dt
 
         is_professional = request.form.get("is_professional")
-        if is_professional:
-            print("ENTRADA __----____---__--")
+        if is_professional == True:
             prof = db.session.execute(select(Professionals).where(Professionals.user_id == user_id)).scalar_one_or_none()
             if not prof:
                 return jsonify({"error": "Professional profile not found"}), 404
@@ -403,7 +402,8 @@ def get_my_activities():
 @jwt_required()
 def create_activity():
     data = request.json
-    if not data or "info_id" not in data or "price" not in data or "slots" not in data or "start_date" not in data or "end_date" not in data or "meeting_point" not in data:
+    print(data)
+    if not data or "id" not in data or "price" not in data or "slots" not in data or "start_date" not in data or "end_date" not in data or "meeting_point" not in data:
         return jsonify({"error": "Missing fields for creating activity."}), 400
     
     prof_id = get_jwt_identity()
@@ -411,7 +411,7 @@ def create_activity():
     prof = db.session.execute(stmt).scalar_one_or_none()
     if prof is None:
         return jsonify({"error": "Given token doesn't match any professional in the database"}), 404
-    stmt = select(Info_activity).where(and_(Info_activity.id == data["info_id"],Info_activity.professional_id == prof.user_id))
+    stmt = select(Info_activity).where(and_(Info_activity.id == data["id"],Info_activity.professional_id == prof.user_id))
     info = db.session.execute(stmt).scalar_one_or_none()
     if info is None:
         return jsonify({"error": "Given info_id doesn't match any info in the database or you aren't the owner"}), 404
@@ -420,15 +420,17 @@ def create_activity():
         return jsonify({"error": "Price can't be negative"})
     elif int(data["slots"]) < 0:
         return jsonify({"error": "Slots can't be negative"})
-    date_s = data["start_date"].split("/")
-    date_e = data["end_date"].split("/")
-    date_s = datetime(int(date_s[0]), int(date_s[1]), int(date_s[2]))
-    date_e = datetime(int(date_e[0]), int(date_e[1]), int(date_e[2]))
-    if date_s > date_e:
-        return jsonify({"error": "Start date can't be greater than end date"})
+    
+    fecha_inicio = data['start_date']
+    fecha_fin = data['end_date']
+    if fecha_inicio is not None and fecha_fin is not None:
+            fecha_inicio = datetime.fromisoformat(fecha_inicio.replace("Z", "+00:00"))
+            fecha_fin = datetime.fromisoformat(fecha_fin.replace("Z", "+00:00"))
+    else:
+        return jsonify({"error": "Invalid date data"})
 
     try:
-        activity = Activities(info_id=info.id,price=data["price"], slots=data["slots"], start_date=date_s, end_date=date_e, meeting_point=data["meeting_point"])
+        activity = Activities(info_id=info.id,price=data["price"], slots=data["slots"], start_date=fecha_inicio, end_date=fecha_fin, meeting_point=data["meeting_point"])
         db.session.add(activity)
         db.session.commit()
     except Exception as e:
@@ -500,37 +502,66 @@ def get_one_activity_inf(id):
 @api.route('/info_activities', methods=['POST'])
 @jwt_required()
 def create_info_activity():
-    data = request.json
-    if not data or "name" not in data or "desc" not in data or "type" not in data or "location" not in data or "price" not in data or "slots" not in data or "start_date" not in data or "end_date" not in data or "meeting_point" not in data:
-        return jsonify({"error": "Missing fields for creating activity."}), 400
     prof_id = int(get_jwt_identity())
     stmt = select(Professionals).where(Professionals.user_id == prof_id)
     prof = db.session.execute(stmt).scalar_one_or_none()
-    if prof is None:
+    # if not data or "name" not in data or "desc" not in data or "type" not in data or "location" not in data or "price" not in data or "slots" not in data or "start_date" not in data or "end_date" not in data or "meeting_point" not in data:
+    #     return jsonify({"error": "Missing fields for creating activity."}), 400
+    price = request.form.get("price")
+    slots = request.form.get("slots")
+    if not prof:
         return jsonify({"error": "Given token doesn't match any professional in the database"}), 404
-    if float(data["price"]) < 0:
+    elif price is None:
+        return jsonify({"error": "No hay precio"}), 400
+    if float(price) < 0:
         return jsonify({"error": "Price can't be negative"})
-    elif int(data["slots"]) < 0:
+    elif int(slots) < 0:
         return jsonify({"error": "Slots can't be negative"})
-    date_s = data["start_date"].split("/")
-    date_e = data["end_date"].split("/")
-    date_s = datetime(int(date_s[0]), int(date_s[1]), int(date_s[2]))
-    date_e = datetime(int(date_e[0]), int(date_e[1]), int(date_e[2]))
-    if date_s > date_e:
-        return jsonify({"error": "Start date can't be greater than end date"})
+    
+    fecha_inicio = request.form.get('start_date')
+    fecha_fin = request.form.get('end_date')
+    if fecha_inicio is not None and fecha_fin is not None:
+        fecha_inicio = datetime.fromisoformat(fecha_inicio.replace("Z", "+00:00"))
+        fecha_fin = datetime.fromisoformat(fecha_fin.replace("Z", "+00:00"))
+    else:
+        return jsonify({"error": "Invalid date data"})
+
+    info_activity = Info_activity(professional_id = prof_id, name=request.form.get("name"), desc=request.form.get("desc"),
+            type = enumInfo(request.form.get("type")), location=request.form.get("location"))
+    db.session.add(info_activity)
     try:
-        info_activity = Info_activity(professional_id = prof_id, name=data["name"], desc=data["desc"], type = enumInfo(data["type"]), location=data["location"])
-        db.session.add(info_activity)
         db.session.commit()
     except Exception as e:
         db.session.rollback()
         return jsonify({"error":"Couldn't create info activity"})
 
     try:
-        activity = Activities(info_id=info_activity.id,price=data["price"], slots=data["slots"], start_date=date_s, end_date=date_e, meeting_point=data["meeting_point"])
+        media = request.files.getlist("media")
+        if media:
+            medias = []
+            for i in media:
+                if os.path.splitext(i.filename)[1] == ".jpg":
+                    print(i)
+                    filename = f"{uuid.uuid4()}.jpg"
+                    filepath = f"public/events/{filename}"
+                    i.save(os.path.join(filepath))
+                    m = Media(info_activity_id = info_activity.id, url=filename)
+                    medias.append(m)
+            db.session.add_all(medias)
+            db.session.commit()
+    except Exception as e:
+        print(e)
+        db.session.rollback()
+        db.session.delete(info_activity)
+        db.session.commit()
+        return jsonify({"error": "Error while uploading medias"}), 500
+    try:
+        
+        activity = Activities(info_id=info_activity.id,price=price, slots=slots, start_date=fecha_inicio, end_date=fecha_fin, meeting_point=request.form.get("meeting_point"))
         db.session.add(activity)
         db.session.commit()
     except Exception as e:
+        print(e)
         db.session.rollback()
         return jsonify({"error": "Couldn't create activity"}), 500
     
@@ -789,12 +820,11 @@ def password_update():
         return jsonify({'success': False, "error": "Error al cambiar la contraseña"}), 500
     return jsonify({'success': True}), 200
 
-# put reviews
-
-@api.route("/test")
-def test():
+@api.route("/contacto", methods=['POST'])
+def email_contacto():
     try:
-        result = send_email("pabloherresp@gmail.com", "aaaaaaaaaaaaaaaaa")
+        data = request.json
+        result = contact_email(data["email"], data["name"], data["message"])
     except Exception as e:
         print(e)
         return jsonify({"error": "No se pudo enviar el correo"})

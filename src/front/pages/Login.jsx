@@ -68,7 +68,7 @@ export const Login = () => {
 						</div>
 						<div className="col-12 col-md-8 align-self-center">
 							<h3 className="display-2 fw-bold text-center my-2 TextDark">Log In</h3>
-							<p className="text-center fw-semibold mt-3">¿Aún no estás registrado? Haga click <Link className="text-decoration-none" to="/signup">aquí</Link></p>
+							<p className="text-center fw-semibold mt-3">¿Aún no estás registrado? Haga click <Link className="text-decoration-none TextDark" to="/signup">aquí</Link></p>
 						</div>
 					</div>
 					<form className="m-3" onSubmit={handleLogin}>
@@ -79,11 +79,11 @@ export const Login = () => {
 						<div className="form-label my-3 w-75 mx-auto">
 							<label className="fs-6 mb-2 fw-semibold" htmlFor="password">Contraseña</label>
 							<input required type="password" name="password" className="form-control" id="password" placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;" autoComplete="current-password" onChange={handleChange} value={formData.password} />
-							<p className="text-center fs-6 my-3 fw-semibold">¿Has olvidado tu contraseña? Haga click <Link className="text-decoration-none" data-bs-toggle="modal" data-bs-target="#resetPasswordModal">aquí</Link></p>
+							<p className="text-center fs-6 my-3 fw-semibold">¿Has olvidado tu contraseña? Haga click <Link className="text-decoration-none TextDark" data-bs-toggle="modal" data-bs-target="#resetPasswordModal">aquí</Link></p>
 
 						</div>
 						<div className="row">
-							<input type="submit" value="Iniciar sesión" className="btn btn-primary my-2 w-auto mx-auto fw-bold" />
+							<input type="submit" value="Iniciar sesión" className="btn Button my-2 w-auto mx-auto fw-bold" />
 							<p className={"text-center fw-semibold " + (formData.error ? "text-danger" : "text-success")}>{formData.response}</p>
 						</div>
 					</form>
