@@ -153,6 +153,34 @@ collection.createProf = async (userdata) => {
     }
 }
 
+collection.reportProfessional = async (userdata) => {
+    try {
+        const resp = await fetch(BACKEND_URL + "api/professionals", {
+            method: "POST",
+            headers: {
+                "Content-Type":"application/json",
+                "Authorization": get_token()
+            }, body: JSON.stringify(userdata)
+        })
+        const data = await resp.json()
+        return data
+    } catch (error) {
+        console.log(error)
+        return {success: false, response: error.message}
+    }
+}
+
+collection.getProfessionalDetails = async (id) => {
+    try {
+        const resp = await fetch(BACKEND_URL + "api/professionals/"+ id)
+        const data = resp.json()
+        return data
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+
 collection.getInscriptionsForUser = async () => {
     try {
         const resp = await fetch(BACKEND_URL + "api/inscriptions", {

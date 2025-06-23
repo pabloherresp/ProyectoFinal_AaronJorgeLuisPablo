@@ -1,19 +1,21 @@
 import React from 'react';
 
-export const CommentBox = () => {
+export const CommentBox = (props) => {
   return (
     <div className="comentario-card mt-3">
       <div className="contenido">
         <div className="estrellas">
-          ★★★★★
+          ★★★★★<h1>{props.rating}</h1>
         </div>
-        <h4>Titulo</h4>
-        <p>Review Body</p>
+        <h4>{props.titulo}</h4>
+        <p>
+          {props.comment}
+        </p>
         <div className="autor-info">
-          <img src="https://static.wikia.nocookie.net/the-incredibles/images/9/97/Mr-Incredible-GD.png/revision/latest?cb=20231210181752" alt="avatar" className="avatar" />
+          <img src={"/avatar/" + props.img} alt="avatar" className="avatar" />
           <div>
-            <div className="nombre m-2">Reviewer Name</div>
-            <div className="fecha m-2">Date</div>
+            <div className="nombre m-2">{props.Reviewer_Name}</div>
+            <div className="fecha m-2">{props.Date.replace(" ","")}</div>
           </div>
         </div>
       </div>

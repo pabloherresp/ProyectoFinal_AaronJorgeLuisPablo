@@ -384,7 +384,7 @@ max-width: 35%;
 }
 
 
-.container {
+.details {
   font-family: Arial, sans-serif;
   background-color: white;
   max-width: 900px;
@@ -421,15 +421,6 @@ max-width: 35%;
 
 .stars {
   color: gold;
-}
-
-.btn {
-  background-color: #ff4c4c;
-  color: white;
-  padding: 10px 15px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
 }
 
 .comment {
@@ -490,3 +481,4 @@ h4 {
 .report{
   width: 150px;
 }
+
