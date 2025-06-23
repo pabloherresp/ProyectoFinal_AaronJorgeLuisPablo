@@ -7,6 +7,7 @@ import Inputmask from 'inputmask';
 import Cleave from 'cleave.js/react';
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { Signup } from "./Signup"
+import { ModalReport } from "../components/ModalReport"
 
 
 export const Activity = () => {
@@ -229,9 +230,15 @@ export const Activity = () => {
                             <img src="/media/heart-empty.svg" alt="" />
                         </button>
                     )}
+
+                    {store.user.id != null &&
+                        <button type="button" className="btn FavButton align-self-center mx-3" data-bs-toggle="modal" data-bs-target="#reportModal">
+                            <img src="/media/report.svg" alt="" />
+                        </button> 
+                    }
                 </div>
                 <p className="activityTextFormat p-5">{store.activity?.info_activity?.desc}</p>
-
+                <ModalReport target={"activity"} activity={store.activity}/>
 
                 <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div className="modal-dialog">

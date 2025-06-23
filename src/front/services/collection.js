@@ -347,4 +347,22 @@ collection.createInfoActivity = async (actData) => {
     }
 }
 
+collection.returnAllReports = async () => {
+ 
+    try{
+        const resp = await fetch(BACKEND_URL + "api/reports",{
+            headers:{
+                "Authorization": get_token()
+            }
+        });
+        const data = await resp.json();
+        return data
+    }catch(error){
+        console.log(error)
+    }
+
+
+}
+
+
 export default collection

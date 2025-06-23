@@ -710,3 +710,10 @@ body.modal-open {
   font-style: italic;
   font-size: 0.85em;
 }
+.delStyle{
+  list-style: none
+}
+.adminStyle{
+  background-color: #9ACBD0;
+  color: #006A71;
+}
