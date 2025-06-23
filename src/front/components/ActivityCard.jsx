@@ -37,6 +37,7 @@ export const ActivityCard = (props) => {
             setTimeout(()=>dispatch({ type: "loadUser", payload: resp.user }), 200)
         }
     }
+    
     return (
         (props.activity != null ?
             < div className="card cardFormat p-0 rounded d-flex MoveUpAnimation" onClick={() => {navigate("/activities/" + props.activity.id)}}>

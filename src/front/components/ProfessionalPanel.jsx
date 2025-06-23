@@ -203,14 +203,14 @@ export const ProfessionalPanel = () => {
 	}, [infoAct])
 
 	return (
-		<div className="py-4 flex-grow-1 row">
+		<div className="py-4 row px-4">
 			<div className="d-flex justify-content-end">
 				<button className="btn Button text-nowrap w-auto mb-3 px-5 mx-auto fw-semibold" data-bs-toggle="modal" data-bs-target="#ActivityModal">Nueva actividad</button>
 
 			</div>
 			{
 				activities && activities.length > 0 ?
-					<div className="table-responsive mx-1 mx-md-5">
+					<div className="table-responsive mx-1 mx-md-auto">
 						<table className="table table-hover p-2 BgBackground">
 							<thead>
 								<tr className="BgSecondary">

@@ -3,11 +3,12 @@ import { CommentBox } from "../components/CommentBox"
 import { useParams } from 'react-router-dom';
 import collection from '../services/collection';
 import { ActivityCard } from '../components/ActivityCard';
+import useGlobalReducer from '../hooks/useGlobalReducer';
 
 export const DetailsProfessional = () => {
     const { id } = useParams();
-    console.log(id)
 
+    const {store,dispatch} = useGlobalReducer()
     const [professional, setProfessional] = useState(null);
 
     useEffect(() => {
@@ -18,7 +19,7 @@ export const DetailsProfessional = () => {
 
     }, [])
     if (!professional) return <h1>loading...</h1>
-    console.log("professional", professional)
+
     return (
         <div className="container details mt-3 p-0 d-flex flex-column mb-3">
             <div className="profile d-flex justify-content-around">
@@ -41,22 +42,14 @@ export const DetailsProfessional = () => {
                 </p>
             </div>
 
-            <div class="container text-center activities">
+            <div className="container text-center activities">
                 <h3 className="d-flex justify-content-start m-3">{professional.business_name}</h3>
-                <div class="row g-4">
+                <div className="row g-4">
 
                     {
-                        professional.info_activities.map((activity) => (
-                            <div class="col-6">
-                                <ActivityCard key={activity.id}
-                                    img={activity.media[0]}
-                                    title={activity.name}
-                                    origin={activity.location}
-                                    description={activity.desc}
-                                    timeleft= {activity.rating}
-                                    
-                                />
-                                
+                        store.all_activities?.filter((item)=>item.info_activity.professional.id == professional.id).map((activity) => (
+                            <div className="col-12 col-md-6 col-lg-4">
+                                <ActivityCard key={activity.id} activity={activity}/>
                             </div>
                         ))
                     }
