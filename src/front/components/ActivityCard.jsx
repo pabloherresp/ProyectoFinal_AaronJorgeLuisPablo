@@ -2,6 +2,7 @@ import React, { useEffect } from "react"
 import useGlobalReducer from "../hooks/useGlobalReducer"
 import { useNavigate } from "react-router-dom"
 import collection from "../services/collection"
+import StarRating from "./StarRating"
 
 export const ActivityCard = (props) => {
 
@@ -37,11 +38,15 @@ export const ActivityCard = (props) => {
         }
     }
 
+    useEffect(()=>{
+        console.log(props.activity)
+    },[])
+
     return (
         (props.activity != null ?
             < div className="card cardFormat p-0 rounded d-flex MoveUpAnimation" onClick={() => {navigate("/activities/" + props.activity.id)}}>
                 <div className="imgCardFormat position-relative h-50">
-                    {store.user.id != null && (store.user.favourites?.map((item) => item.activity.id).includes(props.activity.info_activity.id) ?
+                    {store.user.id != null && (store.user.favourites?.map((item) => item.id).includes(props.activity.info_activity.id) ?
                         <button className="btn FavButton position-absolute top-0 end-0" onClick={((e) => {
                             e.stopPropagation()
                             if (store.user.needs_filling == true)
@@ -67,7 +72,8 @@ export const ActivityCard = (props) => {
                         : "/events/0.jpg")} className="rounded-top-1 imageCard"></img>
                 </div>
                 <div className="p-3 textCardFormat h-50">
-                    <h6 className="fw-bold">{props.activity.info_activity.name}</h6>
+                    {<StarRating rating={props.activity.info_activity.rating} variable={false}/>}
+                    <h6 className="fw-bold mt-3">{props.activity.info_activity.name}</h6>
                     <p className="fw-medium">{props.activity.meeting_point}</p>
                     <p className="textFormat">{props.activity.info_activity.desc}</p>
                     <p className="text-center">{formatDate(props.activity.start_date)}</p>

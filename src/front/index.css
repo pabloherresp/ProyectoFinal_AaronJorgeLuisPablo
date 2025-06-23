@@ -255,7 +255,7 @@ h3 {
 }
 .cardFormat{
   cursor: pointer;
-  height: 22em;
+  height: 100%;
   min-width: 15em;
   box-shadow: 0px 2px rgb(161, 161, 161);
   background-color: white;
@@ -833,8 +833,29 @@ body.modal-open {
   border: 1px solid #006A71;
   color:#006A71;
   background-color: #F2EFE7;
+  transition: all 0.3s ease-in-out;
 }
+.BuyButton:disabled{
+  background-color: #ffffff;
+  color:#006A71;
+}
+
 .BuyButton:hover{
   color:#0d8d90;
   background-color: #F2EFE7;
+  
+  transform: scale(1.1);
+}
+
+.RatingTooltip {
+  --bs-tooltip-bg: var(--bd-violet-bg);
+  --bs-tooltip-color: var(--bs-white);
+}
+
+.LíneaInscription{
+  text-decoration: line-through;
+  text-decoration-color: rgb(128, 128, 128);
+}
+.LineaInscription:hover{
+  transform: scale(1.1);
 }

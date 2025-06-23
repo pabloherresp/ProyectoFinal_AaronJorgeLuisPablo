@@ -88,21 +88,33 @@ var fechaActual = new Date(fechaEnMiliseg)
 
 return(
 
-    <div className="pb-5 container bg-white my-5 rounded myActivityCard fontFamily">
-        <h1 className="font1 p-5 text-center">Actividad más valorada</h1>
-         <div className="row justify-content-around">
-           {mostValuatedActivities()?.map((activity,i) => <Link key={i} className="text-decoration-none valor-card2 col-lg-4 col-md-6 col-sm-12 mt-4" to={'/activities/' + activity.id}><ActivityCard className="mw-100" img={activity.info_activity.media[0]} title={activity.info_activity.name} origin={activity.meeting_point} description={activity.info_activity.desc.slice(0,40)}></ActivityCard></Link>)}
-        </div>  
-        <h1 className="font1 p-5 text-center">Última oportunidad</h1>
-         <div className="row justify-content-around">
-           {lastChance()?.map((activity,i) => <Link key={i} className="text-decoration-none valor-card2 col-lg-4 col-md-6 col-sm-12 mt-4" to={'/activities/' + activity.id}><ActivityCard className="mw-100" img={activity.info_activity.media[0]} title={activity.info_activity.name} origin={activity.meeting_point} description={activity.info_activity.desc.slice(0,40)} timeleft={returnCounter(activity.start_date)}></ActivityCard></Link>)}
-        </div>  
-        <h1 className="font1 p-5 mt-5 text-center">Actividades deportivas activas</h1>
+    <div className="pb-5 container px-5 bg-white my-5 rounded myActivityCard fontFamily">
+            <h1 className="font1 p-5 text-center">Actividades más valoradas</h1>
+            <div className="row justify-content-around">
+                {mostValuatedActivities()?.map((activity, i) => {
+                    return <div key={i} className="col-lg-4 col-md-6 col-sm-12 mt-4">
+                        <ActivityCard activity={activity} />
+                    </div>
+                })}
+            </div>
+            <h1 className="font1 p-5 text-center">Última oportunidad</h1>
+            <div className="row justify-content-around">
+                {store.all_activities?.filter((item) => item.info_activity.type == "SPORT" && new Date(item.start_date) > new Date(Date.now() + 7200000)).sort((a, b) => new Date(a.start_date) - new Date(b.start_date)).slice(0, 3).map((item, i) => {
+                    return <div key={i} className="col-lg-4 col-md-6 col-sm-12 mt-4">
+                        <ActivityCard activity={item} />
+                    </div>
+                }
+                )}
+            </div>
+            <h1 className="font1 p-5 mt-5 text-center">Actividades de ocio activas</h1>
 
-        <div className="row justify-content-around">
-           {returnAllSportActivities()?.map((activity,i) => <Link key={i} className="text-decoration-none valor-card2 col-lg-4 col-md-6 col-sm-12 mt-4" to={'/activities/' + activity.id}><ActivityCard className="mw-100" img={activity.info_activity.media[0]} title={activity.info_activity.name} origin={activity.meeting_point} description={activity.info_activity.desc.slice(0,40)} timeleft={returnCounter(returnAllSportActivities()[i]?.start_date)}></ActivityCard></Link>)}
+            <div className="row justify-content-around">
+                {returnAllSportActivities()?.map((activity, i) =>
+                    <div key={i} className="col-lg-4 col-md-6 col-sm-12 mt-4">
+                        <ActivityCard activity={activity} />
+                    </div>)}
+            </div>
         </div>
-    </div>
 
 )
 
