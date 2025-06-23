@@ -1,6 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 
 export const Contacto = () => {
+    const [mensaje, setMensaje] = useState();
+
+    const handleSubmit = (e)=>{
+        e.preventDefault();
+        setMensaje("");
+    }
+
     return (
         <>
             <div className="container p-lg-2 p-4">
@@ -11,7 +18,7 @@ export const Contacto = () => {
                     <div className="col-sm-12 col-md-6 col-lg-6 bg-contacto">
                         <h3 className="p-4 fw-bold">Nos encanta escucharte.
                             <br/>¿Tienes dudas, ideas o simplemente quieres decir hola? ¡Contáctanos!</h3>
-                        <form action="" className="px-4">
+                        <form onSubmit={handleSubmit} className="px-4">
                             <div className="row">
                                 <div className="col-sm-12 col-lg-10 mb-lg-3">
                                     <label htmlFor="exampleFormControlInput1" className="form-label">Nombre completo</label>

@@ -161,7 +161,7 @@ export const PersonalSpace = () => {
 
 						{activeTab === 'favoritos' && (
 							<div className="py-4">
-								<div className="row d-flex  justify-content-evenly px-4 py-3">
+								<div className="row d-flex justify-content-evenly px-4 py-3">
 									{store.user.favourites?.map((el, i) => {
 										return <div key={i} className="col-sm-12 col-md-6 col-lg-4 my-3">
 											<ActivityCard activity={store.all_activities?.sort((a, b) => a.id - b.id).find((item) => item.info_activity.id == el.activity.id)} />
@@ -173,7 +173,13 @@ export const PersonalSpace = () => {
 
 						{activeTab === 'reseñas' && (
 							<div className="py-4">
-								<CommentBox />
+								<div className="row d-flex justify-content-evenly px-4 py-3">
+									{store.user.reviews?.map((el, i)=>{
+										return <div key={i} className="col-sm-12 col-md-6 col-lg-4 my-3">
+											<CommentBox/>
+										</div>
+									})}
+								</div>
 							</div>
 						)}
 					</div>
