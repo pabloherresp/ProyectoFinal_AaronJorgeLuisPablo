@@ -25,10 +25,10 @@ export const Administration = () => {
 
     const loadReports = async () => {
         const resp = await collection.returnAllReports()
-        console.log(resp)
+
         if (resp.error && resp.error == 403)
             navigate("/")
-        dispatch({ type: 'reports', payload: data })
+        dispatch({ type: 'reports', payload: resp })
     }
 
     useEffect(() => {
