@@ -60,7 +60,7 @@ export const DetailsProfessional = () => {
                             </div>
                         ))
                     }
-
+                    <h6 className="more m-4">ver mas</h6>
 
                 </div>
             </div>
