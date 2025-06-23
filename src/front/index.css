@@ -304,12 +304,19 @@ h3 {
 }
 
 .container1Activity {
-  width: 70%;
+  width: 60%;
 }
 
 .container2Activity {
-  width: 30%;
+  width: 50%;
   background-color: #006a71;
+}
+
+@media (min-width: 992px){
+  .container2Activity{
+    width: 40% !important;
+    max-width: 600px;
+  }
 }
 
 .buttonStyle {
