@@ -875,5 +875,5 @@ def email_contacto():
         result = contact_email(data["email"], data["name"], data["message"])
     except Exception as e:
         print(e)
-        return jsonify({"error": "No se pudo enviar el correo"})
+        return jsonify({"error": "No se pudo enviar el correo"}), 500
     return jsonify({"success": True})

@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
-const StarRating = ({ rating, onChange, precision = 0.5 }) => {
+const StarRating = ({ rating, onChange = null, precision = 0.5, variable = true, small=false}) => {
 	const [hover, setHover] = useState(null);
 	const [previous, setPrevious] = useState(null)
 
@@ -21,19 +21,24 @@ const StarRating = ({ rating, onChange, precision = 0.5 }) => {
 	};
 
 	const handleMouseMove = (index, event) => {
-		const { left, width } = event.currentTarget.getBoundingClientRect();
-		const x = event.clientX - left;
-		const hoveredValue = x < width / 2 ? index + 0.5 : index + 1;
-		setHover(hoveredValue);
+		if (variable) {
+
+			const { left, width } = event.currentTarget.getBoundingClientRect();
+			const x = event.clientX - left;
+			const hoveredValue = x < width / 2 ? index + 0.5 : index + 1;
+			setHover(hoveredValue);
+		}
 	};
 
+
+
 	return (
-		<div style={{ display: "flex" }}>
-			{[...Array(5)].map((item,i) =>  <i key={i} className={`${getStarClass(i)} TextSecondary fs-3 RatingStar`}
-					onClick={(e) => handleClick(i, e)}
-					onMouseMove={(e) => handleMouseMove(i, e)}
-					onMouseLeave={() => setHover(null)}
-				/>)}
+		<div style={{ display: "flex"}}>
+			{[...Array(5)].map((item, i) => <i key={i} className={`${getStarClass(i)} TextSecondary RatingStar fs-4`}
+				onClick={(e) => handleClick(i, e)}
+				onMouseMove={(e) => handleMouseMove(i, e)}
+				onMouseLeave={() => setHover(null)}
+			/>)}
 		</div>
 	);
 };
