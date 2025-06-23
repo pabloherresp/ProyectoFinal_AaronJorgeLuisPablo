@@ -95,7 +95,6 @@ class Professionals(db.Model):
     business_name: Mapped[str] = mapped_column(String)
     tax_address: Mapped[str] = mapped_column(String)
     nuss: Mapped[str] = mapped_column(String(12))
-
     user: Mapped["Users"] = relationship("Users", back_populates="professional", uselist=False)
     info_activities: Mapped[list["Info_activity"]] = relationship("Info_activity", back_populates="professional")
     reports: Mapped[list["Reports"]] = relationship("Reports", back_populates="professional")
@@ -112,13 +111,13 @@ class Professionals(db.Model):
             if count > 0:
               rating = rating / count
         user = {"email": self.user.email, "username": self.user.client.username, "name": self.user.client.name, "surname": self.user.client.surname, "telephone": self.user.client.telephone,"creation_date": self.user.client.creation_date.isoformat(), "avatar_url": self.user.client.avatar_url}
+
         return {
             "id": self.user_id,
             "bio": self.bio,
             "type": self.type.value,
             "business_name": self.business_name,
             "tax_address": self.tax_address,
-            "nuss": self.nuss,
             "rating": rating,
             "info_activities": [a.serialize() for a in self.info_activities] if depth is True else [{"id": a.id, "name": a.name} for a in self.info_activities],
             "reviews": [rev.serialize() for rev in self.reviews],
@@ -147,6 +146,7 @@ class Activities(db.Model):
             response_body = {"inscriptions": [{"id": i.id, "user_id": i.user_id, "username": i.client.username, "name": i.client.name, "surname": i.client.surname, "telephone": i.client.telephone, "NID": i.client.NID} for i in self.inscriptions if i.is_active]}
         return {
             "id": self.id,
+            "info_id": self.info_id,
             "price": self.price,
             "slots": self.slots,
             "creation_date": self.creation_date.isoformat(),
@@ -220,7 +220,6 @@ class Inscriptions(db.Model):
             "activity": self.activity.serialize(False) if self.activity else None,
             "user": self.client.user_id if self.client else None
         }
-
 class Favourites(db.Model):
     __tablename__ = "favourites"
     user_id: Mapped[int] = mapped_column(ForeignKey("clients.user_id"), primary_key=True)
@@ -240,6 +239,7 @@ class Media(db.Model):
     info_activity_id: Mapped[int] = mapped_column(
         ForeignKey("info_activities.id"))
     url: Mapped[str] = mapped_column(String, nullable=False)
+
 
     info_activity: Mapped["Info_activity"] = relationship(back_populates="media", uselist=False)
 
@@ -265,6 +265,7 @@ class Reviews(db.Model):
     professional_message: Mapped[str] = mapped_column(String, nullable=True)
     activity_message: Mapped[str] = mapped_column(String, nullable=True)
     creation_date: Mapped[datetime] = mapped_column(DateTime(), default=datetime.now(timezone.utc))
+
 
     client: Mapped["Clients"] = relationship(back_populates="reviews")
     info_activity: Mapped["Info_activity"] = relationship(back_populates="reviews")
