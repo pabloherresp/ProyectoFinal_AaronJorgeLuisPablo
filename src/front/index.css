@@ -739,3 +739,10 @@ body.modal-open {
   color:#0d8d90;
   background-color: #F2EFE7;
 }
+.alignUserTitle{
+  align-content: center;
+}
+.resizeBox{
+  width: 100%;
+  place-self: center
+}

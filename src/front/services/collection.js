@@ -363,6 +363,23 @@ collection.returnAllReports = async () => {
 
 }
 
+collection.returnAllUsers = async () => {
+ 
+    try{
+        const resp = await fetch(BACKEND_URL + "api/users",{
+            headers:{
+                "Authorization": get_token()
+            }
+        });
+        const data = await resp.json();
+        return data
+    }catch(error){
+        console.log(error)
+    }
+
+
+}
+
 collection.deleteInscription = async (id) => {
     try {
         const resp = await fetch(BACKEND_URL + "api/inscriptions/" + id, {
