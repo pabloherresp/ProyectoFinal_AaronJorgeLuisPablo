@@ -379,4 +379,21 @@ collection.deleteInscription = async (id) => {
     }
 }
 
+collection.contactEmail = async (name, email, message) => {
+    try {
+        const resp = await fetch(BACKEND_URL + "api/contacto",{
+            method: "POST",
+            headers: {"Content-Type":"application/json"},
+            body: JSON.stringify({email: email, name: name, message: message})
+        })
+        if(resp.error)
+            return {error: "No se pudo enviar el correo"}
+        else
+            return {success: true}
+    } catch (error) {
+        console.log(error)
+        return {error: "Error al enviar el correo"}
+    }
+}
+
 export default collection

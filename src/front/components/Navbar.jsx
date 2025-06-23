@@ -73,7 +73,7 @@ export const Navbar = () => {
 								<li onClick={() => setDropdownOpen(false)}><Link className="dropdown-item text-white" to="/tourism">Turismo</Link></li>
 							</ul>
 						</div>
-						<Link className="nav-item nav-link active text-white fs-6 fw-semibold navbarLink" to={"/"}>Equipo</Link>
+						<Link className="nav-item nav-link active text-white fs-6 fw-semibold navbarLink" to={"/nosotros"}>Equipo</Link>
 						<Link className="nav-item nav-link active text-white fs-6 fw-semibold navbarLink me-2" to={"/contacto"}>Contacto</Link>
 					</div>
 

@@ -27,8 +27,6 @@ export const Activity = () => {
     const params = useParams()
     const navigate = useNavigate()
 
-    const chosen = params.id;
-
     const [counter1, setCounter1] = useState(0)
     const [activity, setActivity] = useState(null)
 
@@ -121,21 +119,21 @@ export const Activity = () => {
 
 
     const favItem = async () => {
-        const resp = await collection.createFav(chosen)
+        const resp = await collection.createFav(params.id)
         if (resp.success) {
             setTimeout(() => dispatch({ type: "loadUser", payload: resp.user }), 200)
         }
     }
 
     const delItem = async () => {
-        const resp = await collection.deleteFav(chosen)
+        const resp = await collection.deleteFav(params.id)
         if (resp.success) {
             setTimeout(() => dispatch({ type: "loadUser", payload: resp.user }), 200)
         }
     }
 
     const loadActivity = async () => {
-        const resp = await collection.returnActivity(chosen)
+        const resp = await collection.returnActivity(params.id)
         setActivity(resp)
         dispatch({ type: 'activity', payload: resp })
     }
@@ -148,7 +146,7 @@ export const Activity = () => {
             e.preventDefault();
             scrollContainer3.scrollLeft += e.deltaY;
         });
-    }, [])
+    }, [params.id])
 
     async function handleSubmit(e) {
         e.preventDefault();
@@ -200,38 +198,40 @@ export const Activity = () => {
 
             <div className="container1Activity">
                 <div className="d-flex align-items-center pt-3">
-                    <h1 className="font1 px-5">{store.activity?.info_activity?.name}</h1>
+                    <h1 className="font1 px-5 mt-3">{store.activity?.info_activity?.name}</h1>
 
+                    <div className="ms-auto me-3">
 
-                    {store.user.id != null && (store.user.favourites?.map((item) => item.activity?.id).includes(store.activity?.info_activity?.id) ?
-                        <button className="btn FavButton" onClick={((e) => {
-                            e.stopPropagation()
-                            if (store.user.needs_filling == true)
-                                navigate("/completeuserform")
-                            else
-                                delItem()
-                        })}>
-                            <img src="/media/heart-full.svg" alt="" />
-                        </button>
-                        :
-                        <button className="btn FavButton" onClick={((e) => {
-                            e.stopPropagation()
-                            if (store.user.needs_filling == true)
-                                navigate("/completeuserform")
-                            else
-                                favItem()
-                        })}>
-                            <img src="/media/heart-empty.svg" alt="" />
-                        </button>
-                    )}
+                        {store.user.id != null && (store.user.favourites?.map((item) => item.id).includes(parseInt(params.id)) ?
+                            <button className="btn FavButton" onClick={((e) => {
+                                e.stopPropagation()
+                                if (store.user.needs_filling == true)
+                                    navigate("/completeuserform")
+                                else
+                                    delItem()
+                            })}>
+                                <img src="/media/heart-full.svg" alt="" />
+                            </button>
+                            :
+                            <button className="btn FavButton" onClick={((e) => {
+                                e.stopPropagation()
+                                if (store.user.needs_filling == true)
+                                    navigate("/completeuserform")
+                                else
+                                    favItem()
+                            })}>
+                                <img src="/media/heart-empty.svg" alt="" />
+                            </button>
+                        )}
 
-                    {store.user.id != null &&
-                        <button type="button" className="btn FavButton align-self-center mx-3" data-bs-toggle="modal" data-bs-target="#reportModal">
-                            <img src="/media/report.svg" alt="" />
-                        </button>
-                    }
+                        {store.user.id != null &&
+                            <button type="button" className="btn FavButton align-self-center mx-3" data-bs-toggle="modal" data-bs-target="#reportModal">
+                                <img src="/media/report.svg" alt="" />
+                            </button>
+                        }
+                    </div>
                 </div>
-                <p className="activityTextFormat p-5">{store.activity?.info_activity?.desc}</p>
+                <p className="activityTextFormat mt-3 mx-5 px-5">{store.activity?.info_activity?.desc}</p>
                 <ModalReport target={"activity"} activity={store.activity} />
 
                 <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -243,7 +243,7 @@ export const Activity = () => {
                             </div>
                             <div className="modal-body">
                                 <form onSubmit={handleSubmit}>
-                                    <div className="mb-3">
+                                    <div className="mt-3">
                                         <label className="col-form-label">Detalles de tarjeta:</label>
                                         <div className="form-control">
                                             <CardElement options={{
@@ -310,17 +310,19 @@ export const Activity = () => {
                 <div className="d-flex align-items-center mt-3 mx-3">
 
                     <p className="my-auto"><span className="font3 fw-semibold rounded">Actividad {returnType()}</span></p>
-                        {!store.user?.inscriptions?.map((item) => item.activity_id).includes(store.activity.id) ?
-                            (store.user.id != null ?
-                                <button type="button" className="ms-auto btn BuyButton align-self-center fw-semibold d-flex" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@getbootstrap">
-                                    Inscribirse <img src="/media/shopping-cart.svg" width="22px" height="22px" alt="" />
-                                </button>
-                                :
-                                <button type="button" onClick={() => navigate("/signup")} className="ms-auto btn FavButton align-self-center">
-                                    <img src="/media/shopping-cart.svg" width="22px" height="22px" alt="" />
-                                </button>)
-                            : ""
-                        }
+                    {!store.user?.inscriptions?.map((item) => item.activity_id).includes(store.activity.id) ?
+                        (store.user.id != null ?
+                            <button type="button" className="ms-auto btn BuyButton align-self-center fw-semibold d-flex fw-semibold" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@getbootstrap">
+                                Inscribirse <img src="/media/shopping-cart.svg" width="22px" height="22px" alt="" />
+                            </button>
+                            :
+                            <button type="button" onClick={() => navigate("/signup")} className="ms-auto btn BuyButton align-self-center fw-semibold">
+                                Inscribirse <img src="/media/shopping-cart.svg" width="22px" height="22px" alt="" />
+                            </button>)
+                        : <button disabled type="button" className="ms-auto btn BuyButton align-self-center fw-semibold">
+                            Ya inscrito <img src="/media/shopping-cart.svg" width="22px" height="22px" alt="" />
+                        </button>
+                    }
                 </div>
                 <div className="d-flex mx-3">
                     <p className="mt-3 font2 p-1 rounded">Publicado</p>
@@ -354,7 +356,7 @@ export const Activity = () => {
                     <p className="mt-3"><span className="font2 mx-3 p-1 rounded">Plazas </span></p>
                     <p className="mt-3"><span className="font2 p-1 rounded">{store?.activity?.slots}</span></p>
                 </div>
-                <p className="font2 mx-3 p-1 mt-3 rounded text-center">Location meeting</p>
+                <p className="font2 mx-3 p-1 mt-3 rounded text-center">Punto de encuentro</p>
                 <div className="containerMap mt-3 mx-3">
                     <iframe className="theMap rounded"
                         width="100%"

@@ -91,7 +91,7 @@ export const UserInscriptions = () => {
 						<table className="table table-hover table-responsive p-2 BgBackground">
 							<thead>
 								<tr className="BgSecondary">
-									<th scope="col" className="text-start ps-md-4 w-50 TextDark text-nowrap user-select-none" onClick={() => handleClickHead("name")}>
+									<th scope="col" className={"text-start ps-md-4 w-50 text-nowrap user-select-none TextDark"} onClick={() => handleClickHead("name")}>
 										Nombre {order === "name" ? (inverted > 0 ? '▲' : '▼') : ""}
 									</th>
 									<th scope="col" className="text-center TextDark text-nowrap user-select-none" onClick={() => handleClickHead("start")}>
@@ -114,12 +114,12 @@ export const UserInscriptions = () => {
 										<React.Fragment key={i}>
 											<tr >
 												<td className="ps-4 align-middle d-none d-md-table-cell">
-													<Link className="text-decoration-none fw-semibold TextDark" to={"/activities/" + item.activity.id}>
+													<Link className={"fw-semibold TextDark "  + (new Date(item.activity.start_date) < new Date(Date.now() + 7200000) ? "LíneaInscription":"text-decoration-none")} to={"/activities/" + item.activity.id}>
 														{item.activity.info_activity.name}
 													</Link>
 												</td>
 												<td className="align-middle d-table-cell d-md-none" rowSpan={2}>
-													<Link className="text-decoration-none fw-semibold" to={"/activities/" + item.activity.id}>
+													<Link className={"fw-semibold TextDark "  + (new Date(item.activity.start_date) < new Date(Date.now() + 7200000) ? "LíneaInscription":"text-decoration-none")} to={"/activities/" + item.activity.id}>
 														{item.activity.info_activity.name}
 													</Link>
 												</td>

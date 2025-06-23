@@ -17,7 +17,10 @@ export const ProfessionalPanel = () => {
 		name: "", desc: "", type: "LEISURE", location: "", media: [],
 		price: "", slots: "", start_date: "", end_date: "", meeting_point: ""
 	})
-	const [formData, setFormdata] = useState(infoAct)
+	const [formData, setFormdata] = useState({
+		name: "", desc: "", type: "LEISURE", location: "", media: [],
+		price: "", slots: "", start_date: "", end_date: "", meeting_point: ""
+	})
 	const [media, setMedia] = useState([])
 	const [response, setResponse] = useState({ message: "", success: false })
 
@@ -50,8 +53,7 @@ export const ProfessionalPanel = () => {
 
 		activity.inscriptions.forEach(({ id, username, name, surname, telephone, NID }) => {
 			tableBody.push([" ", username, name + " " + surname, telephone, NID]);
-		});
-
+		})
 		const docDefinition = {
 			content: [
 				{
@@ -182,13 +184,6 @@ export const ProfessionalPanel = () => {
 	}, [])
 
 	useEffect(() => {
-		setFormdata({
-			desc: infoAct.desc,
-			id: infoAct.id,
-			location: infoAct.location,
-			name: infoAct.name,
-			type: infoAct.type
-		})
 		if (infoAct.name != "") {
 			setRef.current.disabled = true
 			setImg.current.disabled = true
@@ -197,14 +192,25 @@ export const ProfessionalPanel = () => {
 			setRef.current.disabled = false
 			setImg.current.disabled = false
 		}
+		setFormdata({
+			...formData,
+			desc: infoAct.desc,
+			id: infoAct.id,
+			location: infoAct.location,
+			name: infoAct.name,
+			type: infoAct.type
+		})
 	}, [infoAct])
 
 	return (
-		<div className="py-4 flex-grow-1">
+		<div className="py-4 flex-grow-1 row">
+			<div className="d-flex justify-content-end">
+				<button className="btn Button text-nowrap w-auto mb-3 px-5 mx-auto fw-semibold" data-bs-toggle="modal" data-bs-target="#ActivityModal">Nueva actividad</button>
+
+			</div>
 			{
 				activities && activities.length > 0 ?
 					<div className="table-responsive mx-1 mx-md-5">
-						<button className="btn Button text-nowrap w-auto mx-3 float-end mb-3 px-5 fw-semibold" data-bs-toggle="modal" data-bs-target="#ActivityModal">Nueva actividad</button>
 						<table className="table table-hover p-2 BgBackground">
 							<thead>
 								<tr className="BgSecondary">
@@ -273,10 +279,10 @@ export const ProfessionalPanel = () => {
 					</div>
 					: <p className="text-center">No has creado ninguna actividad</p>
 			}
-			<div className="modal fade" ref={modalRef} id="ActivityModal" tabIndex="-1" aria-labelledby="ActivityModal" aria-hidden="true">
+			<div className="modal fade p-0" ref={modalRef} id="ActivityModal" tabIndex="-1" aria-labelledby="ActivityModal" aria-hidden="true">
 				<div className="modal-dialog modal-fullscreen">
 					<div className="modal-content mt-auto overflow-auto">
-						<div className="modal-header BgPrimary">
+						<div className="modal-header BgPrimary" data-bs-theme="dark">
 							<h1 className="modal-title text-white fw-bold fs-5" id="exampleModalLabel">Crear actividad</h1>
 							<button type="button" className="btn-close me-3" data-bs-dismiss="modal" aria-label="Close"></button>
 						</div>
@@ -325,7 +331,7 @@ export const ProfessionalPanel = () => {
 										<div className="my-3">
 											<div className="form mx-auto">
 												<label className="fs-6" htmlFor="desc">Descripción</label>
-												<textarea name="desc" className="form-control mt-2" style={{ height: '280px' }} id="bio" placeholder="" onChange={handleChange} value={formData.desc} />
+												<textarea name="desc" className="form-control mt-2" style={{ height: '280px' }} id="desc" placeholder="" onChange={handleChange} value={formData.desc} />
 											</div>
 											<div id="descHelpBlock" className="col-12 form-text">
 												Una descripción sobre la actividad, toda la información necesaria para que los usuarios se interesen por la ella.
@@ -374,7 +380,7 @@ export const ProfessionalPanel = () => {
 											<div className="col-12 mb-3">
 												<label htmlFor="media" className="form-label col-12">Imágenes de la actividad <span className="ms-2 text-light-emphasis">(.jpg)</span></label>
 												<input className="form-control" type="file" accept="image/jpeg" multiple name="media" id="media" onChange={(e) => {
-													setMedia([...e.target.files])
+													setMedia([...e.target.files || []])
 												}} />
 											</div>
 											<div id="mediaHelpBlock" className="col-12 form-text">
@@ -391,8 +397,8 @@ export const ProfessionalPanel = () => {
 
 								</div>
 							</div>
-							<div className="modal-footer w-100 me-3 d-flex flex-column flex-md-row">
-								<div className="me-auto w-100">
+							<div className="modal-footer w-100 mt-5 d-flex flex-column flex-md-row justify-content-end">
+								<div className="me-auto">
 									<p className={"text-center fw-semibold " + (!response.error ? "text-success" : "text-danger")}>{response.message}</p>
 								</div>
 								<div className="d-flex gap-2">
