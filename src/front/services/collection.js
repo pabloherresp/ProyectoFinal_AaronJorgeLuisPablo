@@ -200,6 +200,34 @@ collection.createProf = async (userdata) => {
     }
 }
 
+collection.reportProfessional = async (userdata) => {
+    try {
+        const resp = await fetch(BACKEND_URL + "api/professionals", {
+            method: "POST",
+            headers: {
+                "Content-Type":"application/json",
+                "Authorization": get_token()
+            }, body: JSON.stringify(userdata)
+        })
+        const data = await resp.json()
+        return data
+    } catch (error) {
+        console.log(error)
+        return {success: false, response: error.message}
+    }
+}
+
+collection.getProfessionalDetails = async (id) => {
+    try {
+        const resp = await fetch(BACKEND_URL + "api/professionals/"+ id)
+        const data = resp.json()
+        return data
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+
 collection.getInscriptionsForUser = async () => {
     try {
         const resp = await fetch(BACKEND_URL + "api/inscriptions", {
@@ -393,6 +421,23 @@ collection.deleteInscription = async (id) => {
     } catch (error) {
         console.log(error)
         return {error: "No se ha podido borrar la inscripción", response: error}
+    }
+}
+
+collection.contactEmail = async (name, email, message) => {
+    try {
+        const resp = await fetch(BACKEND_URL + "api/contacto",{
+            method: "POST",
+            headers: {"Content-Type":"application/json"},
+            body: JSON.stringify({email: email, name: name, message: message})
+        })
+        if(resp.error)
+            return {error: "No se pudo enviar el correo"}
+        else
+            return {success: true}
+    } catch (error) {
+        console.log(error)
+        return {error: "Error al enviar el correo"}
     }
 }
 
