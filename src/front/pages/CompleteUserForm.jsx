@@ -58,7 +58,7 @@ export const CompleteUserForm = (props) => {
 
 	const handleChange = async (e) => {
 		if (["name", "surname", "city", "country"].includes(e.target.name))
-			setFormdata({ ...formData, [e.target.name]: e.target.value.replace(/[^a-zA-Zñ\s]/g, '') })
+			setFormdata({ ...formData, [e.target.name]: e.target.value.replace(/[^a-zA-ZñáéíóúÁÉÍÓÚ\s]/g, '') })
 		else if (e.target.name == "telephone")
 			setFormdata({ ...formData, [e.target.name]: e.target.value.replace(/(?!^\+)[^\d]/g, '') })
 		else
