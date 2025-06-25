@@ -8,7 +8,7 @@ def send_email(address, token, name):
         msg = Message("Reset your password", recipients=[address])
 
         if  os.getenv("FLASK_DEBUG") == "1":
-            msg.html = render_template("mailTemplate.html", reset_url = f"{os.getenv("FRONTEND_URL")}resetpassword?token={token}")
+            msg.html = render_template("mailTemplate.html", reset_url = f"{os.getenv('FRONTEND_URL')}resetpassword?token={token}")
         else:
             msg.html = f'''<a href="{os.getenv("FRONTEND_URL")}/resetpassword?token={token}">Hola, sigue este vinculo para resetear tu contraseña</a>'''
 
