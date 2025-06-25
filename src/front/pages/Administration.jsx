@@ -74,7 +74,7 @@ export const Administration = () => {
                     <div className="row d-flex resizeBox">
 
                         {store.all_users?.map((item, i) =>
-                            <UserCard avatar={"/public/avatar/" + item.avatar_url} username={item.username} name={item.name} surname={item.surname} email={item.email} business={item.professional?.business_name} rating={item.professional?.rating.toFixed(2)} type={item.professional?.type} is_professional={item.is_professional} />
+                            <UserCard avatar={item.avatar_url} username={item.username} name={item.name} surname={item.surname} email={item.email} business={item.professional?.business_name} rating={item.professional?.rating.toFixed(2)} type={item.professional?.type} is_professional={item.is_professional} />
                         )}
                     </div>
                 </div>
