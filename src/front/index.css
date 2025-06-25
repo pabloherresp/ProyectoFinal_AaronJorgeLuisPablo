@@ -874,3 +874,34 @@ body.modal-open {
   width: 100%;
   place-self: center
 }
+.msgText{
+  font-size: 1.50em;
+  font-style: italic;
+}
+.reportLinkFormat{
+  color:#006A71;
+}
+.reportLinkFormat:hover{
+  color:#0d8d90;
+}
+.reportButtonFormat{
+  color:#F2EFE7;
+  background-color: #006A71;
+}
+.reportButtonFormat:hover{
+  color:#FFFFFF;
+  background-color: #006A71;
+}
+.reportButtonFormat:active{
+  color:#FFFFFF;
+  background-color: #006A71;
+}
+.reportButtonFormat:visited{
+  color:#FFFFFF;
+  background-color: #006A71;
+}
+.reportButtonFormat:disabled{
+  color:#FFFFFF;
+  background-color: #9ACBD0;
+}
+

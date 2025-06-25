@@ -5,6 +5,8 @@ import collection from "../services/collection"
 
 export const Navbar = () => {
 	const { store, dispatch } = useGlobalReducer()
+
+
 	const navigate = useNavigate()
 
 	const [search, setSearch] = useState("")
@@ -36,7 +38,7 @@ export const Navbar = () => {
 			setSearching(false)
 		}
 	}
-
+	
 	useEffect(() => {
 		const handleClickOutside = (e) => {
 			if (dropRef.current && !dropRef.current.contains(event.target))
