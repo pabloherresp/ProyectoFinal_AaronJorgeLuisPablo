@@ -32,6 +32,9 @@ export const ProfessionalPanel = () => {
 	const setRef = useRef(null)
 	const setImg = useRef(null)
 	const modalRef = useRef(null)
+	const fieldRef = useRef(null)
+	
+	const [uploadingImage, setUploadImage] = useState(false)
 
 	const loadActivities = async () => {
 		const resp = await collection.getMyActivities()
@@ -188,6 +191,8 @@ export const ProfessionalPanel = () => {
 	}
 
 	const handleMediaUpload = async (e) => {
+		setUploadImage(true)
+		fieldRef.current.disabled = true
 		const files = e.target.files
 		let medias = []
 		if (files.length > 0)
@@ -209,6 +214,8 @@ export const ProfessionalPanel = () => {
 				}
 			}
 		setMedia([...media, ...medias])
+		setUploadImage(false)
+		fieldRef.current.disabled = false
 	}
 
 	useEffect(() => {
@@ -318,6 +325,8 @@ export const ProfessionalPanel = () => {
 							<h1 className="modal-title text-white fw-bold fs-5" id="exampleModalLabel">Crear actividad</h1>
 							<button type="button" className="btn-close me-3" data-bs-dismiss="modal" aria-label="Close"></button>
 						</div>
+						<fieldset  ref={fieldRef}>
+							
 						<form className="container" onSubmit={handleCreate}>
 							<div className="modal-body row overflow-auto">
 								<div className="col-12">
@@ -416,6 +425,7 @@ export const ProfessionalPanel = () => {
 										</fieldset>
 									</div>
 									<div className="col-12 d-flex overflow-auto gap-3 p-3 ActFormGallery">
+										{uploadingImage && <p className="text-secondary">Cargando imágenes...</p>}
 										{infoAct.media.length > 0 ? infoAct.media.map((item, index) => {
 											return <img key={index} src={(!item.includes("http") ? "/media/events/" : "") + item} id="preview" className="img-fluid NoDeformImg" />
 										}) : media.length > 0 && media.map((item, index) => <img key={index} src={item} id="preview" className="img-fluid NoDeformImg" />
@@ -434,6 +444,8 @@ export const ProfessionalPanel = () => {
 								</div>
 							</div>
 						</form>
+						
+						</fieldset>
 					</div>
 				</div>
 			</div>

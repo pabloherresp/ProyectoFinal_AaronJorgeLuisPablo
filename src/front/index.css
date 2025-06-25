@@ -933,3 +933,17 @@ body.modal-open {
   --bs-tooltip-bg:  #0d8d90;
   --bs-tooltip-color: var(--bs-white);
 }
+
+
+.linkUserActivity{
+  color:#006A71;
+}
+.linkUserActivity:hover{
+  color:#0d8d90;
+  cursor: pointer;
+}
+
+.AdminAvatarUser{
+  height: 50px;
+  width: 50px;
+}

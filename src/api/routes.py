@@ -174,13 +174,15 @@ def create_client():
         avatar = request.form.get("avatar")
         if avatar:
             client_avatar = avatar
-
         client = Clients(user_id = user_id, username=request.form.get("username"), name=request.form.get("name"), surname=request.form.get("surname"), telephone=request.form.get("telephone"),
-                        NID=request.form.get("NID"), address=request.form.get("address"), city=request.form.get("city"), country=request.form.get("country"),
-                        gender=enumClts(request.form.get("gender")), avatar_url = client_avatar)
+                        NID=request.form.get("NID"), address=request.form.get("address"), city=request.form.get("city"), country=request.form.get("country"), avatar_url = client_avatar)
         
+        gender = request.form.get("gender")
+        if gender is not None:
+            client.gender = enumClts(gender)
+
         fecha_iso = request.form.get('birthdate')
-        if fecha_iso is not None:
+        if fecha_iso != "null":
             fecha_dt = datetime.fromisoformat(fecha_iso.replace("Z", "+00:00"))
             client.birthdate = fecha_dt
         
@@ -201,8 +203,10 @@ def edit_client():
             return jsonify({"error": "User not found"}), 404
 
         client_cells = ["telephone", "name", "surname", "NID","address", "city", "country"]
-        client.gender= enumClts(request.form.get("gender"))
-        
+        gender = request.form.get("gender")
+        if gender is not None:
+            client.gender = enumClts(gender)
+                                     
         username = request.form.get("username")
         if username:
             client.username = username
@@ -215,7 +219,7 @@ def edit_client():
             client.avatar_url = avatar
         
         fecha_iso = request.form.get('birthdate')
-        if fecha_iso is not None:
+        if fecha_iso != "null":
             fecha_dt = datetime.fromisoformat(fecha_iso.replace("Z", "+00:00"))
             client.birthdate = fecha_dt
 

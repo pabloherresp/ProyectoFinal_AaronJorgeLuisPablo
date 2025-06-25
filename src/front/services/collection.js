@@ -459,20 +459,31 @@ collection.contactEmail = async (name, email, message) => {
 }
 
 collection.deleteReport = async (id) => {
-    try {
-            const resp = await fetch(BACKEND_URL + "api/reports/" + id, {
-                method: "DELETE",
-                headers: {"Authorization": get_token()
+  try {
+    const resp = await fetch(BACKEND_URL + "api/reports/" + id, {
+      method: "DELETE",
+      headers: { Authorization: get_token() },
+    });
+    const data = await resp.json();
+    console.log(data);
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
 
-                }
-            })
-            const data = await resp.json()
-            console.log(data)
-            return data
-        }
-        catch (error) {
-            console.log(error)
-        }
-    }
+collection.deleteUser = async (id) => {
+  try {
+    const resp = await fetch(BACKEND_URL + "api/users/" + id, {
+      method: "DELETE",
+      headers: { Authorization: get_token() },
+    });
+    const data = await resp.json();
+    console.log(data);
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 export default collection

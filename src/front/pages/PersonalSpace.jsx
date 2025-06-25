@@ -16,7 +16,7 @@ export const PersonalSpace = () => {
 
 	const loadUser = async () => {
 		const user = await collection.loginToken()
-
+		setFavourites(user.favourites)
 		if (user.id == null)
 			navigate("/login")
 		else if (user.needs_filling == true)
@@ -146,14 +146,14 @@ return (
 							<i className="fa-solid fa-book me-2"></i>Inscripciones
 						</button>
 					</li>
-					{/* <li className="nav-item">
+					<li className="nav-item">
 						<button
 							className={`nav-link TextDark ${activeTab === 'favoritos' ? 'active' : ''}`}
 							onClick={() => setActiveTab('favoritos')}
 						>
 							<i className="fa-solid fa-star me-2"></i>Favoritos
 						</button>
-					</li> */}
+					</li>
 					<li className="nav-item">
 						<button
 							className={`nav-link TextDark ${activeTab === 'reseñas' ? 'active' : ''}`}
@@ -171,11 +171,11 @@ return (
 						<UserInscriptions />
 					)}
 
-					{/* {activeTab === 'favoritos' && (
+					{activeTab === 'favoritos' && (
 						<div className="py-4">
 							{store.user.favourites && store.user.favourites.length > 0 ?
 								<div className="row d-flex  justify-content-evenly px-4 py-3">
-									{favourites?.map((el, i) => {
+									{store?.all_activities.filter((item,index)=> store?.user.favourites.map(item=>item.activity.id).includes(parseInt(item.info_activity.id))).map((el, i) => {
 										return <div key={i} className="col-sm-12 col-md-6 col-lg-4 my-3">
 											<ActivityCard activity={el} />
 										</div>
@@ -185,7 +185,7 @@ return (
 								<p className="text-center">No tienes favoritos</p>
 							}
 						</div>
-					)} */}
+					)}
 
 					{activeTab === 'reseñas' &&
 						<div className="py-4">

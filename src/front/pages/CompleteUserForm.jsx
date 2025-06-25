@@ -137,8 +137,7 @@ export const CompleteUserForm = (props) => {
 	}
 
 	useEffect(() => {
-		if(user == null && localStorage.getItem("token") != null)
-			getUser()
+		getUser()
 	}, [])
 
 	return (
@@ -292,7 +291,7 @@ export const CompleteUserForm = (props) => {
 								</div>
 							</> : ""}
 							<div className="row">
-								{user?.username == null ?
+								{user?.needs_filling ?
 									<input type="submit" value="Crear usuario" className="btn btn-primary my-2 w-auto mx-auto fw-bold" />
 									: <div className="d-flex">
 										<input type="submit" value="Editar datos" className="btn btn-primary my-2 w-auto mx-auto fw-bold" />
