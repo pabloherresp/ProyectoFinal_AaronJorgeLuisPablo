@@ -391,6 +391,23 @@ collection.returnAllReports = async () => {
     }
 }
 
+collection.returnSingleReport = async (id) => {
+    try{
+        const resp = await fetch(BACKEND_URL + "api/reports/" + id,{
+            headers:{
+                "Authorization": get_token()
+            }
+        });
+        const data = await resp.json();
+        if(resp.status == 403)
+            return ({error: 403})
+        else
+            return data
+    }catch(error){
+        console.log(error)
+    }
+}
+
 collection.returnAllUsers = async () => {
  
     try{
@@ -440,5 +457,22 @@ collection.contactEmail = async (name, email, message) => {
         return {error: "Error al enviar el correo"}
     }
 }
+
+collection.deleteReport = async (id) => {
+    try {
+            const resp = await fetch(BACKEND_URL + "api/reports/" + id, {
+                method: "DELETE",
+                headers: {"Authorization": get_token()
+
+                }
+            })
+            const data = await resp.json()
+            console.log(data)
+            return data
+        }
+        catch (error) {
+            console.log(error)
+        }
+    }
 
 export default collection

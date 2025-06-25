@@ -1,6 +1,7 @@
 export const initialStore = () => {
   return {
     all_reports:[],
+    report:[],
     all_users:[],
     all_activities: [],
     activity: {},
@@ -42,6 +43,11 @@ export default function storeReducer(store, action = {}) {
       return {
         ...store,
         all_reports: action.payload,
+      };
+      case "report":
+      return {
+        ...store,
+        report: action.payload,
       };
       case "users":
       return {

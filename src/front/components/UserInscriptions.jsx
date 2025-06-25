@@ -136,7 +136,7 @@ export const UserInscriptions = () => {
 													{item.activity.price.toFixed(2) + "€"}
 												</td>
 												<td className="text-center fw-semibold align-middle d-none d-md-flex flex-column">
-													{store.user.reviews.includes(item.activity.info_activity.id) ?
+													{store.user?.reviews?.includes(item.activity?.info_activity?.id) ?
 														<a className="text-decoration-none text-secondary" data-bs-toggle="tooltip" data-bs-title="Esta actividad ya ha sido reseñada">
 															Reseñar
 														</a>
@@ -164,7 +164,7 @@ export const UserInscriptions = () => {
 													{item.activity.price.toFixed(2) + "€"}
 												</td>
 												<td className="text-center fw-semibold align-middle InscriptionsTableEndDate">
-													{store.user.reviews.includes(item.activity.info_activity.id) ?
+													{store.user?.reviews?.includes(item.activity?.info_activity?.id) ?
 														<a className="text-decoration-none text-secondary me-2" data-bs-toggle="tooltip" data-bs-title="Esta actividad ya ha sido reseñada">
 															Reseñar
 														</a>

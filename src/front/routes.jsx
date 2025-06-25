@@ -22,6 +22,7 @@ import { PersonalSpace } from "./pages/PersonalSpace"
 import { DetailsProfessional } from "./pages/DetailsProfessional"
 import { Contacto } from "./pages/Contacto"
 import { Report } from "./pages/Report"
+import { User } from "./pages/User"
 import { VisionMision } from "./pages/VisionMision"
 import { ResetPassword } from "./pages/ResetPassword"
 import { TermsAndConditions } from "./pages/TermsAndConditions"
@@ -55,6 +56,7 @@ export const router = createBrowserRouter(
       <Route path="/termsandconditions" element={<TermsAndConditions /> } />
       <Route path="/admin" element={<Administration />} />
       <Route path="/report/:id" element={<Report />} />
+      <Route path="/user/:id" element={<User />} />
     </Route>
   ),
   {
