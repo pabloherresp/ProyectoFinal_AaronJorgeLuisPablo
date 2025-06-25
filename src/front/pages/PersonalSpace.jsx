@@ -6,6 +6,7 @@ import { ActivityCard } from "../components/ActivityCard.jsx";
 import { CommentBox } from "../components/CommentBox.jsx";
 import { UserInscriptions } from "../components/UserInscriptions.jsx";
 import { ProfessionalPanel } from "../components/ProfessionalPanel.jsx";
+import collection from "../services/collection.js";
 
 export const PersonalSpace = () => {
 	const navigate = useNavigate()
@@ -13,21 +14,28 @@ export const PersonalSpace = () => {
 	const [activeTab, setActiveTab] = useState('inscripciones')
 	const [favourites, setFavourites] = useState([])
 
-	useEffect(() => {
-		if (store.user.id == null)
+	const loadUser = async () => {
+		const user = await collection.loginToken()
+
+		if (user.id == null)
 			navigate("/login")
-		else if (store.user.needs_filling == true)
+		else if (user.needs_filling == true)
 			navigate("/completeuserform")
-		else if (store.user.is_professional)
+		else if (user.is_professional)
 			setActiveTab("professionalPanel")
+	}
+
+	useEffect(() => {
+		loadUser()
 }, [])
 
 return (
 	<div className="container">
 		<div className="bg-white shadow my-3 rounded">
 			<div className="m-0 p-0 rounded-top shadow overflow-hidden">
+
 				<div className="container-fluid ps-5 BgSecondary ">
-					<div className="row pt-3 pt-md-0">
+					{store.user.id != null ? <div className="row pt-3 pt-md-0">
 						<div className="col-8 col-md-3 justify-content-center align-content-center mx-auto px-5 px-md-3">
 							<img className="shadow img-fluid rounded-circle NoDeformImg my-auto"
 								src={(store.user?.avatar_url ? store.user?.avatar_url : "https://res.cloudinary.com/dsn6qtd9g/image/upload/v1750721682/0_y2kkuy.jpg")} alt="avatar"
@@ -114,7 +122,11 @@ return (
 								</div>
 							</div>
 						</div>
+					</div> : 
+					<div style={{height: "300px"}}>
+
 					</div>
+					}
 				</div>
 
 				<ul className="nav nav-underline d-flex justify-content-evenly mt-4 mx-2">

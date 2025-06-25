@@ -120,6 +120,7 @@ class Professionals(db.Model):
             "bio": self.bio,
             "type": self.type.value,
             "business_name": self.business_name,
+            "nuss": self.nuss,
             "tax_address": self.tax_address,
             "rating": rating,
             "info_activities": [a.serialize() for a in self.info_activities] if depth is True else [{"id": a.id, "name": a.name} for a in self.info_activities],

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import useGlobalReducer from "../hooks/useGlobalReducer"
 import collection from "../services/collection"
@@ -9,14 +9,18 @@ export const CompleteUserForm = (props) => {
 	const [messages, setMessages] = useState({ username: "Empieza a escribir para comprobar si está disponible.", usernameClass: "", usernameStatus: false })
 	const [avatarImg, setAvatarImg] = useState("https://res.cloudinary.com/dsn6qtd9g/image/upload/v1750721682/0_y2kkuy.jpg")
 	const [birthdate, setBirthdate] = useState("")
+	const [uploadingImage, setUploadImage] = useState("")
 
 	const { store, dispatch } = useGlobalReducer()
+
+	const fieldRef = useRef(null)
 
 
 	const navigate = useNavigate()
 
 	const handleCompleteClient = async (e) => {
 		e.preventDefault()
+		fieldRef.current.disabled = true
 		if (props.firstTime) {
 			if (!messages.usernameStatus)
 				setMessages({ ...formData, response: "No puede registrarse con ese usuario" })
@@ -50,10 +54,11 @@ export const CompleteUserForm = (props) => {
 				else {
 					setFormdata({ ...formData, error: false, response: "Datos actualizados con éxito" })
 					dispatch({ type: "loadUser", payload: resp.user })
-					setTimeout(() => navigate(0), 2000)
+					setTimeout(() => navigate("/personalspace"), 2000)
 				}
 			}
 		}
+		fieldRef.current.disabled = false
 	}
 
 	const handleChange = async (e) => {
@@ -90,7 +95,7 @@ export const CompleteUserForm = (props) => {
 	const getUser = async () => {
 		const resp = await collection.loginToken()
 		if("error" in resp)
-			navigate("/")
+			navigate("/login")
 		else{
 			let prof = {}
 			if (resp.is_professional) {
@@ -99,16 +104,18 @@ export const CompleteUserForm = (props) => {
 			}
 			setUser(resp)
 			setAvatarImg(resp.avatar_url)
-			if (resp.birthdate != null)
-				setBirthdate(new Date(resp.birthdate).toISOString().split("T")[0])
-			if (!props.firstTime) {
+			if (resp.username != null) {
 				setFormdata({ ...resp, ...prof })
 				setMessages({ ...messages, username: "", usernameStatus: true })
 			}
+			if (resp.birthdate != null)
+				setBirthdate(new Date(resp.birthdate).toISOString().split("T")[0])
 		}
 	}
 
 	const handleAvatarChange = async (e) =>{
+		fieldRef.current.disabled = true
+		setUploadImage("Subiendo imagen... Espere un momento")
 		const file = e.target.files[0]
 		const data = new FormData()
 		try {
@@ -125,12 +132,12 @@ export const CompleteUserForm = (props) => {
 		} catch (error) {
 			console.log(error)
 		}
+		setUploadImage("")
+		fieldRef.current.disabled = false
 	}
 
 	useEffect(() => {
-		if(store.user.id == null)
-			navigate("/login")
-		if(user == null)
+		if(user == null && localStorage.getItem("token") != null)
 			getUser()
 	}, [])
 
@@ -155,6 +162,8 @@ export const CompleteUserForm = (props) => {
 						}
 					</div>
 					{user ?
+					<fieldset ref={fieldRef}>
+						
 						<form className="row col-md-8 mx-auto" onSubmit={handleCompleteClient}>
 							<div className="col-8 col-sm-6 my-2">
 								<div className="form-floating">
@@ -237,12 +246,15 @@ export const CompleteUserForm = (props) => {
 									<img src={avatarImg} id="preview" className="rounded-circle img-fluid NoDeformImg" />
 								</div>
 								<div className="col-9 mb-3">
-									<label htmlFor="avatar" className="form-label col-10">Foto de perfil <span className="ms-2 text-light-emphasis">(.jpg)</span></label>
+									<label htmlFor="avatar" className="form-label col-10">Foto de perfil</label>
 									<input className="form-control" type="file" accept="image/jpeg" name="avatar" id="avatar" onChange={handleAvatarChange} />
+										<div id="avatarHelpBlock" className="col-12 form-text text-sucess">
+											{uploadingImage || " "}
+										</div>
 								</div>
 							</div>
 							{store.user?.is_professional ? <>
-								<div className="col-12 col-md-6">
+								<div className="col-12 col-md-6 mt-2">
 									<div className="form-floating my-2 mx-auto">
 										<input type="text" name="tax_address" className="form-control" id="tax_address" placeholder="" onChange={handleChange} value={formData.tax_address} />
 										<label className="fs-6" htmlFor="tax_address">Dirección fiscal</label>
@@ -280,7 +292,7 @@ export const CompleteUserForm = (props) => {
 								</div>
 							</> : ""}
 							<div className="row">
-								{props.firstTime ?
+								{user?.username == null ?
 									<input type="submit" value="Crear usuario" className="btn btn-primary my-2 w-auto mx-auto fw-bold" />
 									: <div className="d-flex">
 										<input type="submit" value="Editar datos" className="btn btn-primary my-2 w-auto mx-auto fw-bold" />
@@ -290,7 +302,9 @@ export const CompleteUserForm = (props) => {
 								}
 								<p className={"text-center fw-semibold " + (formData.error ? "text-danger" : "text-success")}>{formData.response}</p>
 							</div>
-						</form> : <div className="text-center">
+						</form> 
+						
+					</fieldset>: <div className="text-center">
 							<div className="spinner-grow LoadingSpinner" role="status">
 								<span className="visually-hidden">Loading...</span>
 							</div>

@@ -83,6 +83,8 @@ def get_one_user_by_token():
     response_body = user.serialize()
     if user.client is None:
         response_body = {**response_body, "needs_filling": True}
+    else:
+        response_body = {**response_body, "needs_filling": False}
     return jsonify({**response_body, "success": True}),200
 
 @api.route('/signup', methods=['POST'])
@@ -708,14 +710,14 @@ def search_word(value):
         prof_strings,
         scorer=fuzz.partial_ratio,
         processor=None,
-        limit=5
+        limit=10
     )
     act_results = process.extract(
         value,
         act_strings,
         scorer=fuzz.partial_ratio,
         processor=None,
-        limit = 5
+        limit = 10
     )
 
     if len(prof_results) == 0 and len(act_results) == 0:

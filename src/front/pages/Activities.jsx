@@ -107,16 +107,16 @@ export const Activities = () => {
         <div className="pb-5 container bg-white rounded myActivityCard fontFamily px-5 my-3">
 
             <h1 className="font1 mt-5 p-2 text-center">Actividades por tipo</h1>
-            <div className="d-flex justify-content-around gap-3">
-                <div className="CarouselFiller"></div>
+            <div className="d-flex justify-content-between gap-3">
+                <div className="CarouselFiller d-none d-lg-block"></div>
                 <div className="row">
-                    <div className="col-lg-4 col-md-6 col-sm-12 mt-4" onClick={()=>navigate("/sport")}><ActivityCard img={"src/front/assets/img/Padel.webp"} title={"Actividades deportivas"} description={"Apúntate a diversas actividades deportivas para mantenerte sano y en forma"} /></div>
+                    <div className="col-lg-4 col-md-6 col-sm-12 mt-4" onClick={()=>navigate("/sport")}><ActivityCard img="https://res.cloudinary.com/dsn6qtd9g/image/upload/v1750721556/Padel_bw057p.webp" title={"Actividades deportivas"} description={"Apúntate a diversas actividades deportivas para mantenerte sano y en forma"} /></div>
 
-                    <div className="col-lg-4 col-md-6 col-sm-12 mt-4" onClick={()=>navigate("/tourism")}><ActivityCard img={"src/front/assets/img/Ruinas.jpeg"} title={"Actividades turísticas"} description={"Recorre el mundo descubriendo nuevas ubicaciones con un encanto exótico"} /></div>
+                    <div className="col-lg-4 col-md-6 col-sm-12 mt-4" onClick={()=>navigate("/tourism")}><ActivityCard img="https://res.cloudinary.com/dsn6qtd9g/image/upload/v1750721556/Ruinas_or3qyq.jpg" title={"Actividades turísticas"} description={"Recorre el mundo descubriendo nuevas ubicaciones con un encanto exótico"} /></div>
 
-                    <div className="col-lg-4 col-md-6 col-sm-12 mt-4" onClick={()=>navigate("/leisure")}><ActivityCard  img={"src/front/assets/img/Poker.webp"} title={"Actividades recreativas"} description={"No te quedes sin sitio en nuestras actividades recreativas donde puedes pasar un buen rato"} /></div>
+                    <div className="col-lg-4 col-md-6 col-sm-12 mt-4" onClick={()=>navigate("/leisure")}><ActivityCard  img="https://res.cloudinary.com/dsn6qtd9g/image/upload/v1750721555/Poker_s7utfv.webp" title={"Actividades recreativas"} description={"No te quedes sin sitio en nuestras actividades recreativas donde puedes pasar un buen rato"} /></div>
                 </div>
-                <div className="CarouselFiller"></div>
+                <div className="CarouselFiller d-none d-lg-block"></div>
             </div>
 
             <h1 className="font1 p-2 mt-5 text-center">Excursiones</h1>
@@ -131,7 +131,7 @@ export const Activities = () => {
             </div>
 
             <div className="d-none d-lg-block">
-                <div className="d-flex justify-content-around gap-3">
+                <div className="d-flex justify-content-between gap-3">
                     <button className="buttonStyle rounded-circle" onClick={(e) => handleClickLess1(counter1)}><i className="fa-solid fa-arrow-left"></i></button>
                     <div className="row">
                         <div className="col-lg-4 col-md-6 col-sm-12 mt-4">
@@ -159,7 +159,7 @@ export const Activities = () => {
             </div>
 
             <div className="d-none d-lg-block">
-                <div className="d-flex justify-content-around gap-3">
+                <div className="d-flex justify-content-between gap-3">
                     <button className="buttonStyle rounded-circle" onClick={(e) => handleClickLess2(counter4)}><i className="fa-solid fa-arrow-left"></i></button>
                     <div className="row">
                         <div className="col-lg-4 col-md-6 col-sm-12 mt-4">

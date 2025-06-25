@@ -134,7 +134,7 @@ export const Navbar = () => {
 									</Link></li>}
 									<li><Link className="dropdown-item text-white d-flex justify-content-between" onClick={() => {
 										dispatch({ type: "closeSession" })
-										setTimeout(() => navigate(0), 50)
+										setTimeout(() => navigate(0), 0)
 									}}>
 										<div><i className="fa-solid fa-power-off fa-sm"></i></div> <span className="fw-semibold">Cerrar sesión</span>
 									</Link></li>

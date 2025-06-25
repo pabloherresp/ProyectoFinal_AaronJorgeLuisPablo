@@ -8,7 +8,7 @@ import useGlobalReducer from "../hooks/useGlobalReducer.jsx"
 
 export const Home = () => {
 	const { store, dispatch } = useGlobalReducer()
-	const [activities, setActivities] = useState([])
+	const [activities, setActivities] = useState(null)
 	const [reviews, setReviews] = useState([])
 	const navigate = useNavigate()
 
@@ -75,38 +75,41 @@ export const Home = () => {
 			<div className="container mb-2">
 				<div className="bg-white rounded-end overflow-hidden">
 					<h1 className="font1 pt-5 pb-3 text-center">Algunas de nuestras actividades</h1>
-					{activities.length > 0 ?
-						<div className="row row-cols-md-3 mx-2">
-							{(activities.filter((item, index) => index < 9).map((item, index, arr) =>
-								<div key={index} className={"col-12 col-md-6 col-lg-4 mt-2 p-3" + (index == (arr.length - 1) && index % 2 == 0 ? " d-block d-md-none d-lg-block" : "")}>
-									<ActivityCard activity={item} />
-								</div>
-							))}
-							<Link className="mx-auto my-auto col-3 btn w-auto text-decoration-none text-dark fw-semibold fs-4" to="/activities">Ver más</Link>
-						</div>
-						: <div className="text-center">
-							<div className="spinner-grow LoadingSpinner" role="status">
-								<span className="visually-hidden">Loading...</span>
+					{activities != null ? <h4 className="text-center my-5 py-5">No se encontraron actividades</h4> :
+						activities?.length > 0 ?
+							<div className="row row-cols-md-3 mx-2">
+								{(activities?.filter((item, index) => index < 9).map((item, index, arr) =>
+									<div key={index} className={"col-12 col-md-6 col-lg-4 mt-2 p-3" + (index == (arr.length - 1) && index % 2 == 0 ? " d-block d-md-none d-lg-block" : "")}>
+										<ActivityCard activity={item} />
+									</div>
+								))}
+								<Link className="mx-auto my-auto col-3 btn w-auto text-decoration-none text-dark fw-semibold fs-4" to="/activities">Ver más</Link>
 							</div>
-						</div>}
+							: <div className="text-center">
+								<div className="spinner-grow LoadingSpinner" role="status">
+									<span className="visually-hidden">Loading...</span>
+								</div>
+							</div>}
 
 					{!store.user.id && <div className="p-0 NewSignUpBanner" onClick={() => navigate("/signup")}>
 						<p className="text-white fs-2 font1 col-12 col-md-6 text-center text-md-start">¡No pierdas el tiempo!<br />Crea ya tu cuenta de forma gratuita y empieza a ser parte de esto<br />Haz click aquí</p>
 					</div>}
-
-					<h1 className="font1 pt-5 text-center">Algunos clientes satisfechos</h1>
-					{reviews?.length > 0 ?
-						<div className="row row-cols-md-3 mx-2 pb-5">
-							{reviews.filter((item) => item.activity_rating != null && item.activity_message != "").sort((a, b) => a.activity_rating - b.activity_rating).filter((item, index) => index < 6).map((item, index, arr) =>
-								<div key={index} className={"col-12 col-md-6 col-lg-4 my-2" + (index == (arr.length - 1) && index % 2 != 0 ? " d-block d-md-none d-lg-block" : "")}>
-									<CommentBox target="activity" review={item} />
-								</div>)}
-						</div>
-						: <div className="text-center">
-							<div className="spinner-grow LoadingSpinner" role="status">
-								<span className="visually-hidden">Loading...</span>
+					{reviews != null ? "" : <>
+						<h1 className="font1 pt-5 text-center">Algunos clientes satisfechos</h1>
+						{reviews?.length > 0 ?
+							<div className="row row-cols-md-3 mx-2 pb-5">
+								{reviews.filter((item) => item.activity_rating != null && item.activity_message != "").sort((a, b) => a.activity_rating - b.activity_rating).filter((item, index) => index < 6).map((item, index, arr) =>
+									<div key={index} className={"col-12 col-md-6 col-lg-4 my-2" + (index == (arr.length - 1) && index % 2 != 0 ? " d-block d-md-none d-lg-block" : "")}>
+										<CommentBox target="activity" review={item} />
+									</div>)}
 							</div>
-						</div>}
+							: <div className="text-center">
+								<div className="spinner-grow LoadingSpinner" role="status">
+									<span className="visually-hidden">Loading...</span>
+								</div>
+							</div>
+						}
+					</>}
 					{!store.user.is_professional && <NewProfessionalBox />}
 				</div>
 			</div>

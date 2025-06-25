@@ -138,9 +138,9 @@ export const ProfessionalPanel = () => {
 				request_body.append(clave, valor)
 			})
 			console.log(media)
-			media.forEach((url)=>{
+			media.forEach((url) => {
 				if (url != "")
-				request_body.append("media", url)
+					request_body.append("media", url)
 			})
 			const resp = await collection.createInfoActivity(request_body)
 			console.log(resp)
@@ -151,11 +151,11 @@ export const ProfessionalPanel = () => {
 				setResponse({ error: false, message: "Actividad creada con éxito" })
 			}
 		}
-		// if (success) {
-		// 	loadActivities()
-		// 	window.bootstrap.Modal.getInstance(modalRef.current).hide()
-		// 	handleReset()
-		// }
+		if (success) {
+			loadActivities()
+			window.bootstrap.Modal.getInstance(modalRef.current).hide()
+			handleReset()
+		}
 	}
 
 	const handleChange = async (e) => {
@@ -191,23 +191,23 @@ export const ProfessionalPanel = () => {
 		const files = e.target.files
 		let medias = []
 		if (files.length > 0)
-		for (let f of files) {
-			const data = new FormData()
-			try {
-				data.append("file", f)
-				data.append("upload_preset", "Preset_Nomadik")
-				data.append("cloud_name", "dsn6qtd9g")
-				const resp = await fetch('https://api.cloudinary.com/v1_1/dsn6qtd9g/image/upload', {
-					method: 'POST',
-					body: data,
-				})
-				const result = await resp.json()
-				medias.push(result.secure_url)
+			for (let f of files) {
+				const data = new FormData()
+				try {
+					data.append("file", f)
+					data.append("upload_preset", "Preset_Nomadik")
+					data.append("cloud_name", "dsn6qtd9g")
+					const resp = await fetch('https://api.cloudinary.com/v1_1/dsn6qtd9g/image/upload', {
+						method: 'POST',
+						body: data,
+					})
+					const result = await resp.json()
+					medias.push(result.secure_url)
 
-			} catch (error) {
-				console.log(error)
+				} catch (error) {
+					console.log(error)
+				}
 			}
-		}
 		setMedia([...media, ...medias])
 	}
 

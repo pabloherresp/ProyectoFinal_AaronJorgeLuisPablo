@@ -412,7 +412,17 @@ h3 {
   cursor: pointer;
   transition: --NewBannerAngle 0.9s 0.3s;
   background-size: var(--NewSignupY);
+  background-repeat: no-repeat;
+  background-position: center;
 }
+
+@media (max-width: 600px) {
+  .NewProfessionalBanner,
+  .NewSignUpBanner {
+    background-size: cover;
+  }
+}
+
 .NewProfessionalBanner{background-image: linear-gradient(var(--NewBannerAngle),rgba(82, 173, 189, 0.4),rgb(38, 56, 65)),
   url("https://res.cloudinary.com/dsn6qtd9g/image/upload/v1750721657/professionalBoxBackground_p7w5it.jpg");
   background-position: center;
