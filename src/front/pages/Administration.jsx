@@ -51,17 +51,30 @@ export const Administration = () => {
             </div>
             <div className="tab-content" id="nav-tabContent">
                 <div className="tab-pane fade show active" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab" tabIndex="0">
+                    {store.all_reports.length>0 
+                    
+                    ?
+                    
+                            store.all_reports?.filter((item,i) => item.is_checked == false).map((item, i) =>
 
-                    {store.all_reports?.map((item, i) =>
-                        <ReportCard message={item.message} report={item.id} activity={item.info_activity?.name} professional={item.professional?.username} user={item.user?.username} date={parseDate(item.creation_date)} route={i + 1} />
-                    )}
+                            
+                                    <ReportCard message={item.message} report={item.id} activity={item.info_activity?.name} professional={item.professional?.username} user={item.user?.username} date={parseDate(item.creation_date)} route={i + 1} />
+                                
+                                
+                            )
+
+                    :
+                    
+                            <h1 className="m-3">No hay reportes</h1>
+                    }
+                    
 
                 </div>
                 <div className="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab" tabIndex="0">
                     <div className="row d-flex resizeBox">
 
                         {store.all_users?.map((item, i) =>
-                            <UserCard avatar={"/public/avatar/" + item.avatar_url} username={item.username} name={item.name} surname={item.surname} email={item.email} business={item.professional?.business_name} rating={item.professional?.rating.toFixed(2)} type={item.professional?.type} is_professional={item.is_professional} />
+                            <UserCard avatar={item.avatar_url} username={item.username} name={item.name} surname={item.surname} email={item.email} business={item.professional?.business_name} rating={item.professional?.rating.toFixed(2)} type={item.professional?.type} is_professional={item.is_professional} />
                         )}
                     </div>
                 </div>
